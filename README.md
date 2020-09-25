@@ -1,1 +1,1 @@
-# journal_app
+# journal-app
