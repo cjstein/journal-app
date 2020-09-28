@@ -67,6 +67,7 @@ journal_app_venv/
 celerybeat-schedule
 
 # Environments
+.env
 .venv
 venv/
 ENV/
