@@ -20,7 +20,7 @@ class Entry(TimeStampedModel):
     """
     Entries for Journal.
     """
-    uuid = models.UUIDField(default=uuid.uuid4, editable=False)
+    uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=255)
     body = models.TextField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
