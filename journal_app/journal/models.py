@@ -1,5 +1,7 @@
 import uuid
 from django.db import models
+from model_utils.fields import MonitorField
+from journal_app.users.models import User
 
 
 class TimeStampedModel(models.Model):
@@ -15,6 +17,16 @@ class TimeStampedModel(models.Model):
 
 
 class Entry(TimeStampedModel):
+    """
+    Entries for Journal.
+    """
     uuid = models.UUIDField(default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=255)
-    body = models.TextField(blank=False)
+    body = models.TextField()
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.title
+
+    def __repr__(self):
+        return f'{self.__class__.__name__}({self.user}, {self.created}, {self.title})'
