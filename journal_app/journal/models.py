@@ -1,5 +1,8 @@
+# Python base imports
 import uuid
+# Django imports
 from django.db import models
+# Custom imports
 from journal_app.users.models import User
 
 
@@ -44,9 +47,11 @@ class Entry(TimeStampedModel):
     title = models.CharField(max_length=255)
     body = models.TextField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    # Released field changes once the 'release event has been triggered by the user.
     released = models.BooleanField(default=False)
+    # If Public is flagged as True, when the posts get released, these entries will be viewable by all contacts.
     public = models.BooleanField(default=False)
-    contact = models.ManyToManyField(Contact,)
+    contact = models.ManyToManyField(Contact)
 
     def __str__(self):
         return self.title
