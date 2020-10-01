@@ -21,3 +21,21 @@ class EntryCreateView(LoginRequiredMixin, CreateView):
 
 class EntryUpdateView(LoginRequiredMixin, UpdateView):
     model = Entry
+
+
+# Contact Pages
+class ContactDetailView(LoginRequiredMixin, DetailView):
+    model = Contact
+
+
+class ContactListView(LoginRequiredMixin, ListView):
+    model = Contact
+
+
+class ContactCreateView(LoginRequiredMixin, CreateView):
+    model = Contact
+
+
+class ContactUpdateView(LoginRequiredMixin, UpdateView):
+    model = Contact
+
