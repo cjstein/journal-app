@@ -62,6 +62,7 @@ target/
 # pyenv
 .python-version
 /journal-app-env/
+journal-app-env/
 /journal_app_venv/
 
 # celery beat schedule file
