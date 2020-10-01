@@ -61,8 +61,8 @@ target/
 
 # pyenv
 .python-version
-journal_app_env/
-journal_app_venv/
+/journal-app-env/
+/journal_app_venv/
 
 # celery beat schedule file
 celerybeat-schedule
@@ -327,5 +327,6 @@ tags
 journal_app/media/
 
 .pytest_cache/
+
 
 
