@@ -1,6 +1,5 @@
 import uuid
 from django.db import models
-from model_utils.fields import MonitorField
 from journal_app.users.models import User
 
 
@@ -54,3 +53,8 @@ class Entry(TimeStampedModel):
 
     def __repr__(self):
         return f'{self.__class__.__name__}({self.user}, {self.created}, {self.title})'
+
+    class Meta:
+        verbose_name = 'entry'
+        verbose_name_plural = 'entries'
+        ordering = ['-updated', '-created']
