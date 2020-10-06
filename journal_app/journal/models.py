@@ -30,7 +30,7 @@ class Contact(TimeStampedModel):
     # Fields below will only need at least one filled out
     email = models.EmailField(blank=True)
     password = models.CharField(max_length=100, blank=True)
-    phone = models.CharField(max_length=15)
+    phone = models.CharField(max_length=15, blank=True)
     # Possibly add whatsapp bot
     # Possibly add Telegrambot
     # Possibly add signal bot

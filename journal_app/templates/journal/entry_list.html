@@ -1,0 +1,23 @@
+{%  extends 'base.html' %}
+
+{% block title %}{{ entry.title }}{% endblock %}
+
+{% block content %}
+  {% for entry in entry_list %}
+    <div class="row">
+      <div class="col-lg-8">
+        <h3>{{ entry.title }}</h3>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-8">
+        <p>{{ entry.text|truncatewords:25 }}</p>
+      </div>
+    </div>
+    <hr>
+  {% empty %}
+    <h2>There are no entries yet.</h2>
+  {% endfor %}
+
+
+{% endblock %}
