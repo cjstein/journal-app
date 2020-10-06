@@ -18,9 +18,24 @@ class EntryListView(LoginRequiredMixin, ListView):
 class EntryCreateView(LoginRequiredMixin, CreateView):
     model = Entry
 
+    fields = [
+        'title',
+        'body',
+    ]
+
+    def form_valid(self, form):
+        form.instance.creator = self.request.user
+        return super(self).form_valid(form)
+
 
 class EntryUpdateView(LoginRequiredMixin, UpdateView):
     model = Entry
+
+    fields = [
+        'title',
+        'body',
+    ]
+    action = 'Update'
 
 
 # Contact Pages
@@ -35,7 +50,26 @@ class ContactListView(LoginRequiredMixin, ListView):
 class ContactCreateView(LoginRequiredMixin, CreateView):
     model = Contact
 
+    fields = [
+        'name',
+        'email',
+        'phone',
+        'password',
+    ]
+
+    def form_valid(self, form):
+        form.instance.creator = self.request.user
+        return super(self).form_valid(form)
+
 
 class ContactUpdateView(LoginRequiredMixin, UpdateView):
     model = Contact
+
+    fields = [
+        'name',
+        'email',
+        'phone',
+        'password',
+    ]
+    action = 'Update'
 

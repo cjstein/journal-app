@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block title %}{{ view.action|default:'Add' }} Contact{% endblock %}
+
+{% block content %}
+  {% with action=view.action|default:'Add' %}
+  <h1>{{ action }} Contact</h1>
+  <form method="post" action=".">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <button type="submit" class="btn btn-primary">{{ action }}</button>
+  </form>
+  {% endwith %}
+{% endblock %}

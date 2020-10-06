@@ -1,0 +1,17 @@
+{%  extends 'base.html' %}
+
+{% block title %}{{ entry.title }}{% endblock %}
+
+{% block content %}
+  {% for contact in contact_list %}
+    <div class="row">
+      <div class="col-lg-8">
+        <h3><a href="{{ contact.get_absolute_url }}">{{ contact.name }}</a></h3>
+      </div>
+    </div>
+  {% empty %}
+    <h2>There are no contacts yet.</h2>
+  {% endfor %}
+
+
+{% endblock %}
