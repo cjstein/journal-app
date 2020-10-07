@@ -1,8 +1,19 @@
+import pytest
 from factory import Faker, fuzzy, SubFactory, post_generation
 from factory.django import DjangoModelFactory
-from typing import Any, Sequence
+# from typing import Any, Sequence
 from journal_app.users.tests.factories import UserFactory
 from ..models import Entry, Contact
+
+
+@pytest.fixture
+def entry():
+    return EntryFactory()
+
+
+@pytest.fixture
+def contact():
+    return ContactFactory()
 
 
 class EntryFactory(DjangoModelFactory):

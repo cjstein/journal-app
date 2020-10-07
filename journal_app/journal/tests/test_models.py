@@ -3,13 +3,14 @@ from .factories import EntryFactory, ContactFactory
 
 pytestmark = pytest.mark.django_db
 
+
 # Entry Tests
 
 
 def test_entry_str():
     entry = EntryFactory()
     assert entry.__str__() == entry.title
-    assert str(entry) == entry .title
+    assert str(entry) == entry.title
 
 
 def test_entry_repr():
@@ -20,6 +21,14 @@ def test_entry_repr():
 
 def test_entry_get_absolute_url():
     entry = EntryFactory()
+
+
+def test_entry_update():
+    entry = EntryFactory()
+    assert entry.modified == False
+    entry.body = 'Changing the body of the entry for the test to see if it is modified'
+    assert entry.modified == True
+
 
 # Contact Tests
 
