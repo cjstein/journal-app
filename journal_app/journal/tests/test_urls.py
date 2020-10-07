@@ -1,7 +1,7 @@
 import pytest
 
 from django.urls import reverse, resolve
-from .factories import entry, contact
+from .factories import entry, contact # noqa F401
 
 pytestmark = pytest.mark.django_db
 
