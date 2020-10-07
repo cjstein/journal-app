@@ -21,12 +21,13 @@
 
 
     <!-- Your stuff: Third-party CSS libraries go here -->
-
+    <!-- Font Awesome  https://fontawesome.com/start -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
     <!-- This file stores project-specific CSS -->
-
-    <link href="{% static 'css/project.css' %}" rel="stylesheet">
     {% block css %}
+    <link href="{% static 'css/project.css' %}" rel="stylesheet">
     {% endblock %}
+    {% block extra_css %}{% endblock %}
 
 
 
@@ -64,11 +65,10 @@
 
 
       <!-- place project specific Javascript in this file -->
-
-      <script src="{% static 'js/project.js' %}"></script>
-
     {% block javascript %}
+      <script src="{% static 'js/project.js' %}"></script>
     {% endblock javascript %}
+    {% block extra_js %}{% endblock %}
   </body>
 </html>
 

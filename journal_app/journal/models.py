@@ -31,9 +31,9 @@ class Contact(TimeStampedModel):
     name = models.CharField(max_length=255)
     uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     # Fields below will only need at least one filled out
-    email = models.EmailField(blank=True)
-    password = models.CharField(max_length=100, blank=True)
-    phone = models.CharField(max_length=15, blank=True)
+    email = models.EmailField(blank=True, null=True)
+    password = models.CharField(max_length=100, blank=True, null=True)
+    phone = models.CharField(max_length=15, blank=True, null=True)
     # Possibly add whatsapp bot
     # Possibly add Telegrambot
     # Possibly add signal bot
@@ -49,8 +49,6 @@ class Contact(TimeStampedModel):
 
     def __str__(self):
         return self.name
-
-
 
 
 class Entry(TimeStampedModel):
