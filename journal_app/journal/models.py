@@ -42,7 +42,7 @@ class Contact(TimeStampedModel):
             str: URL for user detail.
 
         """
-        return reverse("journal:contact_detail", kwargs={"uuid": self.uuid})
+        return reverse("journal:contact_detail", kwargs={"pk": self.uuid})
 
     def __str__(self):
         return self.name
@@ -63,7 +63,7 @@ class Entry(TimeStampedModel):
     released = models.BooleanField(default=False)
     # If Public is flagged as True, when the posts get released, these entries will be viewable by all contacts.
     public = models.BooleanField(default=False)
-    contact = models.ManyToManyField(Contact)
+    contact = models.ManyToManyField(Contact, blank=True)
 
     def get_absolute_url(self):
         """Get url for user's detail view.
@@ -72,7 +72,7 @@ class Entry(TimeStampedModel):
             str: URL for user detail.
 
         """
-        return reverse("journal:entry_detail", kwargs={"uuid": self.uuid})
+        return reverse("journal:entry_detail", kwargs={"pk": self.uuid})
 
     def __str__(self):
         return self.title

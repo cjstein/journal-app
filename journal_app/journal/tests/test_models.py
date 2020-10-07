@@ -21,12 +21,15 @@ def test_entry_repr():
 
 def test_entry_get_absolute_url():
     entry = EntryFactory()
+    url = entry.get_absolute_url()
+    assert url == f'/journal/entry/{entry.uuid}/'
 
 
 def test_entry_update():
     entry = EntryFactory()
     assert entry.modified == False
     entry.body = 'Changing the body of the entry for the test to see if it is modified'
+    entry.save()
     assert entry.modified == True
 
 
@@ -43,3 +46,9 @@ def test_contact_repr():
     contact = ContactFactory()
     assert contact.__repr__() == f'Contact({contact.user}, {contact.name})'
     assert repr(contact) == f'Contact({contact.user}, {contact.name})'
+
+
+def test_contact_get_absolute_url():
+    contact = ContactFactory()
+    url = contact.get_absolute_url()
+    assert url == f'/journal/contact/{contact.uuid}/'
