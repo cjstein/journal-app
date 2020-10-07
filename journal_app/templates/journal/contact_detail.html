@@ -1,20 +1,49 @@
 {%  extends 'base.html' %}
 
-{% block title %}{{ contact.title }}{% endblock %}
-
 {% block content %}
   <div class="row">
     <div class="col-lg-8">
       <h2>{{ contact.name }}</h2>
-      <p>Created: {{ contact.created }}</p>
+      <p>
+        <b>Created:</b> {{ contact.created|date:"SHORT_DATETIME_FORMAT" }}
       {% if contact.modified %}
-        <p>Updated: {{ contact.updated }}</p>
+        <b>Updated:</b> {{ contact.updated|date:"SHORT_DATETIME_FORMAT" }}
       {% endif %}
+      </p>
     </div>
   </div>
   <div class="row">
     <div class="col-lg-8">
-      <p>{{ contact.name }}</p>
+      <h4>Forms of releasing:</h4>
+      <table>
+        <tbody>
+          <tr>
+            <td>
+              {% if contact.password %}<i class="fas fa-check"></i>{% endif %}
+            </td>
+            <td>
+              Password
+            </td>
+          </tr>
+          <tr>
+            <td>
+              {% if contact.email %}<i class="fas fa-check"></i>{% endif %}
+            </td>
+            <td>
+              Email
+            </td>
+          </tr>
+          <tr>
+            <td>
+              {% if contact.phone %}<i class="fas fa-check"></i>{% endif %}
+            </td>
+            <td>
+              Phone
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
     </div>
   </div>
 {% endblock %}

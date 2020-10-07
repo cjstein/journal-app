@@ -15,6 +15,9 @@ class TimeStampedModel(models.Model):
     def modified(self):
         return self.updated != self.created
 
+    def __repr__(self):
+        return f'{self.__class__.__name__}({self.user}, {self.__str__})'
+
     class Meta:
         abstract = True
 
@@ -28,9 +31,9 @@ class Contact(TimeStampedModel):
     name = models.CharField(max_length=255)
     uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     # Fields below will only need at least one filled out
-    email = models.EmailField(blank=True)
-    password = models.CharField(max_length=100, blank=True)
-    phone = models.CharField(max_length=15, blank=True)
+    email = models.EmailField(blank=True, null=True)
+    password = models.CharField(max_length=100, blank=True, null=True)
+    phone = models.CharField(max_length=15, blank=True, null=True)
     # Possibly add whatsapp bot
     # Possibly add Telegrambot
     # Possibly add signal bot
@@ -42,13 +45,10 @@ class Contact(TimeStampedModel):
             str: URL for user detail.
 
         """
-        return reverse("journal:contact_detail", kwargs={"uuid": self.uuid})
+        return reverse("journal:contact_detail", kwargs={"pk": self.uuid})
 
     def __str__(self):
         return self.name
-
-    def __repr__(self):
-        return f'{self.__class__.__name__}({self.user}, {self.name})'
 
 
 class Entry(TimeStampedModel):
@@ -63,7 +63,7 @@ class Entry(TimeStampedModel):
     released = models.BooleanField(default=False)
     # If Public is flagged as True, when the posts get released, these entries will be viewable by all contacts.
     public = models.BooleanField(default=False)
-    contact = models.ManyToManyField(Contact)
+    contact = models.ManyToManyField(Contact, blank=True)
 
     def get_absolute_url(self):
         """Get url for user's detail view.
@@ -72,15 +72,12 @@ class Entry(TimeStampedModel):
             str: URL for user detail.
 
         """
-        return reverse("journal:entry_detail", kwargs={"uuid": self.uuid})
+        return reverse("journal:entry_detail", kwargs={"pk": self.uuid})
 
     def __str__(self):
         return self.title
 
-    def __repr__(self):
-        return f'{self.__class__.__name__}({self.user}, {self.created}, {self.title})'
-
     class Meta:
         verbose_name = 'entry'
         verbose_name_plural = 'entries'
-        ordering = ['-updated', '-created']
+        ordering = ['-updated']

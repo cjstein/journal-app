@@ -1,20 +1,9 @@
 import pytest
 
 from django.urls import reverse, resolve
-from .factories import EntryFactory, ContactFactory
-
+from .factories import entry, contact # noqa F401
 
 pytestmark = pytest.mark.django_db
-
-
-@pytest.fixture
-def entry():
-    return EntryFactory()
-
-
-@pytest.fixture
-def contact():
-    return ContactFactory()
 
 
 def test_entry_list_reverse():
@@ -25,11 +14,13 @@ def test_entry_list_resolve():
     assert resolve('/journal/').view_name == 'journal:entry_list'
 
 
+@pytest.mark.django_db
 def test_entry_detail_reverse(entry):
     url = reverse('journal:entry_detail', kwargs={'pk': entry.uuid})
     assert url == f'/journal/entry/{entry.uuid}/'
 
 
+@pytest.mark.django_db
 def test_entry_detail_resolve(entry):
     url = f'/journal/entry/{entry.uuid}/'
     assert resolve(url).view_name == 'journal:entry_detail'
@@ -54,11 +45,13 @@ def test_contact_list_resolve():
     assert resolve('/journal/contacts/').view_name == 'journal:contact_list'
 
 
+@pytest.mark.django_db
 def test_contact_detail_reverse(contact):
     url = reverse('journal:contact_detail', kwargs={'pk': contact.uuid})
     assert url == f'/journal/contact/{contact.uuid}/'
 
 
+@pytest.mark.django_db
 def test_contact_detail_resolve(contact):
     url = f'/journal/contact/{contact.uuid}/'
     assert resolve(url).view_name == 'journal:contact_detail'
