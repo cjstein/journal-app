@@ -15,13 +15,13 @@ def test_entry_list_resolve():
 
 
 @pytest.mark.django_db
-def test_entry_detail_reverse(entry):
+def test_entry_detail_reverse(entry): # noqa F811
     url = reverse('journal:entry_detail', kwargs={'pk': entry.uuid})
     assert url == f'/journal/entry/{entry.uuid}/'
 
 
 @pytest.mark.django_db
-def test_entry_detail_resolve(entry):
+def test_entry_detail_resolve(entry):  # noqa F811
     url = f'/journal/entry/{entry.uuid}/'
     assert resolve(url).view_name == 'journal:entry_detail'
 
@@ -46,13 +46,13 @@ def test_contact_list_resolve():
 
 
 @pytest.mark.django_db
-def test_contact_detail_reverse(contact):
+def test_contact_detail_reverse(contact): # noqa F811
     url = reverse('journal:contact_detail', kwargs={'pk': contact.uuid})
     assert url == f'/journal/contact/{contact.uuid}/'
 
 
 @pytest.mark.django_db
-def test_contact_detail_resolve(contact):
+def test_contact_detail_resolve(contact): # noqa F811
     url = f'/journal/contact/{contact.uuid}/'
     assert resolve(url).view_name == 'journal:contact_detail'
 
