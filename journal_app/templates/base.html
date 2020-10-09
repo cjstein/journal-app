@@ -14,7 +14,15 @@
     <![endif]-->
 
     <link rel="icon" href="{% static 'images/favicons/favicon.ico' %}">
-
+    <!-- # tinycloud MCE -->
+    <script src="https://cdn.tiny.cloud/1/1tfb3g0qaiap1ehx0nfximy04m02qfebkdzf8pvd6ant5bhg/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+    {% block tinymce_init %}
+      <script>
+        tinymce.init({
+          selector: '#tinymceid'
+        });
+      </script>
+    {% endblock %}
 
     <!-- Latest compiled and minified Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
