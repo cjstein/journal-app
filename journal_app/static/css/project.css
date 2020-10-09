@@ -1,5 +1,9 @@
 /* These styles are generated from project.scss. */
 
+body {
+  font-family: "Roboto", sans-serif;
+}
+
 .alert-debug {
   color: black;
   background-color: white;
@@ -10,4 +14,8 @@
   color: #b94a48;
   background-color: #f2dede;
   border-color: #eed3d7;
+}
+
+.navbar-dark .navbar-nav .active > .nav-link {
+  color: #61ca61;
 }

@@ -4,34 +4,45 @@
         <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
+
         <a class="navbar-brand" href="{% url 'home' %}">Journal App</a>
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
+              {% url 'home' as active_url %}
+                <li class="nav-item{% if request.path == active_url %} active{% endif %}">
+
                     <a class="nav-link" href="{% url 'home' %}">Home <span class="sr-only">(current)</span></a>
                 </li>
-                <li class="nav-item">
+              {% url 'about' as active_url %}
+                <li class="nav-item{% if request.path == active_url %} active{% endif %}">
                     <a class="nav-link" href="{% url 'about' %}">About</a>
                 </li>
             </ul>
             <ul class="navbar-nav ml-auto">
                 {% if request.user.is_authenticated %}
-
-                    <li class="nav-item">
+                  {% url 'journal:entry_create' as active_url %}
+                    <li class="nav-item{% if request.path == active_url %} active{% endif %}">
+                      <a class="nav-link" href="{% url 'journal:entry_create' %}"><i class="fas fa-plus"></i> {% trans "Add" %}</a>
+                    </li>
+                  {% url 'users:detail' request.user.username as active_url %}
+                    <li class="nav-item{% if request.path == active_url %} active{% endif %}">
                         {# URL provided by django-allauth/account/urls.py #}
                         <a class="nav-link" href="{% url 'users:detail' request.user.username  %}">{% trans "My Profile" %}</a>
                     </li>
-                    <li class="nav-item">
+                  {% url 'account_logout' as active_url %}
+                    <li class="nav-item{% if request.path == active_url %} active{% endif %}">
                         {# URL provided by django-allauth/account/urls.py #}
                         <a class="nav-link" href="{% url 'account_logout' %}">{% trans "Sign Out" %}</a>
                     </li>
                 {% else %}
-                    <li class="nav-item">
+                  {% url 'account_signup' as active_url %}
+                    <li class="nav-item{% if request.path == active_url %} active{% endif %}">
                         {# URL provided by django-allauth/account/urls.py #}
                         <a id="sign-up-link" class="nav-link" href="{% url 'account_signup' %}">{% trans "Sign Up" %}</a>
                     </li>
-                    <li class="nav-item">
+                  {% url 'account_login' as active_url %}
+                    <li class="nav-item{% if request.path == active_url %} active{% endif %}">
                         {# URL provided by django-allauth/account/urls.py #}
                         <a id="log-in-link" class="nav-link" href="{% url 'account_login' %}">{% trans "Sign In" %}</a>
                     </li>
