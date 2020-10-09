@@ -2,7 +2,7 @@
 Base settings to build other settings files upon.
 """
 from pathlib import Path
-
+import os
 import environ
 
 ROOT_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
@@ -72,6 +72,7 @@ THIRD_PARTY_APPS = [
     "allauth.account",
     "allauth.socialaccount",
     "django_celery_beat",
+    "tinymce",
 ]
 
 LOCAL_APPS = [
@@ -296,3 +297,7 @@ SOCIALACCOUNT_ADAPTER = "journal_app.users.adapters.SocialAccountAdapter"
 
 # Your stuff...
 # ------------------------------------------------------------------------------
+# Tiny MCE settings
+TINYMCE_JS_URL = "https://cdn.tiny.cloud/1/1tfb3g0qaiap1ehx0nfximy04m02qfebkdzf8pvd6ant5bhg/tinymce/5/tinymce.min.js"
+TINYMCE_JS_ROOT = os.path.join(MEDIA_ROOT, "tiny_mce")
+TINYMCE_COMPRESSOR = False

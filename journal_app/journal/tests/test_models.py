@@ -27,10 +27,10 @@ def test_entry_get_absolute_url():
 
 def test_entry_update():
     entry = EntryFactory()
-    assert entry.modified == False
+    assert entry.modified is False
     entry.body = 'Changing the body of the entry for the test to see if it is modified'
     entry.save()
-    assert entry.modified == True
+    assert entry.modified is True
 
 
 # Contact Tests

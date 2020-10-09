@@ -5,11 +5,13 @@ from django.db import models
 from django.urls import reverse
 # Custom imports
 from journal_app.users.models import User
+from tinymce.models import HTMLField
 
 
 class TimeStampedModel(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     @property
     def modified(self):
@@ -27,7 +29,6 @@ class Contact(TimeStampedModel):
     Contact model will be user supplied and all journal Entries that are tagged with that contact or "public" will be
     filtered when released.
     """
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
     uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     # Fields below will only need at least one filled out
@@ -57,8 +58,7 @@ class Entry(TimeStampedModel):
     """
     uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=255)
-    body = models.TextField()
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    body = HTMLField()
     # Released field changes once the 'release event has been triggered by the user.
     released = models.BooleanField(default=False)
     # If Public is flagged as True, when the posts get released, these entries will be viewable by all contacts.

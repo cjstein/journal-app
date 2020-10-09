@@ -5,6 +5,7 @@ from django.views.generic import DetailView, ListView, UpdateView, CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 # Custom imports
 from .models import Entry, Contact
+from .forms import EntryForm
 
 
 # Entry Views
@@ -18,11 +19,7 @@ class EntryListView(LoginRequiredMixin, ListView):
 
 class EntryCreateView(LoginRequiredMixin, CreateView):
     model = Entry
-
-    fields = [
-        'title',
-        'body',
-    ]
+    form_class = EntryForm
 
     def form_valid(self, form):
         messages.add_message(self.request, messages.SUCCESS, 'Entry successfully added')
@@ -32,11 +29,8 @@ class EntryCreateView(LoginRequiredMixin, CreateView):
 
 class EntryUpdateView(LoginRequiredMixin, UpdateView):
     model = Entry
+    form_class = EntryForm
 
-    fields = [
-        'title',
-        'body',
-    ]
     action = 'Update'
 
     def form_valid(self, form):

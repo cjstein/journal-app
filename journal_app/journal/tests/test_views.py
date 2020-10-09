@@ -1,13 +1,11 @@
 import pytest
-# from pytest_django.asserts import assertContains
 from django.contrib.auth.models import AnonymousUser, User
 from django.urls import reverse
-# from django.contrib.sessions.middleware import SessionMiddleware
 from django.test import RequestFactory, TestCase
 
 from journal_app.users.models import User
 
-from .factories import EntryFactory, ContactFactory
+from .factories import EntryFactory
 from journal_app.journal.views import (
     EntryCreateView, EntryUpdateView, EntryDetailView, EntryListView,
     ContactCreateView, ContactUpdateView, ContactDetailView, ContactListView,
@@ -43,5 +41,3 @@ class TestEntryViews(TestCase):
         callable_obj = EntryCreateView.as_view()
         response = callable_obj(request)
         self.assertEquals(response.status_code, 200, "Entry Create")
-
-

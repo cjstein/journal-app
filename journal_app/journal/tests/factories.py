@@ -1,7 +1,6 @@
 import pytest
-from factory import Faker, fuzzy, SubFactory, post_generation
+from factory import Faker, fuzzy, SubFactory
 from factory.django import DjangoModelFactory
-# from typing import Any, Sequence
 from journal_app.users.tests.factories import UserFactory
 from journal_app.journal.models import Entry, Contact
 

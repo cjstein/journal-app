@@ -6,15 +6,17 @@
   <div class="row">
     <div class="col-lg-8">
       <h2>{{ entry.title }}</h2>
-      <p>Created: {{ entry.created }}</p>
-      {% if entry.modified %}
-        <p>Updated: {{ entry.updated }}</p>
-      {% endif %}
+      <p>
+        <b>Created:</b> {{ entry.created|date:"SHORT_DATETIME_FORMAT" }}
+        {% if entry.modified %}
+          <b>Updated:</b> {{ entry.updated|date:"SHORT_DATETIME_FORMAT" }}
+        {% endif %}
+      </p>
     </div>
   </div>
   <div class="row">
     <div class="col-lg-8">
-      <p>{{ entry.text }}</p>
+      <p>{{ entry.body }}</p>
     </div>
   </div>
 {% endblock %}
