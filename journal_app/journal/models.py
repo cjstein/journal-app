@@ -3,6 +3,7 @@ import uuid
 # Django imports
 from django.db import models
 from django.urls import reverse
+from django.core.exceptions import ValidationError
 # Custom imports
 from journal_app.users.models import User
 from tinymce.models import HTMLField
@@ -58,7 +59,7 @@ class Entry(TimeStampedModel):
     """
     uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=255)
-    body = HTMLField()
+    body = models.TextField()
     # Released field changes once the 'release event has been triggered by the user.
     released = models.BooleanField(default=False)
     # If Public is flagged as True, when the posts get released, these entries will be viewable by all contacts.

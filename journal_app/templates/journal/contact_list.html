@@ -4,14 +4,43 @@
 
 {% block content %}
   {% for contact in contact_list %}
-    <div class="row">
-      <div class="col-lg-8">
-        <h3><a href="{{ contact.get_absolute_url }}" class="header-link">{{ contact.name }}</a></h3>
-      </div>
-    </div>
-  {% empty %}
-    <h2>There are no contacts yet.</h2>
-  {% endfor %}
+    {% if forloop.first %}
+    <table class="table table-grey">
+      <thead>
+        <tr>
+          <th scope="col">Name</th>
+          <th scope="col" class="text-center">Email</th>
+          <th scope="col" class="text-center">Phone</th>
+          <th scope="col" class="text-center">Password</th>
+        </tr>
+      </thead>
+      {% endif %}
+      <tbody>
+      <tr>
+        <th><a href="{{ contact.get_absolute_url }}" class="table-link">{{ contact.name }}</a></th>
+        <td class="text-center">
+          {% if contact.email %}
+            <i class="fas fa-check"></i>
+          {% endif %}
+        </td>
+        <td class="text-center">
+          {% if contact.phone %}
+            <i class="fas fa-check"></i>
+          {% endif %}
+        </td>
+        <td class="text-center">
+          {% if contact.password %}
+            <i class="fas fa-check"></i>
+          {% endif %}
+        </td>
+      </tr>
 
+    {% if forloop.last %}
+      </tbody>
+      </table>
+    {% endif %}
+    {% empty %}
+    <h4>Contact list is empty.  <a href="{% url 'journal:contact_create' %}" class="page-link">Click here to add one!</a></h4>
+  {% endfor %}
 
 {% endblock %}

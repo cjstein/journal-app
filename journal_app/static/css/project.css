@@ -16,6 +16,49 @@ body {
   border-color: #eed3d7;
 }
 
-.navbar-dark .navbar-nav .active > .nav-link {
+.navbar-custom.navbar-nav .active > .nav-link {
   color: #61ca61;
+}
+
+
+.navbar-custom .navbar-text,
+.navbar-custom a,
+.navbar-custom .dropdown .dropdown-menu,
+.navbar-custom {
+  background-color: #3d3d3d;
+  color: white;
+}
+
+
+.navbar-custom a:hover,
+.navbar-custom a.active,
+.navbar-custom .dropdown .dropdown-menu,
+.navbar-custom .navbar-brand {
+  color: #61ca61;
+  background-color: #3d3d3d;
+}
+
+.page-link {
+  color: white;
+  background-color: #3d3d3d;
+}
+
+.page-link:hover {
+  color: #61ca61;
+  background-color: #2f2f2f;
+}
+
+.table-grey {
+  background-color: #3d3d3d;
+  color: white;
+}
+
+.table-link {
+  color: white;
+
+}
+
+.table-link:hover {
+  color: #61ca61;
+
 }
