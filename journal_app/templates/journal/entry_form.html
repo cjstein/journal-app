@@ -2,6 +2,10 @@
 
 {% load crispy_forms_tags %}
 
+{% block head %}
+  {{ form.media }}
+{% endblock %}
+
 {% block title %}{{ view.action|default:'Add' }} Entry{% endblock %}
 
 {% block content %}

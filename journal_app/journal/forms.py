@@ -5,8 +5,6 @@ from .models import Entry, Contact
 
 class EntryForm(ModelForm):
 
-    body = CharField(widget=TinyMCE(attrs={'cols': 80, 'rows': 30}))
-
     class Meta:
         model = Entry
         fields = ['title', 'body']

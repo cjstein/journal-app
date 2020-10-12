@@ -2,6 +2,10 @@
 
 {% block title %}{{ entry.title }}{% endblock %}
 
+{% block head %}
+  {{ form.media }}
+{% endblock %}
+
 {% block content %}
   <div class="row">
     <div class="col-lg-8">
@@ -16,6 +20,7 @@
   </div>
   <div class="row">
     <div class="col-lg-8">
+      <p>{{ entry.body|safe }}</p>
       <p>{{ entry.body }}</p>
     </div>
   </div>
