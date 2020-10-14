@@ -25,37 +25,37 @@
                   {% url 'journal:contact_create' as contact_url %}
                     <li class="nav-item dropdown">
                       <a class="nav-link dropdown-toggle{% if request.path == journal_url or request.path == contact_url%} active{% endif %}" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-plus"></i> {% trans "Add" %}
+                        <i class="fas fa-plus"></i>Add
                       </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                       <a class="dropdown-item" href="{% url 'journal:entry_create' %}">
-                        <i class="fas fa-plus"></i> {% trans "Add Entry" %}
+                        <i class="fas fa-plus"></i>Add Entry
                       </a>
                       <a class="dropdown-item" href="{% url 'journal:contact_create' %}">
-                        <i class="fas fa-plus"></i> {% trans "Add Contact" %}
+                        <i class="fas fa-plus"></i>Add Contact
                       </a>
                     </div>
                     </li>
                   {% url 'users:detail' request.user.username as active_url %}
                     <li class="nav-item">
                         {# URL provided by django-allauth/account/urls.py #}
-                        <a class="nav-link{% if request.path == active_url %} active{% endif %}" href="{% url 'users:detail' request.user.username  %}">{% trans "My Profile" %}</a>
+                        <a class="nav-link{% if request.path == active_url %} active{% endif %}" href="{% url 'users:detail' request.user.username  %}">My Profile</a>
                     </li>
                   {% url 'account_logout' as active_url %}
                     <li class="nav-item">
                         {# URL provided by django-allauth/account/urls.py #}
-                        <a class="nav-link{% if request.path == active_url %} active{% endif %}" href="{% url 'account_logout' %}">{% trans "Sign Out" %}</a>
+                      <a class="nav-link{% if request.path == active_url %} active{% endif %}" href="{% url 'account_logout' %}">Sign Out</a>
                     </li>
                 {% else %}
                   {% url 'account_signup' as active_url %}
                     <li class="nav-item">
                         {# URL provided by django-allauth/account/urls.py #}
-                        <a id=" sign-up-link" class="nav-link{% if request.path == active_url %} active{% endif %}" href="{% url 'account_signup' %}">{% trans "Sign Up" %}</a>
+                        <a id=" sign-up-link" class="nav-link{% if request.path == active_url %} active{% endif %}" href="{% url 'account_signup' %}">Sign Up</a>
                     </li>
                   {% url 'account_login' as active_url %}
                     <li class="nav-item">
                         {# URL provided by django-allauth/account/urls.py #}
-                        <a id="log-in-link" class="nav-link{% if request.path == active_url %} active{% endif %}" href="{% url 'account_login' %}">{% trans "Sign In" %}</a>
+                        <a id="log-in-link" class="nav-link{% if request.path == active_url %} active{% endif %}" href="{% url 'account_login' %}">Sign In</a>
                     </li>
                 {% endif %}
             </ul>
