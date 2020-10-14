@@ -1,4 +1,4 @@
-from django.forms import ModelForm, CharField, ValidationError
+from django.forms import ModelForm, ValidationError
 from tinymce.widgets import TinyMCE
 from .models import Entry, Contact
 
@@ -9,7 +9,7 @@ class EntryForm(ModelForm):
         model = Entry
         fields = ['title', 'body']
         widgets = {
-            'body': TinyMCE(attrs={'cols': 80, 'rows': 10, 'id': 'tinymceid'}),
+            'body': TinyMCE(attrs={'id': 'tinymceid'}),
         }
 
 
@@ -20,7 +20,7 @@ class ContactForm(ModelForm):
         email = clean_data.get('email')
         phone = clean_data.get('phone')
         password = clean_data.get('password')
-        if not email and not password and not phone:
+        if not any([email, password, phone]):
             raise ValidationError(
                 {
                     'email': 'At least one of Email, Password or Phone needs to filled',

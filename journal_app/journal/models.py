@@ -3,7 +3,7 @@ import uuid
 # Django imports
 from django.db import models
 from django.urls import reverse
-from django.core.exceptions import ValidationError
+
 # Custom imports
 from journal_app.users.models import User
 from tinymce.models import HTMLField
