@@ -32,6 +32,7 @@ body {
 
 .navbar-custom a:hover,
 .navbar-custom a.active,
+.custom-toggler .navbar-toggler,
 .navbar-custom .dropdown .dropdown-menu,
 .navbar-custom .navbar-brand {
   color: #61ca61;
@@ -62,3 +63,37 @@ body {
   color: #61ca61;
 
 }
+
+.entry-link {
+  color: black;
+  text-decoration: none;
+}
+
+.entry-link:hover {
+  text-decoration: none;
+  background-color: #61c461;
+  color: black;
+}
+
+.outside-entry-area {
+  background-color: #dcdcdc;
+  border: 2px #3d3d3d;
+  border-radius: 10px;
+  color: black;
+  text-decoration: none;
+}
+
+.entry-area {
+  background-color: #afafaf;
+  border: 2px #3d3d3d;
+  border-radius: 5px;
+  min-height: 100px;
+}
+
+.entry-area:hover {
+  background-color: #61ca61;
+  border: 2px #3d3d3d;
+  border-radius: 5px;
+}
+
+

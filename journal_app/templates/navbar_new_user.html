@@ -1,0 +1,33 @@
+{% load static i18n %}
+<div class="mb-1">
+  <nav class="navbar navbar-expand-md navbar-custom">
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <i class="fas fa-bars" style="color:#61ca61; font-size:28px;"></i>
+    </button>
+    <a class="navbar-brand" href="{% url 'home' %}">Journal App</a>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        {% url 'home' as active_url %}
+        <li class="nav-item">
+          <a class="nav-link{% if request.path == active_url %} active{% endif %}" href="{% url 'home' %}">Home <span class="sr-only">(current)</span></a>
+        </li>
+        {% url 'about' as active_url %}
+        <li class="nav-item">
+          <a class="nav-link{% if request.path == active_url %} active{% endif %}" href="{% url 'about' %}">About</a>
+        </li>
+      </ul>
+      <ul class="navbar-nav ml-auto">
+          {% url 'account_signup' as active_url %}
+          <li class="nav-item">
+            {# URL provided by django-allauth/account/urls.py #}
+            <a id=" sign-up-link" class="nav-link{% if request.path == active_url %} active{% endif %}" href="{% url 'account_signup' %}">Sign Up</a>
+          </li>
+          {% url 'account_login' as active_url %}
+          <li class="nav-item">
+            {# URL provided by django-allauth/account/urls.py #}
+            <a id="log-in-link" class="nav-link{% if request.path == active_url %} active{% endif %}" href="{% url 'account_login' %}">Sign In</a>
+          </li>
+      </ul>
+    </div>
+  </nav>
+</div>
