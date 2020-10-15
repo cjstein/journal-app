@@ -3,7 +3,7 @@ import uuid
 # Django imports
 from django.db import models
 from django.urls import reverse
-from django.core.exceptions import ValidationError
+
 # Custom imports
 from journal_app.users.models import User
 from tinymce.models import HTMLField
@@ -18,9 +18,6 @@ class TimeStampedModel(models.Model):
     def modified(self):
         return self.updated != self.created
 
-    def __repr__(self):
-        return f'{self.__class__.__name__}({self.user}, {self.__str__})'
-
     class Meta:
         abstract = True
 
@@ -34,7 +31,6 @@ class Contact(TimeStampedModel):
     uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     # Fields below will only need at least one filled out
     email = models.EmailField(blank=True, null=True)
-    password = models.CharField(max_length=100, blank=True, null=True)
     phone = models.CharField(max_length=15, blank=True, null=True)
     # Possibly add whatsapp bot
     # Possibly add Telegrambot
@@ -51,6 +47,9 @@ class Contact(TimeStampedModel):
 
     def __str__(self):
         return self.name
+
+    def __repr__(self):
+        return f'{self.__name__}.({self.user}, {self.__str__})'
 
 
 class Entry(TimeStampedModel):
@@ -77,6 +76,9 @@ class Entry(TimeStampedModel):
 
     def __str__(self):
         return self.title
+
+    def __repr__(self):
+        return f'{self.__name__}({self.user}, {self.__str__})'
 
     class Meta:
         verbose_name = 'entry'

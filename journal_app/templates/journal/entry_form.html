@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 
+{% load static %}
 {% load crispy_forms_tags %}
 
 {% block head %}
@@ -17,4 +18,9 @@
     <button type="submit" class="btn btn-primary">{{ action }}</button>
   </form>
   {% endwith %}
+{% endblock %}
+
+{% block extra_js %}
+  <script src="https://cdn.tiny.cloud/1/1tfb3g0qaiap1ehx0nfximy04m02qfebkdzf8pvd6ant5bhg/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+  <script src="{% static 'js/tinymceinit.js' %}"></script>
 {% endblock %}

@@ -8,17 +8,17 @@
 
 {% block content %}
   {% for entry in entry_list %}
-    <div class="row">
-      <div class="col-lg-8">
-        <a href="{{ entry.get_absolute_url }}" class="header-link"><h3>{{ entry.title }}</h3></a>
+      <div class="row">
+        <div class="col-lg-12 outside-entry-area mb-3 pb-3 mt-1">
+            <h1>{{ entry.title }}</h1>
+            <p><b>Last Updated:</b> {{ entry.updated|date:"SHORT_DATETIME_FORMAT"  }}</p>
+          <a href="{{ entry.get_absolute_url }}" class="entry-link">
+            <div class="col-lg-12 entry-area mw-100">
+                {{ entry.body|safe|truncatewords:75 }}
+            </div>
+          </a>
+        </div>
       </div>
-    </div>
-    <div class="row">
-      <div class="col-lg-8">
-        <p>{{ entry.body|safe|truncatewords:25 }}</p>
-      </div>
-    </div>
-    <hr>
   {% empty %}
     <h2>There are no entries yet. <a href="{% url 'journal:entry_create' %}" class="page-link">Add one here!</a></h2>
   {% endfor %}
