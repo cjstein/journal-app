@@ -16,6 +16,9 @@ class EntryDetailView(LoginRequiredMixin, DetailView):
 class EntryListView(LoginRequiredMixin, ListView):
     model = Entry
 
+    def get_queryset(self):
+        return Entry.objects.filter(user=self.request.user)
+
 
 class EntryCreateView(LoginRequiredMixin, CreateView):
     model = Entry
@@ -45,6 +48,9 @@ class ContactDetailView(LoginRequiredMixin, DetailView):
 
 class ContactListView(LoginRequiredMixin, ListView):
     model = Contact
+
+    def get_queryset(self):
+        return Contact.objects.filter(user=self.request.user)
 
 
 class ContactCreateView(LoginRequiredMixin, CreateView):
