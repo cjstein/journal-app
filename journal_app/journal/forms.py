@@ -19,13 +19,11 @@ class ContactForm(ModelForm):
         clean_data = super().clean()
         email = clean_data.get('email')
         phone = clean_data.get('phone')
-        password = clean_data.get('password')
-        if not any([email, password, phone]):
+        if not any([email, phone]):
             raise ValidationError(
                 {
                     'email': 'At least one of Email, Password or Phone needs to filled',
                     'phone': 'At least one of Email, Password or Phone needs to filled',
-                    'password': 'At least one of Email, Password or Phone needs to filled',
                 }
             )
 
@@ -35,5 +33,4 @@ class ContactForm(ModelForm):
             'name',
             'email',
             'phone',
-            'password',
         ]
