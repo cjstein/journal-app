@@ -15,8 +15,8 @@ def test_entry_str():
 
 def test_entry_repr():
     entry = EntryFactory()
-    assert entry.__repr__() == f'Entry({entry.user}, {entry.created}, {entry.title})'
-    assert repr(entry) == f'Entry({entry.user}, {entry.created}, {entry.title})'
+    assert entry.__repr__() == f'Entry({entry.user}, {entry.title})'
+    assert repr(entry) == f'Entry({entry.user},  {entry.title})'
 
 
 def test_entry_get_absolute_url():

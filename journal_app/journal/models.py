@@ -18,9 +18,6 @@ class TimeStampedModel(models.Model):
     def modified(self):
         return self.updated != self.created
 
-    def __repr__(self):
-        return f'{self.__class__.__name__}({self.user}, {self.__str__})'
-
     class Meta:
         abstract = True
 
@@ -51,6 +48,9 @@ class Contact(TimeStampedModel):
     def __str__(self):
         return self.name
 
+    def __repr__(self):
+        return f'{self.__name__}.({self.user}, {self.__str__})'
+
 
 class Entry(TimeStampedModel):
     """
@@ -76,6 +76,9 @@ class Entry(TimeStampedModel):
 
     def __str__(self):
         return self.title
+
+    def __repr__(self):
+        return f'{self.__name__}({self.user}, {self.__str__})'
 
     class Meta:
         verbose_name = 'entry'
