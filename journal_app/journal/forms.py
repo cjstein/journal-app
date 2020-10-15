@@ -22,8 +22,8 @@ class ContactForm(ModelForm):
         if not any([email, phone]):
             raise ValidationError(
                 {
-                    'email': 'At least one of Email, Password or Phone needs to filled',
-                    'phone': 'At least one of Email, Password or Phone needs to filled',
+                    'email': 'At least one of Email or Phone needs to filled',
+                    'phone': 'At least one of Email or Phone needs to filled',
                 }
             )
 
