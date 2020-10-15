@@ -1,6 +1,7 @@
 # Django imports
 from django.contrib import messages
 from django.urls import reverse_lazy
+from django.shortcuts import get_object_or_404
 from django.views.generic import DetailView, ListView, UpdateView, CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 # Custom imports
@@ -11,6 +12,9 @@ from journal_app.journal.forms import EntryForm, ContactForm
 # Entry Views
 class EntryDetailView(LoginRequiredMixin, DetailView):
     model = Entry
+
+    def get_queryset(self):
+        return Entry.objects.filter(user=self.request.user)
 
 
 class EntryListView(LoginRequiredMixin, ListView):
@@ -36,6 +40,9 @@ class EntryUpdateView(LoginRequiredMixin, UpdateView):
 
     action = 'Update'
 
+    def get_object(self):
+        return get_object_or_404(Entry, pk=self.kwargs['pk'], user=self.request.user)
+
     def form_valid(self, form):
         messages.add_message(self.request, messages.SUCCESS, 'Entry successfully updated')
         return super().form_valid(form)
@@ -44,6 +51,9 @@ class EntryUpdateView(LoginRequiredMixin, UpdateView):
 # Contact Pages
 class ContactDetailView(LoginRequiredMixin, DetailView):
     model = Contact
+
+    def get_queryset(self):
+        return Contact.objects.filter(user=self.request.user)
 
 
 class ContactListView(LoginRequiredMixin, ListView):
@@ -72,6 +82,9 @@ class ContactUpdateView(LoginRequiredMixin, UpdateView):
     def form_valid(self, form):
         messages.add_message(self.request, messages.SUCCESS, 'Contact successfully updated')
         return super().form_valid(form)
+
+    def get_object(self):
+        return get_object_or_404(Contact, pk=self.kwargs['pk'], user=self.request.user)
 
     def get_success_url(self):
         return reverse_lazy('journal:contact_detail', kwargs={'pk': self.kwargs['pk']})
