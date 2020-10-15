@@ -49,7 +49,7 @@ class Contact(TimeStampedModel):
         return self.name
 
     def __repr__(self):
-        return f'{self.__name__}.({self.user}, {self.__str__})'
+        return f'{self.__class__.__name__}({self.user}, {self})'
 
 
 class Entry(TimeStampedModel):
@@ -78,7 +78,7 @@ class Entry(TimeStampedModel):
         return self.title
 
     def __repr__(self):
-        return f'{self.__name__}({self.user}, {self.__str__})'
+        return f'{self.__class__.__name__}({self.user}, {self})'
 
     class Meta:
         verbose_name = 'entry'
