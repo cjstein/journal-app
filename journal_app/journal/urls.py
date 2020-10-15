@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import (
+from journal_app.journal.views import (
     EntryCreateView, EntryListView, EntryDetailView, EntryUpdateView,
     ContactCreateView, ContactListView, ContactDetailView, ContactUpdateView,
 )

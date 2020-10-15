@@ -4,8 +4,8 @@ from django.urls import reverse_lazy
 from django.views.generic import DetailView, ListView, UpdateView, CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 # Custom imports
-from .models import Entry, Contact
-from .forms import EntryForm, ContactForm
+from journal_app.journal.models import Entry, Contact
+from journal_app.journal.forms import EntryForm, ContactForm
 
 
 # Entry Views
