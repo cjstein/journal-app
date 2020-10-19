@@ -1,6 +1,6 @@
 from django.forms import ModelForm, ValidationError
 from tinymce.widgets import TinyMCE
-from .models import Entry, Contact
+from journal_app.journal.models import Entry, Contact
 
 
 class EntryForm(ModelForm):

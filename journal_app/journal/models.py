@@ -6,13 +6,11 @@ from django.urls import reverse
 
 # Custom imports
 from journal_app.users.models import User
-from tinymce.models import HTMLField
 
 
 class TimeStampedModel(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     @property
     def modified(self):
@@ -23,11 +21,8 @@ class TimeStampedModel(models.Model):
 
 
 class Contact(TimeStampedModel):
-    """
-    Contact model will be user supplied and all journal Entries that are tagged with that contact or "public" will be
-    filtered when released.
-    """
     name = models.CharField(max_length=255)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     # Fields below will only need at least one filled out
     email = models.EmailField(blank=True, null=True)
@@ -37,25 +32,17 @@ class Contact(TimeStampedModel):
     # Possibly add signal bot
 
     def get_absolute_url(self):
-        """Get url for user's detail view.
-
-        Returns:
-            str: URL for user detail.
-
-        """
         return reverse("journal:contact_detail", kwargs={"pk": self.uuid})
 
     def __str__(self):
         return self.name
 
     def __repr__(self):
-        return f'{self.__name__}.({self.user}, {self.__str__})'
+        return f'{self.__class__.__name__}({self.user}, {self.name})'
 
 
 class Entry(TimeStampedModel):
-    """
-    Entries for Journal.
-    """
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=255)
     body = models.TextField()
@@ -66,19 +53,13 @@ class Entry(TimeStampedModel):
     contact = models.ManyToManyField(Contact, blank=True)
 
     def get_absolute_url(self):
-        """Get url for user's detail view.
-
-        Returns:
-            str: URL for user detail.
-
-        """
         return reverse("journal:entry_detail", kwargs={"pk": self.uuid})
 
     def __str__(self):
         return self.title
 
     def __repr__(self):
-        return f'{self.__name__}({self.user}, {self.__str__})'
+        return f'{self.__class__.__name__}({self.user}, {self.title})'
 
     class Meta:
         verbose_name = 'entry'
