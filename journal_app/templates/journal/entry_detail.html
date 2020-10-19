@@ -10,12 +10,22 @@
   <div class="row">
     <div class="col-lg-8">
       <h2>{{ entry.title }}</h2>
+      <h6><a href="{% url 'journal:entry_update' entry.uuid %}" class="page-link"><i class="far fa-edit"></i> Edit</a></h6>
       <p>
         <b>Created:</b> {{ entry.created|date:"SHORT_DATETIME_FORMAT" }}
         {% if entry.modified %}
           <b>Updated:</b> {{ entry.updated|date:"SHORT_DATETIME_FORMAT" }}
         {% endif %}
       </p>
+      {% if entry.contact.all %}
+        <p><b>Sharing:</b>
+          {% for contact in entry.contact.all %}
+            {{ contact.name }}{% if not forloop.last %}, {% endif %}
+          {% endfor %}
+        </p>
+      {% else %}
+        <p><b>Sharing:</b> None</p>
+      {% endif %}
     </div>
   </div>
   <div class="row">

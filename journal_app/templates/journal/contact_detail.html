@@ -4,6 +4,7 @@
   <div class="row">
     <div class="col-lg-8">
       <h2>{{ contact.name }}</h2>
+      <h6><a href="{% url 'journal:contact_update' contact.uuid %}" class="page-link"><i class="far fa-edit"></i> Edit</a></h6>
       <p>
         <b>Created:</b> {{ contact.created|date:"SHORT_DATETIME_FORMAT" }}
       {% if contact.modified %}
