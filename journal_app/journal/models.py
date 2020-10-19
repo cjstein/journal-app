@@ -40,6 +40,9 @@ class Contact(TimeStampedModel):
     def __repr__(self):
         return f'{self.__class__.__name__}({self.user}, {self.name})'
 
+    class Meta:
+        ordering = ['name']
+
 
 class Entry(TimeStampedModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
