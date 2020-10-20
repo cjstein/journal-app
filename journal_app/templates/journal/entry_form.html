@@ -14,8 +14,25 @@
   <h1>{{ action }} Entry</h1>
   <form method="post" action=".">
     {% csrf_token %}
-    {{ form|crispy }}
-    <button type="submit" class="btn btn-primary">{{ action }}</button>
+    <button type="submit" class="btn btn-primary btn-lg btn-block">{{ action }}</button>
+    {{ form.title|as_crispy_field }}
+    {{ form.public|as_crispy_field }}
+    {{ form.body|as_crispy_field }}
+
+    {{ form.contact|as_crispy_field }}
+    <!-- Attempting to make the check boxes more friendly
+    <div class="row">
+      <div class="col-lg-12">
+        {% for contact in form.contact %}
+          <div class="btn-group-toggle" data-toggle="buttons">
+            <label class="btn btn-primary active{% if contact.choice_label in entry.contact.all %}active{% endif %}">
+              <input type="checkbox" autocomplete="off" checked="checked">{{ contact.tag }}{{ contact.choice_label }}
+            </label>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+    -->
   </form>
   {% endwith %}
 {% endblock %}
