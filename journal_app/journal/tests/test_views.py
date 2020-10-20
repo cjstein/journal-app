@@ -23,6 +23,8 @@ class TestEntryViews(TestCase):
         callable_obj = EntryDetailView.as_view()
         response = callable_obj(request, pk=self.entry1.uuid)
         self.assertEqual(response.status_code, 200, 'Entry Detail')
+
+    def test_wrong_detail_view(self):
         request = self.factory.get(reverse('journal:entry_detail', kwargs={'pk': self.entry1.uuid}))
         callable_obj = EntryDetailView.as_view()
         response = callable_obj(request, pk=self.entry2.uuid)
