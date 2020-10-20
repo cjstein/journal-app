@@ -70,8 +70,8 @@ class AnonUserCheckinView(RedirectView):
     permanent = True
 
     def get_redirect_url(self, *args, **kwargs):
-        user = User.objects.get(username=kwargs['username'])
-        if user.checkin_link == kwargs['checkin_link']:
+        user = User.objects.get(username=self.kwargs['username'])
+        if user.checkin_link == self.kwargs['uuid']:
             user.last_checkin = timezone.now()
             user.save()
             messages.add_message(
@@ -89,4 +89,4 @@ class AnonUserCheckinView(RedirectView):
             return super(self).get_redirect_url(*args, **kwargs)
 
 
-anon_user_checkin_view = UserCheckinView.as_view()
+anon_user_checkin_view = AnonUserCheckinView.as_view()
