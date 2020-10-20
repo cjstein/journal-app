@@ -9,7 +9,7 @@ class User(AbstractUser):
     """Default user for Journal App."""
     name = CharField(blank=True, max_length=255)
     checkin_link = UUIDField(default=uuid.uuid4)
-    last_checkin = DateTimeField(default=timezone.now())
+    last_checkin = DateTimeField(default=timezone.now)
     # How many days after check-in until release.  This may be a customizable field in the future.
     days_to_release = IntegerField(default=7)
 
@@ -25,4 +25,4 @@ class User(AbstractUser):
         """
         This function returns a boolean based on if the desired number of days has passed since last check in.
         """
-        return timezone.now() > self.checkin_deadline
+        return timezone.now > self.checkin_deadline

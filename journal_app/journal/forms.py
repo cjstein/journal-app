@@ -1,4 +1,4 @@
-from django.forms import ModelForm, ValidationError
+from django.forms import ModelForm, ValidationError, CheckboxSelectMultiple
 from tinymce.widgets import TinyMCE
 from journal_app.journal.models import Entry, Contact
 
@@ -7,9 +7,19 @@ class EntryForm(ModelForm):
 
     class Meta:
         model = Entry
-        fields = ['title', 'body']
+        fields = [
+            'title',
+            'public',
+            'body',
+            'contact',
+        ]
         widgets = {
             'body': TinyMCE(attrs={'id': 'tinymceid'}),
+            'contact': CheckboxSelectMultiple,
+        }
+        labels = {
+            'public': 'Release everyone on your contact list?',
+            'contact': 'Share with:',
         }
 
 

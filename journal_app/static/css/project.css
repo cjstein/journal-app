@@ -40,13 +40,11 @@ body {
 }
 
 .page-link {
-  color: white;
-  background-color: #3d3d3d;
+  color: #3d3d3d;
 }
 
 .page-link:hover {
   color: #61ca61;
-  background-color: #2f2f2f;
 }
 
 .table-grey {
