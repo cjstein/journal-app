@@ -1,9 +1,9 @@
-from datetime import datetime
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils import timezone
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
+from django.template.defaultfilters import date
 from django.views.generic import DetailView, RedirectView, UpdateView
 
 User = get_user_model()
@@ -41,36 +41,52 @@ user_update_view = UserUpdateView.as_view()
 
 
 class UserRedirectView(LoginRequiredMixin, RedirectView):
-
-    permanent = False
-
-    def get_redirect_url(self):
-        return reverse("users:detail", kwargs={"username": self.request.user.username})
+    pattern_name = 'users:detail'
 
 
 user_redirect_view = UserRedirectView.as_view()
 
 
 class UserCheckinView(LoginRequiredMixin, RedirectView):
+    url = reverse_lazy('journal:entry_list')
 
     def get_redirect_url(self, *args, **kwargs):
         user = User.objects.get(username=self.request.user.username)
-        if user.username == self.kwargs['username'] and user.checkin_link == self.kwargs['checkin_link']:
+        user.last_checkin = timezone.now()
+        user.save()
+        messages.add_message(
+            self.request,
+            messages.SUCCESS,
+            f'Thanks for checking in. Your next deadline is {date(user.checkin_deadline, "SHORT_DATE_FORMAT")}.'
+        )
+        return super().get_redirect_url(*args, **kwargs)
+
+
+user_checkin_view = UserCheckinView.as_view()
+
+
+class AnonUserCheckinView(RedirectView):
+    url = reverse_lazy('home')
+    permanent = True
+
+    def get_redirect_url(self, *args, **kwargs):
+        user = User.objects.get(username=kwargs['username'])
+        if user.checkin_link == kwargs['checkin_link']:
             user.last_checkin = timezone.now()
             user.save()
             messages.add_message(
                 self.request,
                 messages.SUCCESS,
-                f'Thanks for checking in. Your next deadline is {datetime.strftime(user.checkin_deadline, "%h-%d-%Y %H:%M")}'
+                f'Thanks for checking in. Your next deadline is {date(user.checkin_deadline, "SHORT_DATE_FORMAT")}.'
             )
-            return reverse('journal:entry_list')
+            return super(self).get_redirect_url(*args, **kwargs)
         else:
             messages.add_message(
                 self.request,
                 messages.ERROR,
                 'There seems to be an issue with your checkin, please try again or contact us.'
             )
-            return reverse('journal:entry_list')
+            return super(self).get_redirect_url(*args, **kwargs)
 
 
-user_checkin_view = UserCheckinView.as_view()
+anon_user_checkin_view = UserCheckinView.as_view()

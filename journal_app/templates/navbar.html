@@ -17,6 +17,9 @@
                 </li>
             </ul>
             <ul class="navbar-nav ml-auto">
+              <li class="nav-item">
+                <a href="{% url 'users:checkin' request.user.username %}" class="nav-link"><i class="fas fa-calendar-check"></i> Check-in</a>
+              </li>
               {% url 'journal:entry_create' as journal_url %}
               {% url 'journal:contact_create' as contact_url %}
               <li class="nav-item dropdown">
