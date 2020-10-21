@@ -1,7 +1,9 @@
 import pytest
 from django.contrib.auth.models import AnonymousUser
 from django.http.response import Http404
-from django.test import RequestFactory
+from django.test import RequestFactory, TestCase, Client
+from django.utils import timezone
+from django.urls import reverse
 
 from journal_app.users.models import User
 from journal_app.users.tests.factories import UserFactory
@@ -9,9 +11,12 @@ from journal_app.users.views import (
     UserRedirectView,
     UserUpdateView,
     user_detail_view,
+    user_checkin_view,
+    anon_user_checkin_view,
 )
 
 pytestmark = pytest.mark.django_db
+REFERENCE_DATE = timezone.datetime(year=2019, month=10, day=30)
 
 
 class TestUserUpdateView:
@@ -38,7 +43,7 @@ class TestUserUpdateView:
 class TestUserRedirectView:
     def test_get_redirect_url(self, user: User, rf: RequestFactory):
         view = UserRedirectView()
-        request = rf.get("/fake-url")
+        request = rf.get("/fake-url/")
         request.user = user
 
         view.request = request
@@ -70,3 +75,43 @@ class TestUserDetailView:
 
         with pytest.raises(Http404):
             user_detail_view(request, username="username")
+
+
+class TestUserCheckinView(TestCase):
+    def setUp(self):
+        self.user1 = UserFactory()
+        self.user1.last_checkin = REFERENCE_DATE
+        self.user1.save()
+        self.user2 = UserFactory()
+        self.user2.last_checkin = REFERENCE_DATE
+        self.user2.save()
+
+    def test_checkin(self):
+        # Every test needs access to the request factory
+        self.client = Client()
+        self.client.force_login(user=self.user1)
+        assert self.user1.last_checkin == timezone.datetime(year=2019, month=10, day=30)
+        response = self.client.get(
+            reverse('users:checkin', kwargs={'username': self.user1.username}),
+            follow=True,
+        )
+        self.assertRedirects(response,
+                             reverse('journal:entry_list'),
+                             status_code=302,
+                             target_status_code=200,
+                             fetch_redirect_response=True)
+        self.user1.refresh_from_db()
+        assert self.user1.last_checkin != REFERENCE_DATE
+
+    def test_anon_checkin(self):
+        self.client = Client()
+        assert self.user2.last_checkin == timezone.datetime(year=2019, month=10, day=30)
+        response = self.client.get(
+            reverse('users:anon_checkin', kwargs={'username': self.user2.username, 'uuid': self.user2.checkin_link}),
+            follow=True,
+        )
+        self.assertRedirects(response,
+                             reverse('home'),
+                             status_code=302,
+                             target_status_code=200,
+                             fetch_redirect_response=True)
