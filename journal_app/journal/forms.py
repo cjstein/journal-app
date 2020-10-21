@@ -1,9 +1,14 @@
 from django.forms import ModelForm, ValidationError, CheckboxSelectMultiple
 from tinymce.widgets import TinyMCE
 from journal_app.journal.models import Entry, Contact
+from journal_app.users.models import User
 
 
 class EntryForm(ModelForm):
+
+    def __init__(self, user, *args, **kwargs):
+        super(EntryForm, self).__init__(*args, **kwargs)
+        self.fields['contact'].queryset = Contact.objects.filter(user=user)
 
     class Meta:
         model = Entry

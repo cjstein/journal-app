@@ -7,6 +7,7 @@ from django.http import Http404
 # Custom imports
 from journal_app.journal.models import Entry, Contact
 from journal_app.journal.forms import EntryForm, ContactForm
+from journal_app.users.models import User
 
 
 # Entry Views
@@ -37,6 +38,11 @@ class EntryListView(LoginRequiredMixin, ListView):
 class EntryCreateView(LoginRequiredMixin, CreateView):
     model = Entry
     form_class = EntryForm
+
+    def get_form_kwargs(self, **kwargs):
+        kwargs = super(EntryCreateView, self).get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
 
     def form_valid(self, form):
         messages.add_message(self.request, messages.SUCCESS, 'Entry successfully added')
