@@ -26,9 +26,14 @@ class TestEntryViews(TestCase):
 
     def test_wrong_detail_view(self):
         request = self.factory.get(reverse('journal:entry_detail', kwargs={'pk': self.entry1.uuid}))
+        request.user = self.entry2.user
         callable_obj = EntryDetailView.as_view()
         response = callable_obj(request, pk=self.entry2.uuid)
-        self.assertEqual(response.status_code, 403, '403')
+        self.assertTemplateNotUsed(r'journal/entry_detail.html')
+        self.assertTemplateUsed(r'journal/entry_list.html')
+
+    def test_wrong_update_view(self):
+        request = self.factory.get(reverse('journal:entry_update'))
 
     def test_list_view(self):
         request = self.factory.get(reverse('journal:entry_list'))
