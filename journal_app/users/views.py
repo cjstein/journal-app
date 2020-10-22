@@ -82,14 +82,13 @@ class AnonUserCheckinView(RedirectView):
                 messages.SUCCESS,
                 f'Thanks for checking in. Your next deadline is {date(user.checkin_deadline, "SHORT_DATE_FORMAT")}.'
             )
-            return super().get_redirect_url(*args, **kwargs)
         else:
             messages.add_message(
                 self.request,
                 messages.ERROR,
                 'There seems to be an issue with your checkin, please try again or contact us.'
             )
-            return super().get_redirect_url(*args, **kwargs)
+        return super().get_redirect_url(*args, **kwargs)
 
 
 anon_user_checkin_view = AnonUserCheckinView.as_view()
