@@ -19,7 +19,6 @@ class EntryFactory(DjangoModelFactory):
 
     title = fuzzy.FuzzyText()
     body = fuzzy.FuzzyText()
-    released = fuzzy.FuzzyChoice([True, False])
     public = fuzzy.FuzzyChoice([True, False])
     user = SubFactory(UserFactory)
 

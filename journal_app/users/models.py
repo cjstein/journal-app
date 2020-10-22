@@ -25,4 +25,4 @@ class User(AbstractUser):
         """
         This function returns a boolean based on if the desired number of days has passed since last check in.
         """
-        return timezone.now > self.checkin_deadline
+        return timezone.now() > self.checkin_deadline

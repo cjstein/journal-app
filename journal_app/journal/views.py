@@ -7,6 +7,7 @@ from django.http import Http404
 # Custom imports
 from journal_app.journal.models import Entry, Contact
 from journal_app.journal.forms import EntryForm, ContactForm
+from journal_app.users.models import User
 
 
 # Entry Views
@@ -23,7 +24,7 @@ class EntryDetailView(UserPassesTestMixin, LoginRequiredMixin, DetailView):
         return self.request.user == entry.user
 
     def handle_no_permission(self):
-        messages.add_message(self.request, messages.ERROR, 'Unable to find entry!')
+        # messages.add_message(self.request, messages.ERROR, 'Unable to find entry!')
         return super(EntryDetailView, self).handle_no_permission()
 
 
@@ -38,6 +39,11 @@ class EntryCreateView(LoginRequiredMixin, CreateView):
     model = Entry
     form_class = EntryForm
 
+    def get_form_kwargs(self, **kwargs):
+        kwargs = super(EntryCreateView, self).get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
     def form_valid(self, form):
         messages.add_message(self.request, messages.SUCCESS, 'Entry successfully added')
         form.instance.user = self.request.user
@@ -47,8 +53,14 @@ class EntryCreateView(LoginRequiredMixin, CreateView):
 class EntryUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
     model = Entry
     form_class = EntryForm
+    raise_exception = True
 
     action = 'Update'
+
+    def get_form_kwargs(self, **kwargs):
+        kwargs = super(EntryUpdateView, self).get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
 
     def test_func(self):
         # Test to make sure the user is the one who owns the entry
@@ -58,9 +70,6 @@ class EntryUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
     def form_valid(self, form):
         messages.add_message(self.request, messages.SUCCESS, 'Entry successfully updated')
         return super().form_valid(form)
-
-    def handle_no_permission(self):
-        return Http404()
 
 
 # Contact Pages
