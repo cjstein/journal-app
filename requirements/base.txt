@@ -5,7 +5,8 @@ argon2-cffi==20.1.0  # https://github.com/hynek/argon2_cffi
 redis==3.5.3  # https://github.com/andymccurdy/redis-py
 hiredis==1.1.0  # https://github.com/redis/hiredis-py
 celery==4.4.6  # pyup: < 5.0,!=4.4.7  # https://github.com/celery/celery
-django-celery-beat==2.0.0  # https://github.com/celery/django-celery-beat
+pytest==6.0.2  # https://github.com/pytest-dev/pytest
+
 
 # Django
 # ------------------------------------------------------------------------------
@@ -15,3 +16,6 @@ django-model-utils==4.0.0  # https://github.com/jazzband/django-model-utils
 django-allauth==0.42.0  # https://github.com/pennersr/django-allauth
 django-crispy-forms==1.9.2  # https://github.com/django-crispy-forms/django-crispy-forms
 django-redis==4.12.1  # https://github.com/jazzband/django-redis
+django-celery-beat==2.0.0  # https://github.com/celery/django-celery-beat
+pytest-django==3.10.0  # https://github.com/pytest-dev/pytest-django
+django-extensions==3.0.9  # https://github.com/django-extensions/django-extensions
