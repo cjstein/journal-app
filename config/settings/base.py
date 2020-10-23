@@ -279,6 +279,7 @@ CELERY_TASK_SOFT_TIME_LIMIT = 60
 CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
 # django-allauth
 # ------------------------------------------------------------------------------
+ACCOUNT_EMAIL_SUBJECT_PREFIX = False
 ACCOUNT_ALLOW_REGISTRATION = env.bool("DJANGO_ACCOUNT_ALLOW_REGISTRATION", True)
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
 ACCOUNT_AUTHENTICATION_METHOD = "username_email"
@@ -293,6 +294,7 @@ ACCOUNT_USERNAME_MIN_LENGTH = 5
 ACCOUNT_ADAPTER = "journal_app.users.adapters.AccountAdapter"
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
 SOCIALACCOUNT_ADAPTER = "journal_app.users.adapters.SocialAccountAdapter"
+
 
 
 # Your stuff...
