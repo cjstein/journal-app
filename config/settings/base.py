@@ -62,6 +62,8 @@ DJANGO_APPS = [
     "django.contrib.sites",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    'dal',
+    'dal_select2',
     # "django.contrib.humanize", # Handy template tags
     "django.contrib.admin",
     "django.forms",
@@ -294,9 +296,6 @@ ACCOUNT_USERNAME_MIN_LENGTH = 5
 ACCOUNT_ADAPTER = "journal_app.users.adapters.AccountAdapter"
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
 SOCIALACCOUNT_ADAPTER = "journal_app.users.adapters.SocialAccountAdapter"
-
-
-
 # Your stuff...
 # ------------------------------------------------------------------------------
 # Tiny MCE settings

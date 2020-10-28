@@ -1,13 +1,13 @@
 # Django imports
 from django.contrib import messages
-from django.urls import reverse_lazy
-from django.views.generic import DetailView, ListView, UpdateView, CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.http import Http404
+from django.urls import reverse_lazy
+from django.views.generic import DetailView, ListView, UpdateView, CreateView
+from dal import autocomplete
+from journal_app.journal.forms import EntryForm, ContactForm
 # Custom imports
 from journal_app.journal.models import Entry, Contact
-from journal_app.journal.forms import EntryForm, ContactForm
-from journal_app.users.models import User
 
 
 # Entry Views
@@ -119,3 +119,15 @@ class ContactUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
 
     def handle_no_permission(self):
         return Http404()
+
+
+class ContactAutoComplete(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        if not self.request.user.is_authenticated:
+            return Contact.objects.none()
+
+        qs = Contact.objects.filter(user=self.request.user)
+
+        if self.q:
+            qs = qs.filter(name__istartswith=self.q)
+        return qs
