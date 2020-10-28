@@ -1,4 +1,5 @@
 {%  extends 'base.html' %}
+{% load crispy_forms_tags static %}
 
 {% block title %}{{ entry.title }}{% endblock %}
 
@@ -17,15 +18,26 @@
           <b>Updated:</b> {{ entry.updated|date:"SHORT_DATETIME_FORMAT" }}
         {% endif %}
       </p>
-      {% if entry.contact.all %}
-        <p><b>Sharing:</b>
-          {% for contact in entry.contact.all %}
-            {{ contact.name }}{% if not forloop.last %}, {% endif %}
-          {% endfor %}
-        </p>
-      {% else %}
-        <p><b>Sharing:</b> None</p>
-      {% endif %}
+      <form method="post" action=".">
+        {% csrf_token %}
+        {{ form.contact|as_crispy_field }}
+        <button type="submit" class="btn btn-primary">Save</button>
+        <table style="display: none">
+          {{ view.formset.empty_form }}
+        </table>
+        <table>
+          {{ view.formset }}
+        </table>
+      </form>
+{#      {% if entry.contact.all %}#}
+{#        <p><b>Sharing:</b>#}
+{#          {% for contact in entry.contact.all %}#}
+{#            {{ contact.name }}{% if not forloop.last %}, {% endif %}#}
+{#          {% endfor %}#}
+{#        </p>#}
+{#      {% else %}#}
+{#        <p><b>Sharing:</b> None</p>#}
+{#      {% endif %}#}
     </div>
   </div>
   <div class="row">
@@ -34,4 +46,8 @@
       {{ entry.body|safe }}
     </div>
   </div>
+{% endblock %}
+{% block extra_js %}
+  <script type="text/javascript" src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>
+  {{ form.media }}
 {% endblock %}

@@ -49,3 +49,19 @@ class ContactForm(ModelForm):
             'email',
             'phone',
         ]
+
+
+class EntryContactAddForm(ModelForm):
+
+    def __init__(self, user, *args, **kwargs):
+        super(EntryContactAddForm, self).__init__(*args, **kwargs)
+        self.fields['contact'].queryset = Contact.objects.filter(user=user)
+
+    class Meta:
+        model = Entry
+        fields = [
+            'contact'
+        ]
+        widgets = {
+            'contact': autocomplete.ModelSelect2Multiple(url='journal:contact-autocomplete'),
+        }
