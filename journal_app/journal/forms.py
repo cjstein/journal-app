@@ -1,7 +1,7 @@
-from django.forms import ModelForm, ValidationError, CheckboxSelectMultiple
+from django.forms import ModelForm, ValidationError, ModelChoiceField
+from dal import autocomplete
 from tinymce.widgets import TinyMCE
 from journal_app.journal.models import Entry, Contact
-from journal_app.users.models import User
 
 
 class EntryForm(ModelForm):
@@ -20,7 +20,7 @@ class EntryForm(ModelForm):
         ]
         widgets = {
             'body': TinyMCE(attrs={'id': 'tinymceid'}),
-            'contact': CheckboxSelectMultiple,
+            'contact': autocomplete.ModelSelect2Multiple(url='journal:contact-autocomplete'),
         }
         labels = {
             'public': 'Release everyone on your contact list?',
@@ -49,3 +49,19 @@ class ContactForm(ModelForm):
             'email',
             'phone',
         ]
+
+
+class EntryContactAddForm(ModelForm):
+
+    def __init__(self, user, *args, **kwargs):
+        super(EntryContactAddForm, self).__init__(*args, **kwargs)
+        self.fields['contact'].queryset = Contact.objects.filter(user=user)
+
+    class Meta:
+        model = Entry
+        fields = [
+            'contact'
+        ]
+        widgets = {
+            'contact': autocomplete.ModelSelect2Multiple(url='journal:contact-autocomplete'),
+        }

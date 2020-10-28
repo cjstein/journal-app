@@ -95,3 +95,10 @@ body {
 }
 
 
+.select2-selection__rendered {
+  padding-bottom: 10px;
+  padding: 0px;
+  position: relative;
+  bottom: 6px;
+  left: -10px;
+}

@@ -19,3 +19,5 @@ django-redis==4.12.1  # https://github.com/jazzband/django-redis
 django-celery-beat==2.0.0  # https://github.com/celery/django-celery-beat
 pytest-django==3.10.0  # https://github.com/pytest-dev/pytest-django
 django-extensions==3.0.9  # https://github.com/django-extensions/django-extensions
+django-tinymce==3.1.0
+django-autocomplete-light==3.8.1
