@@ -52,17 +52,6 @@ body {
   text-decoration: underline;
 }
 
-.entry-edit-link {
-  color: #3d3d3d;
-  background-color: #b3b3b3;
-}
-
-.entry-edit-link:hover {
-  color: #61ca61;
-  background-color: #3d3d3d;
-
-  text-decoration: underline;
-}
 
 .table-grey {
   background-color: #3d3d3d;
@@ -79,16 +68,6 @@ body {
 
 }
 
-.entry-link {
-  color: black;
-  text-decoration: none;
-}
-
-.entry-link:hover {
-  text-decoration: none;
-  background-color: #61c461;
-  color: black;
-}
 
 .outside-entry-area {
   background-color: #dcdcdc;
@@ -114,8 +93,21 @@ body {
 
 .select2-selection__rendered {
   padding-bottom: 10px;
-  padding: 0px;
   position: relative;
   bottom: 6px;
   left: -10px;
+}
+
+.btn-theme {
+  font-size: 24pt;
+  color: #61ca61;
+  background-color: #3d3d3d;
+  border-radius: 10px;
+  border: 10px black;
+}
+
+.btn-theme:hover {
+  color: #61ca61;
+  background-color: #000000;
+  text-decoration: underline;
 }
