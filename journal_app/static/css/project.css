@@ -52,6 +52,16 @@ body {
   text-decoration: underline;
 }
 
+.entry-link {
+  color: black;
+  text-decoration: none;
+}
+
+.entry-link:hover {
+  text-decoration: none;
+  background-color: #61c461;
+  color: black;
+}
 
 .table-grey {
   background-color: #3d3d3d;
@@ -99,8 +109,7 @@ body {
 }
 
 .btn-theme {
-  font-size: 24pt;
-  color: #61ca61;
+  color: white;
   background-color: #3d3d3d;
   border-radius: 10px;
   border: 10px black;
@@ -110,4 +119,8 @@ body {
   color: #61ca61;
   background-color: #000000;
   text-decoration: underline;
+}
+
+.btn-lg {
+  font-size: 24pt;
 }
