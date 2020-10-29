@@ -49,6 +49,11 @@ class EntryCreateView(LoginRequiredMixin, CreateView):
         form.instance.user = self.request.user
         return super().form_valid(form)
 
+    def get_context_data(self, **kwargs):
+        context = super(EntryCreateView, self).get_context_data()
+        context['contacts'] = Contact.objects.filter(user=self.request.user)
+        return context
+
 
 class EntryUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
     model = Entry
@@ -70,6 +75,11 @@ class EntryUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
     def form_valid(self, form):
         messages.add_message(self.request, messages.SUCCESS, 'Entry successfully updated')
         return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super(EntryUpdateView, self).get_context_data()
+        context['contacts'] = Contact.objects.filter(user=self.request.user)
+        return context
 
 
 class EntryDeleteView(LoginRequiredMixin, DeleteView):
