@@ -41,10 +41,27 @@ body {
 
 .page-link {
   color: #3d3d3d;
+  background-color: #b3b3b3;
+  font-size: 18px;
+  border-radius: 10px;
+  border: 10px black;
 }
 
 .page-link:hover {
   color: #61ca61;
+  text-decoration: underline;
+}
+
+.entry-edit-link {
+  color: #3d3d3d;
+  background-color: #b3b3b3;
+}
+
+.entry-edit-link:hover {
+  color: #61ca61;
+  background-color: #3d3d3d;
+
+  text-decoration: underline;
 }
 
 .table-grey {
