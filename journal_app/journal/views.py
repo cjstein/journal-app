@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.http import Http404
 from django.urls import reverse_lazy
-from django.views.generic import DetailView, ListView, UpdateView, CreateView
+from django.views.generic import DetailView, ListView, UpdateView, CreateView, DeleteView
 from dal import autocomplete
 from journal_app.journal.forms import EntryForm, ContactForm
 # Custom imports
@@ -72,7 +72,17 @@ class EntryUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
         return super().form_valid(form)
 
 
+class EntryDeleteView(LoginRequiredMixin, DeleteView):
+    model = Entry
+    template_name = 'journal/entry_delete.html'
+
+    def get_success_url(self):
+        messages.add_message(self.request, messages.SUCCESS, 'Entry Successfully deleted!')
+        return reverse_lazy('journal:entry_list')
+
+
 # Contact Pages
+
 
 class ContactDetailView(LoginRequiredMixin, DetailView):
     model = Contact
