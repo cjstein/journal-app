@@ -38,14 +38,3 @@ class User(AbstractUser):
 
     def get_absolute_checkin_link(self):
         return reverse("users:anon_checkin", kwargs={'username': self.username, 'uuid': self.checkin_link})
-
-
-@receiver(email_confirmed)
-def user_confirmed_email(request, email_address, **kwargs):
-    # Once the user confirms email, send them a welcome email
-    user = User.objects.get(email=email_address.email)
-    subject = f'Welcome to {CURRENT_SITE_NAME}!'
-    html_message = render_to_string('account/email/welcome_email.html', {'user': user})
-    plain_message = strip_tags(html_message)
-    to = user.email
-    mail.send_mail(subject, plain_message, None, [to], html_message=html_message)
