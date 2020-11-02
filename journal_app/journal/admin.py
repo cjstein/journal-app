@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Entry, Contact
+from journal_app.journal.models import Entry, Contact
 
 # Register your models here.
 admin.site.register(Entry)
