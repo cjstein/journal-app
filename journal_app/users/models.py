@@ -36,6 +36,9 @@ class User(AbstractUser):
         """
         return timezone.now() > self.checkin_deadline
 
+    def get_absolute_checkin_link(self):
+        return reverse("users:anon_checkin", kwargs={'username': self.username, 'uuid': self.checkin_link})
+
 
 @receiver(email_confirmed)
 def user_confirmed_email(request, email_address, **kwargs):
