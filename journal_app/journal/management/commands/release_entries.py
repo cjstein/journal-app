@@ -4,7 +4,7 @@ from journal_app.users.models import User
 
 
 class Command(BaseCommand):
-    help = "Checks each user's last check in and sends them a reminder email"
+    help = "Checks user last checkin and if it is past due, it releases their entries"
 
     def handle(self, *args, **options):
         users = User.objects.all()
