@@ -1,6 +1,6 @@
 from django.dispatch import receiver
 from django.contrib.sites.models import Site
-from journal_app.mail.models import Mail
+from journal_app.journal_mail.models import Mail
 from journal_app.users.models import User
 from allauth.account.signals import email_confirmed
 

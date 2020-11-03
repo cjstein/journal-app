@@ -22,14 +22,10 @@ class Mail(models.Model):
 
     The body of the email shall be created in the template for the email with the variables needed in them
     """
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.to = kwargs['to'] if kwargs['to'] else self.user.email
-        self.save()
 
     subject = models.CharField(max_length=100, blank=True, null=True)
     header = models.CharField(max_length=50)
-    to = models.EmailField(blank=False, null=False)
+    to = models.EmailField(blank=True, null=True)
     datetime = models.DateTimeField(auto_now_add=True)
     email_from = models.EmailField(default=DEFAULT_FROM_EMAIL)
     html_message = models.TextField()
@@ -39,7 +35,7 @@ class Mail(models.Model):
     def message(self, **context):
         context['user'] = self.user
         context['header'] = self.header
-        self.html_message = render_to_string(self.get_full_template, context)
+        self.html_message = render_to_string(self.get_full_template(), context)
         self.save()
         self.send_mail()
 
@@ -53,4 +49,6 @@ class Mail(models.Model):
     def send_mail(self):
         mail.send_mail(self.subject, self.plain_message, None, [self.to], html_message=self.html_message)
 
-
+    def save(self, *args, **kwargs):
+        if not self.to:
+            self.to = self.user.email

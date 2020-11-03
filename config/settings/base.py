@@ -80,7 +80,7 @@ THIRD_PARTY_APPS = [
 LOCAL_APPS = [
     "journal_app.users.apps.UsersConfig",
     "journal_app.journal.apps.JournalConfig",
-    "journal_app.mail.apps.MailConfig",
+    "journal_app.journal_mail.apps.JournalMailConfig",
     # Your stuff: custom apps go here
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps

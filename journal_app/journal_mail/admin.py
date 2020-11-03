@@ -1,4 +1,5 @@
 from django.contrib import admin
-from .models import Mail
+from journal_app.journal_mail.models import Mail
+
 
 admin.site.register(Mail)
