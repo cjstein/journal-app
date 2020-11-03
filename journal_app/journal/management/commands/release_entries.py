@@ -13,3 +13,5 @@ class Command(BaseCommand):
             for entry in entries:
                 entry.released = True
                 entry.save()
+            user.entries_released = True
+            user.save()

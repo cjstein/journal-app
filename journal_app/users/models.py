@@ -1,6 +1,6 @@
 import uuid
 from django.contrib.auth.models import AbstractUser
-from django.db.models import CharField, UUIDField, DateTimeField, IntegerField
+from django.db.models import CharField, UUIDField, DateTimeField, IntegerField, BooleanField
 from django.urls import reverse
 from django.utils import timezone
 from django.core import mail
@@ -21,6 +21,7 @@ class User(AbstractUser):
     last_checkin = DateTimeField(default=timezone.now)
     # How many days after check-in until release.  This may be a customizable field in the future.
     days_to_release = IntegerField(default=7)
+    entries_released = BooleanField(default=False)
 
     def get_absolute_url(self):
         return reverse("users:detail", kwargs={"username": self.username})

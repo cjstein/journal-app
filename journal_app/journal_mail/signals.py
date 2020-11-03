@@ -5,7 +5,7 @@ from journal_app.users.models import User
 from allauth.account.signals import email_confirmed
 
 
-CURRENT_SITE_NAME = Site.objects.get_current().domain
+CURRENT_SITE_NAME = Site.objects.get_current()
 
 
 @receiver(email_confirmed)
@@ -20,5 +20,4 @@ def user_confirmed_email(request, email_address, **kwargs):
         template_name='welcome_email',
     )
     mail.message()
-    mail.save()
 
