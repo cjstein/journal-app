@@ -11,7 +11,6 @@
           <th scope="col">Name</th>
           <th scope="col" class="text-center">Email</th>
           <th scope="col" class="text-center">Phone</th>
-          <th scope="col" class="text-center">Edit</th>
           <th scope="col" class="text-center">Delete</th>
         </tr>
       </thead>
@@ -30,10 +29,7 @@
           {% endif %}
         </td>
         <td class="text-center">
-          <i class="fas fa-check"></i>
-        </td>
-        <td class="text-center">
-            <i class="fas fa-check"></i>
+          <a href="{% url 'journal:contact_delete' contact.pk %}" class="table-link"><i class="far fa-trash-alt"></i> Delete</a>
         </td>
       </tr>
 
