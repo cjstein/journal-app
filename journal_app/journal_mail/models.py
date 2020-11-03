@@ -54,3 +54,9 @@ class Mail(models.Model):
         if not self.to:
             self.to = self.user.email
         super(Mail, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return f'{self.user}: {self.template_name}'
+
+    def __repr__(self):
+        return f'{self.__class__.__name__}({self.user}, {self.template_name}, {self.datetime})'

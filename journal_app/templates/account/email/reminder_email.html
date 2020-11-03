@@ -1,0 +1,14 @@
+{% extends 'account/email/base_message.html' %}
+
+{% block tagline %}
+Checkin deadline coming soon!
+{% endblock %}
+
+{% block header %}
+Better checkin so your Entries don't get release
+{% endblock %}
+
+{% block content %}
+  {{ user.username }},<br/>
+  Your Entries will be released in {{ user.days_until_release }} days.  Please checkin again at {{ user.get_absolute_checkin_link }}
+{% endblock %}
