@@ -82,13 +82,18 @@ class EntryUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
         return context
 
 
-class EntryDeleteView(LoginRequiredMixin, DeleteView):
+class EntryDeleteView(UserPassesTestMixin, LoginRequiredMixin, DeleteView):
     model = Entry
     template_name = 'journal/entry_delete.html'
 
     def get_success_url(self):
         messages.add_message(self.request, messages.SUCCESS, 'Entry Successfully deleted!')
         return reverse_lazy('journal:entry_list')
+
+    def test_func(self):
+        # Test to make sure the user is the one who owns the entry
+        contact = Contact.objects.filter(pk=self.kwargs['pk'])
+        return self.request.user == contact[0].user
 
 
 # Contact Pages
@@ -139,6 +144,20 @@ class ContactUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
 
     def handle_no_permission(self):
         return Http404()
+
+
+class ContactDeleteView(UserPassesTestMixin, LoginRequiredMixin, DeleteView):
+    model = Contact
+    template_name = 'journal/contact_delete.html'
+
+    def test_func(self):
+        # Test to make sure the user is the one who owns the entry
+        contact = Contact.objects.filter(pk=self.kwargs['pk'])
+        return self.request.user == contact[0].user
+
+    def get_success_url(self):
+        messages.add_message(self.request, messages.SUCCESS, 'Contact Successfully deleted!')
+        return reverse_lazy('journal:contact_list')
 
 
 class ContactAutoComplete(autocomplete.Select2QuerySetView):

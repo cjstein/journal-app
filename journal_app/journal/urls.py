@@ -1,7 +1,7 @@
 from django.urls import path
 from journal_app.journal.views import (
     EntryCreateView, EntryListView, EntryDetailView, EntryUpdateView, EntryDeleteView,
-    ContactCreateView, ContactListView, ContactDetailView, ContactUpdateView,
+    ContactCreateView, ContactListView, ContactDetailView, ContactUpdateView, ContactDeleteView,
     ContactAutoComplete,
 )
 
@@ -18,6 +18,7 @@ urlpatterns = [
     path("contact/<uuid:pk>/", ContactDetailView.as_view(), name='contact_detail'),
     path("contact/new/", ContactCreateView.as_view(), name='contact_create'),
     path("contact/<uuid:pk>/update/", ContactUpdateView.as_view(), name='contact_update'),
+    path("contact/<uuid:pk>/delete/", ContactDeleteView.as_view(), name='contact_delete'),
     path("contact/auto-complete/", ContactAutoComplete.as_view(), name='contact-autocomplete'),
     path("", EntryListView.as_view(), name='entry_list'),
 ]

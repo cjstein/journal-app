@@ -48,7 +48,15 @@ class Mail(models.Model):
 
     def send_mail(self):
         mail.send_mail(self.subject, self.plain_message, None, [self.to], html_message=self.html_message)
+        self.save()
 
     def save(self, *args, **kwargs):
         if not self.to:
             self.to = self.user.email
+        super(Mail, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return f'{self.user}: {self.template_name}'
+
+    def __repr__(self):
+        return f'{self.__class__.__name__}({self.user}, {self.template_name}, {self.datetime})'

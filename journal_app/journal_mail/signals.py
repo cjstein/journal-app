@@ -5,7 +5,7 @@ from journal_app.users.models import User
 from allauth.account.signals import email_confirmed
 
 
-CURRENT_SITE_NAME = Site.objects.get_current().domain
+CURRENT_SITE_NAME = Site.objects.get_current()
 
 
 @receiver(email_confirmed)
