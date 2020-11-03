@@ -20,4 +20,5 @@ def user_confirmed_email(request, email_address, **kwargs):
         template_name='welcome_email',
     )
     mail.message()
+    mail.save()
 
