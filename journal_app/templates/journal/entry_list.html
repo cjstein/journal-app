@@ -20,7 +20,7 @@
         </div>
       </div>
   {% empty %}
-    <h2>There are no entries yet. <a href="{% url 'journal:entry_create' %}" class="page-link">Add one here!</a></h2>
+    <h2>There are no entries yet. <a href="{% url 'journal:entry_create' %}" class="btn btn-theme btn-lg btn-block"><i class="fas fa-plus"></i> Add one here!</a></h2>
   {% endfor %}
 
 

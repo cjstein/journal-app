@@ -1,0 +1,13 @@
+{% extends 'account/email/base_message.html' %}
+
+{% block tagline %}
+Thank you for joining!
+{% endblock %}
+
+{% block header %}
+Thanks for joining!
+{% endblock %}
+
+{% block content %}
+  Welcome {{ user.username }}.  Thank you for joining the site!  Please visit our tutorial page to see how it works.
+{% endblock %}

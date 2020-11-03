@@ -41,10 +41,26 @@ body {
 
 .page-link {
   color: #3d3d3d;
+  background-color: #b3b3b3;
+  font-size: 18px;
+  border-radius: 10px;
+  border: 10px black;
 }
 
 .page-link:hover {
   color: #61ca61;
+  text-decoration: underline;
+}
+
+.entry-link {
+  color: black;
+  text-decoration: none;
+}
+
+.entry-link:hover {
+  text-decoration: none;
+  background-color: #61c461;
+  color: black;
 }
 
 .table-grey {
@@ -62,16 +78,6 @@ body {
 
 }
 
-.entry-link {
-  color: black;
-  text-decoration: none;
-}
-
-.entry-link:hover {
-  text-decoration: none;
-  background-color: #61c461;
-  color: black;
-}
 
 .outside-entry-area {
   background-color: #dcdcdc;
@@ -97,8 +103,24 @@ body {
 
 .select2-selection__rendered {
   padding-bottom: 10px;
-  padding: 0px;
   position: relative;
   bottom: 6px;
   left: -10px;
+}
+
+.btn-theme {
+  color: white;
+  background-color: #3d3d3d;
+  border-radius: 10px;
+  border: 10px black;
+}
+
+.btn-theme:hover {
+  color: #61ca61;
+  background-color: #000000;
+  text-decoration: underline;
+}
+
+.btn-lg {
+  font-size: 24pt;
 }
