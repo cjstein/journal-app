@@ -10,10 +10,14 @@
   <div class="row">
     <h2>Entries to be shared with {{ contact.name }}</h2>
   </div>
-  <div class="row">
-    <a href="{% url 'journal:contact_update' contact.pk %}" class="btn btn-warning"><i class="far far fa-edit"></i> Edit {{ contact.name }}</a>
-    <a href="{% url 'journal:contact_delete' contact.pk %}" class="btn btn-danger"><i class="far fa-trash-alt"></i> Delete {{ contact.name }}</a>
-  </div>
+    <div class="row">
+      <div class="col-lg-6">
+        <h6 class="text-center"><a href="{% url 'journal:contact_update' contact.uuid %}" class="btn btn-theme btn-block"><i class="far fa-edit"></i> Edit {{ contact.name }}</a></h6>
+      </div>
+      <div class="col-lg-6">
+        <h6 class="text-center"><a href="{% url 'journal:contact_delete' contact.uuid %}" class="btn btn-theme btn-block btn-danger-hover"><i class="far fa-trash-alt"></i> Delete {{ contact.name }}</a></h6>
+      </div>
+    </div>
   {% for entry in entry_list %}
     <div class="row">
       <div class="col-lg-12 outside-entry-area mb-3 pb-3 mt-1">

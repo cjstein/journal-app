@@ -124,3 +124,9 @@ body {
 .btn-lg {
   font-size: 24pt;
 }
+
+.btn-danger-hover:hover {
+  background-color: red;
+  color: black;
+  border-color: #660101;
+}
