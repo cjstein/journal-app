@@ -6,10 +6,6 @@ from config.settings.base import DEFAULT_FROM_EMAIL
 from journal_app.users.models import User
 
 
-def get_sentinel_user():
-    return User.objects.get_or_create(username='deleted', email='deleted@gmail.com', password='sfsagsadgczdbgbzbfvz')[0]
-
-
 class Mail(models.Model):
     """
     Email model to log and send all emails.
@@ -29,7 +25,7 @@ class Mail(models.Model):
     datetime = models.DateTimeField(auto_now_add=True)
     email_from = models.EmailField(default=DEFAULT_FROM_EMAIL)
     html_message = models.TextField()
-    user = models.ForeignKey(User, on_delete=models.SET(get_sentinel_user))
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     template_name = models.CharField(max_length=40, blank=False, null=False)
 
     def message(self, **context):
