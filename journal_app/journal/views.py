@@ -2,6 +2,7 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.http import Http404
+from django.db import models
 from django.urls import reverse_lazy
 from django.views.generic import DetailView, ListView, UpdateView, CreateView, DeleteView
 from dal import autocomplete
@@ -10,18 +11,22 @@ from journal_app.journal.forms import EntryForm, ContactForm
 from journal_app.journal.models import Entry, Contact
 
 
+def test_user_owns(request, model: models.Model, pk):
+    test_model = model.objects.filter(pk=pk)[0]
+    return request.user == test_model.user
+
+
 # Entry Views
 class EntryDetailView(UserPassesTestMixin, LoginRequiredMixin, DetailView):
     model = Entry
     redirect_field_name = 'journal:entry_list'
 
     def get_queryset(self):
-        return Entry.objects.filter(user=self.request.user)
+        user_entries = Entry.objects.filter(user=self.request.user)
+        return user_entries
 
     def test_func(self):
-        # Test to make sure the user is the one who owns the entry
-        entry = Entry.objects.filter(pk=self.kwargs['pk'])[0]
-        return self.request.user == entry.user
+        return test_user_owns(self.request, Entry, self.kwargs['pk'])
 
     def handle_no_permission(self):
         # messages.add_message(self.request, messages.ERROR, 'Unable to find entry!')
@@ -68,9 +73,7 @@ class EntryUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
         return kwargs
 
     def test_func(self):
-        # Test to make sure the user is the one who owns the entry
-        entry = Entry.objects.filter(pk=self.kwargs['pk'])
-        return self.request.user == entry[0].user
+        return test_user_owns(self.request, Entry, self.kwargs['pk'])
 
     def form_valid(self, form):
         messages.add_message(self.request, messages.SUCCESS, 'Entry successfully updated')
@@ -91,9 +94,7 @@ class EntryDeleteView(UserPassesTestMixin, LoginRequiredMixin, DeleteView):
         return reverse_lazy('journal:entry_list')
 
     def test_func(self):
-        # Test to make sure the user is the one who owns the entry
-        contact = Contact.objects.filter(pk=self.kwargs['pk'])
-        return self.request.user == contact[0].user
+        return test_user_owns(self.request, Entry, self.kwargs['pk'])
 
 
 # Contact Pages
@@ -103,9 +104,7 @@ class ContactDetailView(LoginRequiredMixin, DetailView):
     model = Contact
 
     def test_func(self):
-        # Test to make sure the user is the one who owns the entry
-        contact = Contact.objects.filter(pk=self.kwargs['pk'])
-        return self.request.user == contact[0].user
+        return test_user_owns(self.request, Contact, self.kwargs['pk'])
 
     def handle_no_permission(self):
         return Http404()
@@ -135,9 +134,7 @@ class ContactUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
     action = 'Update'
 
     def test_func(self):
-        # Test to make sure the user is the one who owns the entry
-        contact = Contact.objects.filter(pk=self.kwargs['pk'])
-        return self.request.user == contact[0].user
+        return test_user_owns(self.request, Contact, self.kwargs['pk'])
 
     def get_success_url(self):
         return reverse_lazy('journal:contact_detail', kwargs={'pk': self.kwargs['pk']})
@@ -151,9 +148,7 @@ class ContactDeleteView(UserPassesTestMixin, LoginRequiredMixin, DeleteView):
     template_name = 'journal/contact_delete.html'
 
     def test_func(self):
-        # Test to make sure the user is the one who owns the entry
-        contact = Contact.objects.filter(pk=self.kwargs['pk'])
-        return self.request.user == contact[0].user
+        return test_user_owns(self.request, Contact, self.kwargs['pk'])
 
     def get_success_url(self):
         messages.add_message(self.request, messages.SUCCESS, 'Contact Successfully deleted!')
@@ -170,3 +165,55 @@ class ContactAutoComplete(autocomplete.Select2QuerySetView):
         if self.q:
             qs = qs.filter(name__istartswith=self.q)
         return qs
+
+
+class ContactEntryList(UserPassesTestMixin, LoginRequiredMixin, ListView):
+    model = Entry
+    template_name = 'journal/contact_entry_list.html'
+
+    def test_func(self):
+        return test_user_owns(self.request, Contact, self.kwargs['pk'])
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        contact = Contact.objects.get(user=self.request.user, pk=self.kwargs['pk'])
+        entry_list = contact.entry_set.all()
+        context['contact'] = contact
+        context['entry_list'] = entry_list
+        return context
+
+
+class ContactReleasedEntryList(UserPassesTestMixin, ListView):
+    model = Entry
+    template_name = 'journal/entry_list.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        contact = Contact.objects.get(pk=self.kwargs['contact'])
+        entry_list = contact.entry_set.all()
+        context['contact'] = contact
+        context['entry_list'] = entry_list
+        context['released'] = True
+        return context
+
+    def test_func(self):
+        contact = Contact.objects.get(pk=self.kwargs['contact'])
+        return contact.user.entries_released
+
+
+class ContactReleasedEntryDetail(UserPassesTestMixin, DetailView):
+    model = Entry
+    template_name = 'journal/entry_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        contact = Contact.objects.get(pk=self.kwargs['contact'])
+        entry_list = contact.entry_set.all()
+        context['contact'] = contact
+        context['entry_list'] = entry_list
+        context['released'] = True
+        return context
+
+    def test_func(self):
+        contact = Contact.objects.get(pk=self.kwargs['contact'])
+        return contact.user.entries_released

@@ -20,8 +20,8 @@ class TestReleaseEntries(TestCase):
         self.entry1 = EntryFactory()
         self.entry2 = EntryFactory()
         self.contact = ContactFactory()
-        self.entries = [EntryFactory() for _ in range(100)]
-        self.choices = []
+        self.user1 = self.entry1.user
+        self.user2 = self.entry2.user
 
     def call_command(self, *args, **kwargs):
         out = StringIO()
@@ -35,44 +35,22 @@ class TestReleaseEntries(TestCase):
         return out.getvalue()
 
     def test_release_entrires(self):
-        assert self.entry1.user.release_entries is False
+        assert self.user1.release_entries is False
         assert self.entry1.released is False
-        assert self.entry2.user.release_entries is False
+        assert self.user2.release_entries is False
         assert self.entry2.released is False
         out = self.call_command()
-        assert self.entry1.user.release_entries is False
+        assert self.user1.release_entries is False
         assert self.entry1.released is False
-        assert self.entry2.user.release_entries is False
+        assert self.user2.release_entries is False
         assert self.entry2.released is False
-        self.entry1.user.last_checkin = REFERENCE_DATE
-        self.entry1.user.save()
-        self.entry1.user.refresh_from_db()
+        self.user1.last_checkin = REFERENCE_DATE
+        self.user1.save()
+        self.user1.refresh_from_db()
         out = self.call_command()
         self.entry1.refresh_from_db()
-        assert self.entry1.user.release_entries is True
+        assert self.user1.release_entries is True
         assert self.entry1.released is True
-        assert self.entry2.user.release_entries is False
+        assert self.user2.release_entries is False
         assert self.entry2.released is False
 
-    def test_random_entries(self):
-        for entry in self.entries:
-            assert entry.released is False
-            assert entry.user.release_entries is False
-        out = self.call_command()
-        for entry in self.entries:
-            assert entry.released is False
-            assert entry.user.release_entries is False
-            selection = choice([True, False])
-            self.choices.append(selection)
-            if selection:
-                entry.user.last_checkin = REFERENCE_DATE
-                entry.user.save()
-        out = self.call_command()
-        for selection, entry in zip(self.choices, self.entries):
-            entry.refresh_from_db()
-            if selection:
-                assert entry.user.release_entries is True
-                assert entry.released is True
-            else:
-                assert entry.user.release_entries is False
-                assert entry.released is False

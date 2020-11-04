@@ -14,6 +14,9 @@ class User(AbstractUser):
     days_to_release_setting = IntegerField(default=7)
     entries_released = BooleanField(default=False)
 
+    def get_absolute_url(self):
+        return reverse("users:detail", kwargs={"username": self.username})
+
     @property
     def checkin_deadline(self):
         return self.last_checkin + timezone.timedelta(days=self.days_to_release_setting)
@@ -27,10 +30,7 @@ class User(AbstractUser):
 
     @property
     def days_until_release(self):
-        return int((self.checkin_deadline - timezone.now()).days)
-
-    def get_absolute_url(self):
-        return reverse("users:detail", kwargs={"username": self.username})
+        return (self.checkin_deadline - timezone.now()).days
 
     def get_absolute_checkin_link(self):
         return reverse("users:anon_checkin", kwargs={'username': self.username, 'uuid': self.checkin_link})

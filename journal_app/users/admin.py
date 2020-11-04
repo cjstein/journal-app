@@ -14,7 +14,7 @@ class UserAdmin(auth_admin.UserAdmin):
     add_form = UserCreationForm
     fieldsets = (("User", {
         "fields": (
-            "name", "checkin_link", "last_checkin", "days_to_release",
+            "name", "checkin_link", "last_checkin", "days_to_release_setting", "entries_released"
         )
     }),) + auth_admin.UserAdmin.fieldsets
     list_display = ["username", "name", "is_superuser"]

@@ -7,8 +7,7 @@ class Command(BaseCommand):
     help = "Checks each user's last check in and sends them a reminder email if it is within 5, 3 and 1 days"
 
     def handle(self, *args, **options):
-        users = User.objects.filter(days_until_release__gt=0, days_until_release__lte=5)
-        # users = User.objects.exclude(entries_released=True, days_until_release__gt=5, days_until_release__lt=1)
+        users = (user for user in User.objects.all() if not user.entries_released and user.days_until_release < 6)
         subject = 'Checkin Deadline Approaching'
         for user in users:
             mail = Mail(
@@ -18,3 +17,4 @@ class Command(BaseCommand):
                 template_name='reminder_email'
             )
             mail.message()
+            mail.save()

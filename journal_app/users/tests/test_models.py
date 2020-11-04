@@ -14,7 +14,7 @@ def test_user_checkin_deadline(user: User):
     user.last_checkin = timezone.now()
     user.save()
     user.refresh_from_db()
-    assert user.checkin_deadline == user.last_checkin + timezone.timedelta(days=user.days_to_release)
+    assert user.checkin_deadline == user.last_checkin + timezone.timedelta(days=user.days_to_release_setting)
 
 
 def test_release_entries(user: User):
@@ -22,5 +22,5 @@ def test_release_entries(user: User):
     user.save()
     user.refresh_from_db()
     assert not user.release_entries
-    user.last_checkin = timezone.now() - timezone.timedelta(days=user.days_to_release + 1)
+    user.last_checkin = timezone.now() - timezone.timedelta(days=user.days_to_release_setting + 1)
     assert user.release_entries
