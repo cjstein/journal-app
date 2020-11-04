@@ -32,7 +32,7 @@ class Contact(TimeStampedModel):
     # Possibly add signal bot
 
     def get_absolute_url(self):
-        return reverse("journal:contact_update", kwargs={"pk": self.uuid})
+        return reverse("journal:contact_entry_list", kwargs={"pk": self.uuid})
 
     def __str__(self):
         return self.name

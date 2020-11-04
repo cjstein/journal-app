@@ -43,7 +43,7 @@
       {% if entry.contact.all %}
         <p><b>Sharing:</b>
           {% for contact in entry.contact.all %}
-            {{ contact.name }}{% if not forloop.last %}, {% endif %}
+            <a href="{{ contact.get_absolute_url }}" class="btn btn-primary">{{ contact.name }}</a>
           {% endfor %}
         </p>
       {% else %}
