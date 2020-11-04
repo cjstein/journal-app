@@ -30,7 +30,7 @@ class User(AbstractUser):
 
     @property
     def days_until_release(self):
-        return int((self.checkin_deadline - timezone.now()).days)
+        return (self.checkin_deadline - timezone.now()).days
 
     def get_absolute_checkin_link(self):
         return reverse("users:anon_checkin", kwargs={'username': self.username, 'uuid': self.checkin_link})

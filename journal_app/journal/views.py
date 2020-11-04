@@ -181,3 +181,39 @@ class ContactEntryList(UserPassesTestMixin, LoginRequiredMixin, ListView):
         context['contact'] = contact
         context['entry_list'] = entry_list
         return context
+
+
+class ContactReleasedEntryList(UserPassesTestMixin, ListView):
+    model = Entry
+    template_name = 'journal/entry_list.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        contact = Contact.objects.get(pk=self.kwargs['contact'])
+        entry_list = contact.entry_set.all()
+        context['contact'] = contact
+        context['entry_list'] = entry_list
+        context['released'] = True
+        return context
+
+    def test_func(self):
+        contact = Contact.objects.get(pk=self.kwargs['contact'])
+        return contact.user.entries_released
+
+
+class ContactReleasedEntryDetail(UserPassesTestMixin, DetailView):
+    model = Entry
+    template_name = 'journal/entry_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        contact = Contact.objects.get(pk=self.kwargs['contact'])
+        entry_list = contact.entry_set.all()
+        context['contact'] = contact
+        context['entry_list'] = entry_list
+        context['released'] = True
+        return context
+
+    def test_func(self):
+        contact = Contact.objects.get(pk=self.kwargs['contact'])
+        return contact.user.entries_released

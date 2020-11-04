@@ -2,7 +2,7 @@ from django.urls import path
 from journal_app.journal.views import (
     EntryCreateView, EntryListView, EntryDetailView, EntryUpdateView, EntryDeleteView,
     ContactCreateView, ContactListView, ContactDetailView, ContactUpdateView, ContactDeleteView,
-    ContactAutoComplete, ContactEntryList,
+    ContactAutoComplete, ContactEntryList, ContactReleasedEntryList, ContactReleasedEntryDetail,
 )
 
 app_name = "journal"
@@ -21,5 +21,8 @@ urlpatterns = [
     path("contact/<uuid:pk>/update/", ContactUpdateView.as_view(), name='contact_update'),
     path("contact/<uuid:pk>/delete/", ContactDeleteView.as_view(), name='contact_delete'),
     path("contact/auto-complete/", ContactAutoComplete.as_view(), name='contact-autocomplete'),
+    # Released urls
+    path("released/<uuid:contact>/", ContactReleasedEntryList.as_view(), name='released_entries'),
+    path("released/<uuid:contact>/<uuid:pk>", ContactReleasedEntryDetail.as_view(), name='released_entry_detail'),
     path("", EntryListView.as_view(), name='entry_list'),
 ]

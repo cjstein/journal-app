@@ -13,14 +13,16 @@
       <h2>{{ entry.title }}</h2>
     </div>
   </div>
-  <div class="row">
-    <div class="col-lg-6">
-      <h6 class="text-center"><a href="{% url 'journal:entry_update' entry.uuid %}" class="btn btn-theme btn-block"><i class="far fa-edit"></i> Edit</a></h6>
-    </div>
-    <div class="col-lg-6">
-      <h6 class="text-center"><a href="{% url 'journal:entry_delete' entry.uuid %}" class="btn btn-theme btn-block"><i class="far fa-trash-alt"></i> Delete</a></h6>
-    </div>
-  </div>
+    {% if not released %}
+      <div class="row">
+        <div class="col-lg-6">
+          <h6 class="text-center"><a href="{% url 'journal:entry_update' entry.uuid %}" class="btn btn-theme btn-block"><i class="far fa-edit"></i> Edit</a></h6>
+        </div>
+        <div class="col-lg-6">
+          <h6 class="text-center"><a href="{% url 'journal:entry_delete' entry.uuid %}" class="btn btn-theme btn-block"><i class="far fa-trash-alt"></i> Delete</a></h6>
+        </div>
+      </div>
+    {% endif %}
   <div class="row">
     <div class="col-lg-12">
       <p>
@@ -40,7 +42,7 @@
 {#          {{ view.formset }}#}
 {#        </table>#}
 {#      </form>#}
-      {% if entry.contact.all %}
+      {% if entry.contact.all and not released%}
         <p><b>Sharing:</b>
           {% for contact in entry.contact.all %}
             <a href="{{ contact.get_absolute_url }}" class="btn btn-primary">{{ contact.name }}</a>
@@ -50,7 +52,6 @@
     </div>
   </div>
   <div class="row">
-
     <div class="col-lg-12">
       {{ entry.body|safe }}
     </div>
