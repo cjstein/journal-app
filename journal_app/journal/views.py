@@ -16,6 +16,15 @@ def test_user_owns(request, model: models.Model, pk):
     return request.user == test_model.user
 
 
+def get_entries_from_contact(request, pk):
+    context = {}
+    contact = Contact.objects.get(user=request.user, pk=pk)
+    entry_list = contact.entry_set.all()
+    context['contact'] = contact
+    context['entry_list'] = entry_list
+    return context
+
+
 # Entry Views
 class EntryDetailView(UserPassesTestMixin, LoginRequiredMixin, DetailView):
     model = Entry
@@ -176,10 +185,7 @@ class ContactEntryList(UserPassesTestMixin, LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
-        contact = Contact.objects.get(user=self.request.user, pk=self.kwargs['pk'])
-        entry_list = contact.entry_set.all()
-        context['contact'] = contact
-        context['entry_list'] = entry_list
+        context.update(get_entries_from_contact(self.request, self.kwargs['pk']))
         return context
 
 
@@ -189,10 +195,7 @@ class ContactReleasedEntryList(UserPassesTestMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
-        contact = Contact.objects.get(pk=self.kwargs['contact'])
-        entry_list = contact.entry_set.all()
-        context['contact'] = contact
-        context['entry_list'] = entry_list
+        context.update(get_entries_from_contact(self.request, self.kwargs['pk']))
         context['released'] = True
         return context
 
@@ -207,10 +210,7 @@ class ContactReleasedEntryDetail(UserPassesTestMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
-        contact = Contact.objects.get(pk=self.kwargs['contact'])
-        entry_list = contact.entry_set.all()
-        context['contact'] = contact
-        context['entry_list'] = entry_list
+        context.update(get_entries_from_contact(self.request, self.kwargs['pk']))
         context['released'] = True
         return context
 
