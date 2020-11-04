@@ -49,7 +49,7 @@ class Mail(models.Model):
     def save(self, *args, **kwargs):
         if not self.to:
             self.to = self.user.email
-        super(Mail, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f'{self.user}: {self.template_name}'
