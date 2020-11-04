@@ -185,7 +185,7 @@ class ContactEntryList(UserPassesTestMixin, LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
-        context += get_entries_from_contact(self.request, self.kwargs['pk'])
+        context.update(get_entries_from_contact(self.request, self.kwargs['pk']))
         return context
 
 
@@ -195,7 +195,7 @@ class ContactReleasedEntryList(UserPassesTestMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
-        context += get_entries_from_contact(self.request, self.kwargs['pk'])
+        context.update(get_entries_from_contact(self.request, self.kwargs['pk']))
         context['released'] = True
         return context
 
@@ -210,7 +210,7 @@ class ContactReleasedEntryDetail(UserPassesTestMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
-        context += get_entries_from_contact(self.request, self.kwargs['pk'])
+        context.update(get_entries_from_contact(self.request, self.kwargs['pk']))
         context['released'] = True
         return context
 
