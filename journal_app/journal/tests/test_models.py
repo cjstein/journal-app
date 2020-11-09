@@ -60,4 +60,4 @@ def test_contact_repr():
 def test_contact_get_absolute_url():
     contact = ContactFactory()
     url = contact.get_absolute_url()
-    assert url == f'/journal/contact/{contact.uuid}/update/'
+    assert url == f'/journal/contact/{contact.uuid}/entries/'
