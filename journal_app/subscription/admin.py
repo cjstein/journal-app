@@ -1,3 +1,5 @@
 from django.contrib import admin
+from journal_app.subscription.models import StripeCustomer
 
-# Register your models here.
+
+admin.site.register(StripeCustomer)
