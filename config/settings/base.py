@@ -75,7 +75,7 @@ THIRD_PARTY_APPS = [
     "allauth.socialaccount",
     "django_celery_beat",
     "tinymce",
-    "djstripe",
+    # "djstripe",
 ]
 
 LOCAL_APPS = [
@@ -307,3 +307,12 @@ SOCIALACCOUNT_ADAPTER = "journal_app.users.adapters.SocialAccountAdapter"
 TINYMCE_JS_URL = "https://cdn.tiny.cloud/1/1tfb3g0qaiap1ehx0nfximy04m02qfebkdzf8pvd6ant5bhg/tinymce/5/tinymce.min.js"
 TINYMCE_JS_ROOT = os.path.join(MEDIA_ROOT, "tiny_mce")
 TINYMCE_COMPRESSOR = False
+
+# Stripe keys
+# ------------------------------------------------------------------------------
+STRIPE_LIVE_PUBLIC_KEY = env("STRIPE_LIVE_PUBLIC_KEY", default='')
+STRIPE_LIVE_SECRET_KEY = env("STRIPE_LIVE_SECRET_KEY", default='')
+STRIPE_TEST_PUBLIC_KEY = env("STRIPE_TEST_PUBLIC_KEY", default='')
+STRIPE_TEST_SECRET_KEY = env("STRIPE_TEST_SECRET_KEY", default='')
+STRIPE_LIVE_MODE = env.bool("STRIPE_LIVE_MODE", False)
+DJSTRIPE_WEBHOOK_SECRET = env("DJSTRIPE_WEBHOOK_SECRET", default='whsec_xxx')
