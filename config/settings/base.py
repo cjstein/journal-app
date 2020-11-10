@@ -81,6 +81,7 @@ LOCAL_APPS = [
     "journal_app.users.apps.UsersConfig",
     "journal_app.journal.apps.JournalConfig",
     "journal_app.journal_mail.apps.JournalMailConfig",
+    "journal_app.subscription.apps.SubscriptionConfig",
     # Your stuff: custom apps go here
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps

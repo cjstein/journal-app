@@ -57,3 +57,5 @@ CELERY_TASK_ALWAYS_EAGER = True
 CELERY_TASK_EAGER_PROPAGATES = True
 # Your stuff...
 # ------------------------------------------------------------------------------
+# Test Stripe subscription
+TEST_STRIPE_PRICE_ID = env("TEST_STRIPE_PRICE_ID", default='')
