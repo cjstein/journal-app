@@ -1,28 +1,42 @@
 from django.contrib import messages
 from django.contrib.auth import get_user_model
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from django.urls import reverse, reverse_lazy
 from django.template.defaultfilters import date
 from django.views.generic import DetailView, RedirectView, UpdateView
+from journal_app.journal.models import Entry
 
 User = get_user_model()
 
 
-class UserDetailView(LoginRequiredMixin, DetailView):
+def test_user_is_requester(request, user: User):
+    return request.user == user
+
+
+class UserDetailView(UserPassesTestMixin, LoginRequiredMixin, DetailView):
 
     model = User
     slug_field = "username"
     slug_url_kwarg = "username"
 
+    def test_func(self):
+        user = User.objects.get(User, pk=self.request.user.pk)
+        test_user_is_requester(self.request, user)
+
 
 user_detail_view = UserDetailView.as_view()
 
 
-class UserUpdateView(LoginRequiredMixin, UpdateView):
+class UserUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
 
     model = User
     fields = ["name"]
+
+    def test_func(self):
+        user = User.objects.get(User, pk=self.request.user.pk)
+        test_user_is_requester(self.request, user)
 
     def get_success_url(self):
         return reverse("users:detail", kwargs={"username": self.request.user.username})
@@ -40,9 +54,13 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
 user_update_view = UserUpdateView.as_view()
 
 
-class UserRedirectView(LoginRequiredMixin, RedirectView):
+class UserRedirectView(UserPassesTestMixin, LoginRequiredMixin, RedirectView):
 
     permanent = False
+
+    def test_func(self):
+        user = User.objects.get(User, pk=self.request.user.pk)
+        test_user_is_requester(self.request, user)
 
     def get_redirect_url(self):
         return reverse("users:detail", kwargs={"username": self.request.user.username})
@@ -51,8 +69,12 @@ class UserRedirectView(LoginRequiredMixin, RedirectView):
 user_redirect_view = UserRedirectView.as_view()
 
 
-class UserCheckinView(LoginRequiredMixin, RedirectView):
+class UserCheckinView(UserPassesTestMixin, LoginRequiredMixin, RedirectView):
     url = reverse_lazy('journal:entry_list')
+
+    def test_func(self):
+        user = User.objects.get(User, pk=self.request.user.pk)
+        test_user_is_requester(self.request, user)
 
     def get_redirect_url(self, *args, **kwargs):
         user = User.objects.get(username=self.request.user.username)
@@ -92,3 +114,29 @@ class AnonUserCheckinView(RedirectView):
 
 
 anon_user_checkin_view = AnonUserCheckinView.as_view()
+
+
+class RetractPosts(UserPassesTestMixin, LoginRequiredMixin, RedirectView):
+    url = reverse_lazy('users:detail')
+
+    def test_func(self):
+        user = User.objects.get(User, pk=self.request.user.pk)
+        test_user_is_requester(self.request, user)
+
+    def get_redirect_url(self, *args, **kwargs):
+        user = User.objects.get(User, pk=self.request.user.pk)
+        messages.add_message(
+            self.request,
+            messages.SUCCESS,
+            "You Entries have been retracted"
+        )
+        entries = Entry.objects.filter(user=user)
+        for entry in entries:
+            entry.released = False
+        Entry.objects.bulk_update(entries, ['released'])
+        user.entries_released = False
+        user.save()
+        return reverse("users:detail", kwargs={'username': user.username})
+
+
+retract_posts_view = RetractPosts.as_view()
