@@ -130,3 +130,18 @@ body {
   color: black;
   border-color: #660101;
 }
+
+hr {
+  height: 1px;
+  border-top: 2px solid;
+}
+
+.text-link {
+  text-decoration: underline;
+  color: #3d3d3d;
+}
+
+.text-link:hover {
+  text-decoration: underline;
+  color: #660101;
+}

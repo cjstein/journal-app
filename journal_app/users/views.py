@@ -1,10 +1,13 @@
 from django.contrib import messages
 from django.contrib.auth import get_user_model
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from django.urls import reverse, reverse_lazy
 from django.template.defaultfilters import date
 from django.views.generic import DetailView, RedirectView, UpdateView
+from journal_app.journal.models import Entry
+from journal_app.users.forms import UserSettingForm
 
 User = get_user_model()
 
@@ -12,8 +15,9 @@ User = get_user_model()
 class UserDetailView(LoginRequiredMixin, DetailView):
 
     model = User
-    slug_field = "username"
-    slug_url_kwarg = "username"
+
+    def get_object(self):
+        return User.objects.get(username=self.request.user.username)
 
 
 user_detail_view = UserDetailView.as_view()
@@ -32,7 +36,7 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
 
     def form_valid(self, form):
         messages.add_message(
-            self.request, messages.INFO, "Information successfully updated"
+            self.request, messages.SUCCESS, "Information successfully updated"
         )
         return super().form_valid(form)
 
@@ -53,6 +57,9 @@ user_redirect_view = UserRedirectView.as_view()
 
 class UserCheckinView(LoginRequiredMixin, RedirectView):
     url = reverse_lazy('journal:entry_list')
+
+    def get_object(self):
+        return User.objects.get(username=self.request.user.username)
 
     def get_redirect_url(self, *args, **kwargs):
         user = User.objects.get(username=self.request.user.username)
@@ -92,3 +99,49 @@ class AnonUserCheckinView(RedirectView):
 
 
 anon_user_checkin_view = AnonUserCheckinView.as_view()
+
+
+class RetractPosts(LoginRequiredMixin, RedirectView):
+    url = reverse_lazy('users:detail')
+
+    def get_object(self):
+        return User.objects.get(username=self.request.user.username)
+
+    def get_redirect_url(self, *args, **kwargs):
+        user = User.objects.get(username=self.request.user.username)
+        messages.add_message(
+            self.request,
+            messages.SUCCESS,
+            "You Entries have been retracted"
+        )
+        entries = Entry.objects.filter(user=user)
+        for entry in entries:
+            entry.released = False
+        Entry.objects.bulk_update(entries, ['released'])
+        user.entries_released = False
+        user.save()
+        return reverse("users:detail", kwargs={'username': user.username})
+
+
+retract_posts_view = RetractPosts.as_view()
+
+
+class ProfileSettings(LoginRequiredMixin, UpdateView):
+    model = User
+    fields = ['days_to_release_setting']
+    template_name = "users/user_settings_form.html"
+
+    def get_object(self):
+        return User.objects.get(username=self.request.user.username)
+
+    def form_valid(self, form):
+        messages.add_message(
+            self.request, messages.SUCCESS, "Information successfully updated"
+        )
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse("users:detail", kwargs={"username": self.request.user.username})
+
+
+settings_update_view = ProfileSettings.as_view()

@@ -35,4 +35,5 @@ class User(AbstractUser):
     def get_absolute_checkin_link(self):
         return reverse("users:anon_checkin", kwargs={'username': self.username, 'uuid': self.checkin_link})
 
-
+    def __str__(self):
+        return self.name if self.name else self.username

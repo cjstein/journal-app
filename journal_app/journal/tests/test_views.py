@@ -54,3 +54,7 @@ class TestEntryViews(TestCase):
         callable_obj = EntryCreateView.as_view()
         response = callable_obj(request)
         self.assertEqual(response.status_code, 200, "Entry Create")
+
+    def test_create_success_view(self):
+        request = self.factory.post(reverse('journal:entry_create'), data={'title': 'Test title', })
+

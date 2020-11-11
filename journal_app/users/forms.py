@@ -1,7 +1,6 @@
 from django.contrib.auth import forms as admin_forms
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
-from django.utils.translation import gettext_lazy as _
 
 User = get_user_model()
 
@@ -14,7 +13,7 @@ class UserChangeForm(admin_forms.UserChangeForm):
 class UserCreationForm(admin_forms.UserCreationForm):
 
     error_message = admin_forms.UserCreationForm.error_messages.update(
-        {"duplicate_username": _("This username has already been taken.")}
+        {"duplicate_username": "This username has already been taken."}
     )
 
     class Meta(admin_forms.UserCreationForm.Meta):
@@ -29,3 +28,11 @@ class UserCreationForm(admin_forms.UserCreationForm):
             return username
 
         raise ValidationError(self.error_messages["duplicate_username"])
+
+
+class UserSettingForm(admin_forms.UserChangeForm):
+    class Meta(admin_forms.UserChangeForm.Meta):
+        model = User
+        fields = (
+            'days_to_release_setting',
+        )

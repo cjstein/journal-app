@@ -75,12 +75,14 @@ THIRD_PARTY_APPS = [
     "allauth.socialaccount",
     "django_celery_beat",
     "tinymce",
+    "stripe",
 ]
 
 LOCAL_APPS = [
     "journal_app.users.apps.UsersConfig",
     "journal_app.journal.apps.JournalConfig",
     "journal_app.journal_mail.apps.JournalMailConfig",
+    "journal_app.subscription.apps.SubscriptionConfig",
     # Your stuff: custom apps go here
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -306,3 +308,11 @@ SOCIALACCOUNT_ADAPTER = "journal_app.users.adapters.SocialAccountAdapter"
 TINYMCE_JS_URL = "https://cdn.tiny.cloud/1/1tfb3g0qaiap1ehx0nfximy04m02qfebkdzf8pvd6ant5bhg/tinymce/5/tinymce.min.js"
 TINYMCE_JS_ROOT = os.path.join(MEDIA_ROOT, "tiny_mce")
 TINYMCE_COMPRESSOR = False
+
+# Stripe keys
+# ------------------------------------------------------------------------------
+
+STRIPE_PUBLIC_KEY = env("STRIPE_TEST_PUBLIC_KEY", default='')
+STRIPE_SECRET_KEY = env("STRIPE_TEST_SECRET_KEY", default='')
+STRIPE_LIVE_MODE = env.bool("STRIPE_LIVE_MODE", False)
+STRIPE_ENDPOINT_SECRET = env("STRIPE_ENDPOINT_SECRET", default='whsec_xxx')
