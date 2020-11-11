@@ -108,7 +108,7 @@ class RetractPosts(LoginRequiredMixin, RedirectView):
         return User.objects.get(username=self.request.user.username)
 
     def get_redirect_url(self, *args, **kwargs):
-        user = User.objects.get(User, username=self.request.user.username)
+        user = User.objects.get(username=self.request.user.username)
         messages.add_message(
             self.request,
             messages.SUCCESS,

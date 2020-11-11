@@ -5,7 +5,7 @@
 
 {% block content %}
 <div class="container">
-
+  <!-- Profile -->
   <div class="row mt-2">
     <div class="col-sm-12">
       {% if not object.entries_released %}
@@ -20,7 +20,7 @@
         <u>My Profile</u><a class="btn btn-theme ml-2" href="{% url 'users:update' %}" role="button"><i class="far fa-edit"></i> Edit</a>
       </h2>
       <p><b>Username:</b> {{ object.username }}<br/>
-        <b>Email:</b> {{ object.email }}
+        <b>Email:</b> {{ object.email }}<br/>
       {% if object.name %}
         <br/>
         <b>Name:</b> {{ object.name }}<br/>
@@ -30,22 +30,29 @@
       <hr/>
     </div>
   </div>
-
-<!-- Action buttons -->
-<div class="row mt-3">
-
-  <div class="col-sm-12">
-    <h2>
-      <u>Settings</u><a class="btn btn-theme ml-2" href="{% url 'users:settings' %}" role="button"><i class="far fa-edit"></i> Edit</a>
-    </h2>
-    <p><b>Days to wait without check-in until posts are released: </b> {{ object.days_to_release_setting}} days</p>
-
+  <!-- END Profile -->
+  <!-- Settings -->
+  <div class="row">
+    <div class="col-sm-12">
+      <h2>
+        <u>Settings</u><a class="btn btn-theme ml-2" href="{% url 'users:settings' %}" role="button"><i class="far fa-edit"></i> Edit</a>
+      </h2>
+      <p><b>Days to wait without check-in until posts are released: </b> {{ object.days_to_release_setting}} days</p>
+      <hr/>
+    </div>
   </div>
-
-</div>
-<!-- End Action buttons -->
-
-
+  <!-- End Settings -->
+  <!-- Subscription -->
+  <div class="row">
+    <div class="col-sm-12">
+      <h2><u>Subscription</u></h2>
+      <p>
+        <b>Subscription Type:</b> <br/>
+        <b>Subscription Expiration:</b>
+      </p>
+    </div>
+  </div>
+  <!-- END Subscription -->
 </div>
 {% endblock content %}
 
