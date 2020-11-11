@@ -1,13 +1,14 @@
 from django.urls import path
-from journal_app.subscription.views import home, stripe_config, create_checkout_session, success, cancel
+from journal_app.subscription import views
 
 
 app_name = "subscription"
 
 urlpatterns = [
-    path('', home, name='home'),
-    path('config/', stripe_config),
-    path('create-checkout-session/', create_checkout_session),
-    path('success/', success),  # new
-    path('cancel/', cancel),
+    path('', views.home, name='home'),
+    path('config/', views.stripe_config),
+    path('create-checkout-session/', views.create_checkout_session),
+    path('success/', views.success),
+    path('cancel/', views.cancel),
+    path('webhook/', views.stripe_webhook),
 ]

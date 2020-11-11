@@ -311,9 +311,8 @@ TINYMCE_COMPRESSOR = False
 
 # Stripe keys
 # ------------------------------------------------------------------------------
-STRIPE_LIVE_PUBLIC_KEY = env("STRIPE_LIVE_PUBLIC_KEY", default='')
-STRIPE_LIVE_SECRET_KEY = env("STRIPE_LIVE_SECRET_KEY", default='')
-STRIPE_TEST_PUBLIC_KEY = env("STRIPE_TEST_PUBLIC_KEY", default='')
-STRIPE_TEST_SECRET_KEY = env("STRIPE_TEST_SECRET_KEY", default='')
+
+STRIPE_PUBLIC_KEY = env("STRIPE_TEST_PUBLIC_KEY", default='')
+STRIPE_SECRET_KEY = env("STRIPE_TEST_SECRET_KEY", default='')
 STRIPE_LIVE_MODE = env.bool("STRIPE_LIVE_MODE", False)
-DJSTRIPE_WEBHOOK_SECRET = env("DJSTRIPE_WEBHOOK_SECRET", default='whsec_xxx')
+STRIPE_ENDPOINT_SECRET = env("STRIPE_ENDPOINT_SECRET", default='whsec_xxx')
