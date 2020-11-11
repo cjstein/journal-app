@@ -16,7 +16,7 @@ urlpatterns = [
     path("~update/", view=user_update_view, name="update"),
     path("checkin/<str:username>/", view=user_checkin_view, name='checkin'),
     path("checkin/<str:username>/<uuid:uuid>/", view=anon_user_checkin_view, name='anon_checkin'),
-    path("settings/<str:username>/", view=settings_update_view, name='settings'),
+    path("settings/", view=settings_update_view, name='settings'),
     path("retract/<str:username>/", view=retract_posts_view, name="retract"),
     path("<str:username>/", view=user_detail_view, name="detail"),
 

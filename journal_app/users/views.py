@@ -36,7 +36,7 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
 
     def form_valid(self, form):
         messages.add_message(
-            self.request, messages.INFO, "Information successfully updated"
+            self.request, messages.SUCCESS, "Information successfully updated"
         )
         return super().form_valid(form)
 
@@ -128,14 +128,20 @@ retract_posts_view = RetractPosts.as_view()
 
 class ProfileSettings(LoginRequiredMixin, UpdateView):
     model = User
-    form_class = UserSettingForm
+    fields = ['days_to_release_setting']
+    template_name = "users/user_settings_form.html"
 
     def get_object(self):
         return User.objects.get(username=self.request.user.username)
 
     def form_valid(self, form):
-        messages.add_message(self.request, messages.SUCCESS, "Settings updated successfully")
+        messages.add_message(
+            self.request, messages.SUCCESS, "Information successfully updated"
+        )
         return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse("users:detail", kwargs={"username": self.request.user.username})
 
 
 settings_update_view = ProfileSettings.as_view()
