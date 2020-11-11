@@ -1,4 +1,4 @@
-from django.forms import ModelForm, ValidationError, ModelChoiceField
+from django.forms import ModelForm, ValidationError
 from dal import autocomplete
 from tinymce.widgets import TinyMCE
 from journal_app.journal.models import Entry, Contact

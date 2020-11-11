@@ -36,7 +36,7 @@
 
   <div class="col-sm-12">
     <h2>
-      <u>Settings</u><a class="btn btn-theme ml-2" href="{% url 'users:update' %}" role="button"><i class="far fa-edit"></i> Edit</a>
+      <u>Settings</u><a class="btn btn-theme ml-2" href="{% url 'users:settings' request.user.username %}" role="button"><i class="far fa-edit"></i> Edit</a>
     </h2>
     <p><b>Days to wait without check-in until posts are released: </b> {{ object.days_to_release_setting}} days</p>
 
