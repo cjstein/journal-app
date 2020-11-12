@@ -1,6 +1,7 @@
 import stripe
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
+from django.contrib.sites.models import Site
 from django.http.response import HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.utils.timezone import datetime
@@ -44,13 +45,13 @@ def stripe_config(request):
 @csrf_exempt
 def create_checkout_session(request):
     if request.method == 'GET':
-        domain_url = 'http://localhost:8000/'
+        domain_url = fr'{Site.objects.get_current().domain}'
         stripe.api_key = settings.STRIPE_SECRET_KEY
         try:
             checkout_session = stripe.checkout.Session.create(
                 client_reference_id=request.user.id if request.user.is_authenticated else None,
-                success_url=domain_url + 'subscription/success?session_id={CHECKOUT_SESSION_ID}',
-                cancel_url=domain_url + 'subscription/cancel/',
+                success_url=domain_url + '/subscription/success?session_id={CHECKOUT_SESSION_ID}',
+                cancel_url=domain_url + '/subscription/cancel/',
                 payment_method_types=['card'],
                 mode='subscription',
                 line_items=[
