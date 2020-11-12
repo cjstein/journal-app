@@ -2,9 +2,7 @@ from time import sleep
 
 import pytest
 
-from journal_app.journal.models import Contact, Entry
 from journal_app.journal.tests.factories import ContactFactory, EntryFactory
-from journal_app.users.tests.factories import UserFactory
 
 pytestmark = pytest.mark.django_db
 
@@ -29,14 +27,6 @@ def test_entry_update():
     entry = EntryFactory()
     assert entry.created == entry.updated
     assert entry.modified is False
-    """
-    below assert fails
-    -> return self.updated != self.created
-    (Pdb) self.updated
-    datetime.datetime(2020, 10, 15, 11, 5, 22, 722688, tzinfo=<UTC>)
-    (Pdb) self.created
-    datetime.datetime(2020, 10, 15, 11, 5, 22, 722668, tzinfo=<UTC>)
-    """
     # assert entry.modified is False
     entry.body = 'Changing the body of the entry for the test to see if it is modified'
     sleep(1)

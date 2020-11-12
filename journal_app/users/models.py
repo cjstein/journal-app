@@ -6,7 +6,6 @@ from django.db.models import (
     CharField,
     DateTimeField,
     IntegerField,
-    Manager,
     UUIDField,
 )
 from django.urls import reverse

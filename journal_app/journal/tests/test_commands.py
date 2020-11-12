@@ -1,13 +1,10 @@
 from io import StringIO
-from random import choice
 
 import pytest
 from django.core.management import call_command
 from django.test import TestCase
 
-from journal_app.journal.models import Contact, Entry
 from journal_app.journal.tests.factories import ContactFactory, EntryFactory
-from journal_app.users.tests.factories import UserFactory
 from journal_app.users.tests.test_views import REFERENCE_DATE
 
 pytestmark = pytest.mark.django_db
@@ -46,10 +43,9 @@ class TestReleaseEntries(TestCase):
         self.user1.last_checkin = REFERENCE_DATE
         self.user1.save()
         self.user1.refresh_from_db()
-        out = self.call_command()
+        out = self.call_command() # noqa F841
         self.entry1.refresh_from_db()
         assert self.user1.release_entries is True
         assert self.entry1.released is True
         assert self.user2.release_entries is False
         assert self.entry2.released is False
-
