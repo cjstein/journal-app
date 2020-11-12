@@ -1,5 +1,6 @@
 # Python base imports
 import uuid
+
 # Django imports
 from django.db import models
 from django.urls import reverse

@@ -1,9 +1,10 @@
-import pytest
 from time import sleep
-from journal_app.journal.tests.factories import EntryFactory, ContactFactory
-from journal_app.journal.models import Entry, Contact
-from journal_app.users.tests.factories import UserFactory
 
+import pytest
+
+from journal_app.journal.models import Contact, Entry
+from journal_app.journal.tests.factories import ContactFactory, EntryFactory
+from journal_app.users.tests.factories import UserFactory
 
 pytestmark = pytest.mark.django_db
 

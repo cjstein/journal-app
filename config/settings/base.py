@@ -1,8 +1,9 @@
 """
 Base settings to build other settings files upon.
 """
-from pathlib import Path
 import os
+from pathlib import Path
+
 import environ
 
 ROOT_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
@@ -312,7 +313,9 @@ TINYMCE_COMPRESSOR = False
 # Stripe keys
 # ------------------------------------------------------------------------------
 
-STRIPE_PUBLIC_KEY = env("STRIPE_TEST_PUBLIC_KEY", default='')
-STRIPE_SECRET_KEY = env("STRIPE_TEST_SECRET_KEY", default='')
+STRIPE_PUBLIC_KEY = env("STRIPE_PUBLIC_KEY", default='')
+STRIPE_SECRET_KEY = env("STRIPE_SECRET_KEY", default='')
 STRIPE_LIVE_MODE = env.bool("STRIPE_LIVE_MODE", False)
 STRIPE_ENDPOINT_SECRET = env("STRIPE_ENDPOINT_SECRET", default='whsec_xxx')
+WEBHOOK_URL = env("WEBHOOK_URL", default=r'http://localhost:8000/webhook')
+DOMAIN_URL = env("DOMAIN_URL", default=r'http://localhost:8000/')

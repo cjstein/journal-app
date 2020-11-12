@@ -1,12 +1,13 @@
-from django.utils.timezone import datetime
-from django.shortcuts import render
-from django.conf import settings
-from django.http.response import JsonResponse, HttpResponse
-from django.contrib.auth.decorators import login_required
-from django.views.decorators.csrf import csrf_exempt
 import stripe
-from journal_app.users.models import User
+from django.conf import settings
+from django.contrib.auth.decorators import login_required
+from django.http.response import HttpResponse, JsonResponse
+from django.shortcuts import render
+from django.utils.timezone import datetime
+from django.views.decorators.csrf import csrf_exempt
+
 from journal_app.subscription.models import StripeCustomer
+from journal_app.users.models import User
 
 
 @login_required

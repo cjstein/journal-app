@@ -1,6 +1,6 @@
 from django.urls import path
-from journal_app.subscription import views
 
+from journal_app.subscription import views
 
 app_name = "subscription"
 

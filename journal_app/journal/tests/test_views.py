@@ -1,11 +1,18 @@
 import pytest
 from django.core.exceptions import PermissionDenied
-from django.urls import reverse
 from django.test import RequestFactory, TestCase
-from journal_app.journal.tests.factories import EntryFactory, ContactFactory
+from django.urls import reverse
+
+from journal_app.journal.tests.factories import ContactFactory, EntryFactory
 from journal_app.journal.views import (
-    EntryCreateView, EntryUpdateView, EntryDetailView, EntryListView,
-    ContactCreateView, ContactUpdateView, ContactDetailView, ContactListView,
+    ContactCreateView,
+    ContactDetailView,
+    ContactListView,
+    ContactUpdateView,
+    EntryCreateView,
+    EntryDetailView,
+    EntryListView,
+    EntryUpdateView,
 )
 
 pytestmark = pytest.mark.django_db

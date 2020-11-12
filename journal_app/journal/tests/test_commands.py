@@ -1,15 +1,14 @@
-import pytest
 from io import StringIO
 from random import choice
 
+import pytest
 from django.core.management import call_command
 from django.test import TestCase
 
-from journal_app.journal.models import Entry, Contact
-from journal_app.users.tests.test_views import REFERENCE_DATE
-from journal_app.journal.tests.factories import EntryFactory, ContactFactory
+from journal_app.journal.models import Contact, Entry
+from journal_app.journal.tests.factories import ContactFactory, EntryFactory
 from journal_app.users.tests.factories import UserFactory
-
+from journal_app.users.tests.test_views import REFERENCE_DATE
 
 pytestmark = pytest.mark.django_db
 

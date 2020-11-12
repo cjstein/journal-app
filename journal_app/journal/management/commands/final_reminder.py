@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand
 from django.utils import timezone
-from journal_app.users.models import User
 
+from journal_app.users.models import User
 
 TODAY = timezone.now()
 

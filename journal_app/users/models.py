@@ -1,6 +1,14 @@
 import uuid
+
 from django.contrib.auth.models import AbstractUser
-from django.db.models import CharField, UUIDField, DateTimeField, IntegerField, BooleanField, Manager
+from django.db.models import (
+    BooleanField,
+    CharField,
+    DateTimeField,
+    IntegerField,
+    Manager,
+    UUIDField,
+)
 from django.urls import reverse
 from django.utils import timezone
 

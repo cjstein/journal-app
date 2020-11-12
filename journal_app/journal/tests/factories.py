@@ -1,8 +1,9 @@
 import pytest
-from factory import Faker, fuzzy, SubFactory
+from factory import Faker, SubFactory, fuzzy
 from factory.django import DjangoModelFactory
+
+from journal_app.journal.models import Contact, Entry
 from journal_app.users.tests.factories import UserFactory
-from journal_app.journal.models import Entry, Contact
 
 
 @pytest.fixture

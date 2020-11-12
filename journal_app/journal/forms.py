@@ -1,7 +1,8 @@
-from django.forms import ModelForm, ValidationError
 from dal import autocomplete
+from django.forms import ModelForm, ValidationError
 from tinymce.widgets import TinyMCE
-from journal_app.journal.models import Entry, Contact
+
+from journal_app.journal.models import Contact, Entry
 
 
 class EntryForm(ModelForm):
