@@ -1,7 +1,8 @@
-from django.db import models
 from django.core import mail
+from django.db import models
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
+
 from config.settings.base import DEFAULT_FROM_EMAIL
 from journal_app.users.models import User
 

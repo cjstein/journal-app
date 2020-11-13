@@ -1,9 +1,9 @@
-from django.dispatch import receiver
+from allauth.account.signals import email_confirmed
 from django.contrib.sites.models import Site
+from django.dispatch import receiver
+
 from journal_app.journal_mail.models import Mail
 from journal_app.users.models import User
-from allauth.account.signals import email_confirmed
-
 
 CURRENT_SITE_NAME = Site.objects.get_current()
 
@@ -20,4 +20,3 @@ def user_confirmed_email(request, email_address, **kwargs):
         template_name='welcome_email',
     )
     mail.message()
-

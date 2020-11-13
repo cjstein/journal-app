@@ -1,13 +1,12 @@
 from django.contrib import messages
 from django.contrib.auth import get_user_model
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.shortcuts import get_object_or_404
-from django.utils import timezone
-from django.urls import reverse, reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.template.defaultfilters import date
+from django.urls import reverse, reverse_lazy
+from django.utils import timezone
 from django.views.generic import DetailView, RedirectView, UpdateView
+
 from journal_app.journal.models import Entry
-from journal_app.users.forms import UserSettingForm
 
 User = get_user_model()
 

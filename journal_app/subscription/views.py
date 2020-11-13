@@ -1,12 +1,14 @@
-from django.utils.timezone import datetime
-from django.shortcuts import render
-from django.conf import settings
-from django.http.response import JsonResponse, HttpResponse
-from django.contrib.auth.decorators import login_required
-from django.views.decorators.csrf import csrf_exempt
 import stripe
-from journal_app.users.models import User
+from django.conf import settings
+from django.contrib.auth.decorators import login_required
+from django.contrib.sites.models import Site
+from django.http.response import HttpResponse, JsonResponse
+from django.shortcuts import render
+from django.utils.timezone import datetime
+from django.views.decorators.csrf import csrf_exempt
+
 from journal_app.subscription.models import StripeCustomer
+from journal_app.users.models import User
 
 
 @login_required
@@ -43,13 +45,14 @@ def stripe_config(request):
 @csrf_exempt
 def create_checkout_session(request):
     if request.method == 'GET':
-        domain_url = 'http://localhost:8000/'
+        domain_url = Site.objects.get_current().domain
+        domain_url = domain_url if domain_url.startswith('http') else fr'https://{domain_url}'
         stripe.api_key = settings.STRIPE_SECRET_KEY
         try:
             checkout_session = stripe.checkout.Session.create(
                 client_reference_id=request.user.id if request.user.is_authenticated else None,
-                success_url=domain_url + 'subscription/success?session_id={CHECKOUT_SESSION_ID}',
-                cancel_url=domain_url + 'subscription/cancel/',
+                success_url=domain_url + '/subscription/success?session_id={CHECKOUT_SESSION_ID}',
+                cancel_url=domain_url + '/subscription/cancel/',
                 payment_method_types=['card'],
                 mode='subscription',
                 line_items=[
@@ -88,10 +91,10 @@ def stripe_webhook(request):
         )
     except ValueError as e:
         # Invalid payload
-        return HttpResponse(status=400)
+        return HttpResponse(status=400, content=e)
     except stripe.error.SignatureVerificationError as e:
         # Invalid signature
-        return HttpResponse(status=400)
+        return HttpResponse(status=400, content=e)
 
     # Handle the checkout.session.completed event
     if event['type'] == 'checkout.session.completed':

@@ -1,11 +1,14 @@
 import pytest
 from django.core.exceptions import PermissionDenied
-from django.urls import reverse
 from django.test import RequestFactory, TestCase
-from journal_app.journal.tests.factories import EntryFactory, ContactFactory
+from django.urls import reverse
+
+from journal_app.journal.tests.factories import EntryFactory
 from journal_app.journal.views import (
-    EntryCreateView, EntryUpdateView, EntryDetailView, EntryListView,
-    ContactCreateView, ContactUpdateView, ContactDetailView, ContactListView,
+    EntryCreateView,
+    EntryDetailView,
+    EntryListView,
+    EntryUpdateView,
 )
 
 pytestmark = pytest.mark.django_db
@@ -29,7 +32,7 @@ class TestEntryViews(TestCase):
         request = self.factory.get(reverse('journal:entry_detail', kwargs={'pk': self.entry1.uuid}))
         request.user = self.entry2.user
         callable_obj = EntryDetailView.as_view()
-        response = callable_obj(request, pk=self.entry2.uuid)
+        response = callable_obj(request, pk=self.entry2.uuid) # noqa F841
         self.assertTemplateNotUsed(r'journal/entry_detail.html')
         self.assertTemplateUsed(r'journal/entry_list.html')
 
@@ -57,4 +60,4 @@ class TestEntryViews(TestCase):
 
     def test_create_success_view(self):
         request = self.factory.post(reverse('journal:entry_create'), data={'title': 'Test title', })
-
+        # TODO finish tests

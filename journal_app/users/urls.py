@@ -1,13 +1,13 @@
 from django.urls import path
 
 from journal_app.users.views import (
-    user_detail_view,
-    user_redirect_view,
-    user_update_view,
-    user_checkin_view,
     anon_user_checkin_view,
     retract_posts_view,
     settings_update_view,
+    user_checkin_view,
+    user_detail_view,
+    user_redirect_view,
+    user_update_view,
 )
 
 app_name = "users"

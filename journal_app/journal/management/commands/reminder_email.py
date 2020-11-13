@@ -1,6 +1,7 @@
 from django.core.management.base import BaseCommand
-from journal_app.users.models import User
+
 from journal_app.journal_mail.models import Mail
+from journal_app.users.models import User
 
 DAYS_FOR_REMINDER = 6
 

@@ -1,14 +1,21 @@
 # Django imports
+from dal import autocomplete
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.http import Http404
 from django.db import models
+from django.http import Http404
 from django.urls import reverse_lazy
-from django.views.generic import DetailView, ListView, UpdateView, CreateView, DeleteView
-from dal import autocomplete
-from journal_app.journal.forms import EntryForm, ContactForm
+from django.views.generic import (
+    CreateView,
+    DeleteView,
+    DetailView,
+    ListView,
+    UpdateView,
+)
+
+from journal_app.journal.forms import ContactForm, EntryForm
 # Custom imports
-from journal_app.journal.models import Entry, Contact
+from journal_app.journal.models import Contact, Entry
 
 
 def test_user_owns(request, model: models.Model, pk):

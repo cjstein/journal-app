@@ -1,6 +1,7 @@
+from django.conf import settings
 from django.urls import path
-from journal_app.subscription import views
 
+from journal_app.subscription import views
 
 app_name = "subscription"
 
@@ -10,5 +11,5 @@ urlpatterns = [
     path('create-checkout-session/', views.create_checkout_session),
     path('success/', views.success),
     path('cancel/', views.cancel),
-    path('webhook/', views.stripe_webhook),
+    path(settings.WEBHOOK_URL, views.stripe_webhook, name='webhook'),
 ]

@@ -28,11 +28,3 @@ class UserCreationForm(admin_forms.UserCreationForm):
             return username
 
         raise ValidationError(self.error_messages["duplicate_username"])
-
-
-class UserSettingForm(admin_forms.UserChangeForm):
-    class Meta(admin_forms.UserChangeForm.Meta):
-        model = User
-        fields = (
-            'days_to_release_setting',
-        )

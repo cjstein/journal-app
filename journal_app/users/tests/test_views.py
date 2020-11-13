@@ -1,18 +1,18 @@
 import pytest
 from django.contrib.auth.models import AnonymousUser
 from django.http.response import Http404
-from django.test import RequestFactory, TestCase, Client
-from django.utils import timezone
+from django.test import Client, RequestFactory, TestCase
 from django.urls import reverse
+from django.utils import timezone
 
 from journal_app.users.models import User
 from journal_app.users.tests.factories import UserFactory
 from journal_app.users.views import (
     UserRedirectView,
     UserUpdateView,
-    user_detail_view,
-    user_checkin_view,
     anon_user_checkin_view,
+    user_checkin_view,
+    user_detail_view,
 )
 
 pytestmark = pytest.mark.django_db
