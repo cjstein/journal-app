@@ -15,11 +15,11 @@
   </div>
     {% if not released %}
       <div class="row">
-        <div class="col-lg-6">
-          <h6 class="text-center"><a href="{% url 'journal:entry_update' entry.uuid %}" class="btn btn-theme btn-block"><i class="far fa-edit"></i> Edit</a></h6>
-        </div>
-        <div class="col-lg-6">
-          <h6 class="text-center"><a href="{% url 'journal:entry_delete' entry.uuid %}" class="btn btn-theme btn-block btn-danger-hover"><i class="far fa-trash-alt"></i> Delete</a></h6>
+        <div class="col-lg-12">
+            <h5>
+              <a href="{% url 'journal:entry_update' entry.uuid %}" class="entry-link"><i class="far fa-edit"></i> Edit</a>
+              <a href="{% url 'journal:entry_delete' entry.uuid %}" class="entry-link text-link ml-3"><i class="far fa-trash-alt"></i> Delete</a>
+            </h5>
         </div>
       </div>
     {% endif %}
@@ -45,7 +45,7 @@
       {% if entry.contact.all and not released%}
         <p><b>Sharing:</b>
           {% for contact in entry.contact.all %}
-            <a href="{{ contact.get_absolute_url }}" class="btn btn-primary">{{ contact.name }}</a>
+            <a href="{{ contact.get_absolute_url }}" class="entry-link mr-2">{{ contact.name }}</a>
           {% endfor %}
         </p>
       {% endif %}

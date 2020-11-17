@@ -53,12 +53,12 @@ body {
 }
 
 .entry-link {
-  color: black;
+  color: #3d3d3d;
   text-decoration: underline;
 }
 
 .entry-link:hover {
-  text-decoration: none;
+  text-decoration: underline;
   color: #61c461;
 }
 

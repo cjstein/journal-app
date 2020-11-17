@@ -13,7 +13,9 @@
         {% csrf_token %}
 
         {{ form.title|as_crispy_field }}
-        {{ form.public|as_crispy_field }}
+        {% if contacts %}
+          {{ form.public|as_crispy_field }}
+        {% endif %}
         {{ form.body|as_crispy_field }}
         {% if contacts %}
           {{ form.contact|as_crispy_field }}
