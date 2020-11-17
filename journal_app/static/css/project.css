@@ -53,14 +53,13 @@ body {
 }
 
 .entry-link {
-  color: black;
-  text-decoration: none;
+  color: #3d3d3d;
+  text-decoration: underline;
 }
 
 .entry-link:hover {
-  text-decoration: none;
-  background-color: #61c461;
-  color: black;
+  text-decoration: underline;
+  color: #61c461;
 }
 
 .table-grey {
@@ -76,28 +75,6 @@ body {
 .table-link:hover {
   color: #61ca61;
 
-}
-
-
-.outside-entry-area {
-  background-color: #dcdcdc;
-  border: 2px #3d3d3d;
-  border-radius: 10px;
-  color: black;
-  text-decoration: none;
-}
-
-.entry-area {
-  background-color: #afafaf;
-  border: 2px #3d3d3d;
-  border-radius: 5px;
-  min-height: 100px;
-}
-
-.entry-area:hover {
-  background-color: #61ca61;
-  border: 2px #3d3d3d;
-  border-radius: 5px;
 }
 
 
@@ -131,11 +108,6 @@ body {
   border-color: #660101;
 }
 
-hr {
-  height: 1px;
-  border-top: 2px solid;
-}
-
 .text-link {
   text-decoration: underline;
   color: #3d3d3d;
@@ -144,4 +116,8 @@ hr {
 .text-link:hover {
   text-decoration: underline;
   color: #660101;
+}
+
+hr {
+  border-color: #b0b0b0;
 }

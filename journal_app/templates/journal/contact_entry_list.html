@@ -1,4 +1,5 @@
 {%  extends 'base.html' %}
+{% load humanize %}
 
 {% block title %}Journal Entry List{% endblock %}
 
@@ -8,21 +9,21 @@
 
 {% block content %}
   <div class="row">
-    <h2>Entries to be shared with {{ contact.name }}</h2>
+    <h3>Entries to be shared with {{ contact.name }}</h3>
   </div>
     <div class="row">
-      <div class="col-lg-6">
-        <h6 class="text-center"><a href="{% url 'journal:contact_update' contact.uuid %}" class="btn btn-theme btn-block"><i class="far fa-edit"></i> Edit {{ contact.name }}</a></h6>
-      </div>
-      <div class="col-lg-6">
-        <h6 class="text-center"><a href="{% url 'journal:contact_delete' contact.uuid %}" class="btn btn-theme btn-block btn-danger-hover"><i class="far fa-trash-alt"></i> Delete {{ contact.name }}</a></h6>
+      <div class="col-lg-12">
+        <h5>
+          <a href="{% url 'journal:contact_update' contact.uuid %}" class="entry-link"><i class="far fa-edit"></i> Edit {{ contact.name }}</a>
+          <a href="{% url 'journal:contact_delete' contact.uuid %}" class="text-link"><i class="far fa-trash-alt"></i> Delete {{ contact.name }}</a>
+        </h5>
       </div>
     </div>
   {% for entry in entry_list %}
-    <div class="row">
-      <div class="col-lg-12 outside-entry-area mb-3 pb-3 mt-1">
-        <h1>{{ entry.title }}</h1>
-        <p><b>Last Updated:</b> {{ entry.updated|date:"SHORT_DATETIME_FORMAT"  }}</p>
+    <div class="row{% if forloop.first %} mt-2{% endif %}">
+      <div class="col-lg-12">
+        <h2>{{ entry.title }}</h2>
+        <p><b>Last Updated:</b> {{ entry.updated|naturaltime  }}</p>
         <a href="{{ entry.get_absolute_url }}" class="entry-link">
           <div class="col-lg-12 entry-area mw-100">
             {{ entry.body|safe|truncatewords:75 }}
@@ -30,8 +31,9 @@
         </a>
       </div>
     </div>
+    <hr/>
   {% empty %}
-    <h2>There are no entries yet. <a href="{% url 'journal:entry_create' %}" class="btn btn-theme btn-lg btn-block"><i class="fas fa-plus"></i> Add one here!</a></h2>
+    <h2>There are no entries yet. <a href="{% url 'journal:entry_create' %}" class="btn btn-theme btn-lg btn-block"><i class="fas fa-plus"></i> Add an entry here!</a></h2>
   {% endfor %}
 
 
