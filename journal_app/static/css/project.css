@@ -54,13 +54,12 @@ body {
 
 .entry-link {
   color: black;
-  text-decoration: none;
+  text-decoration: underline;
 }
 
 .entry-link:hover {
   text-decoration: none;
-  background-color: #61c461;
-  color: black;
+  color: #61c461;
 }
 
 .table-grey {
@@ -76,28 +75,6 @@ body {
 .table-link:hover {
   color: #61ca61;
 
-}
-
-
-.outside-entry-area {
-  background-color: #dcdcdc;
-  border: 2px #3d3d3d;
-  border-radius: 10px;
-  color: black;
-  text-decoration: none;
-}
-
-.entry-area {
-  background-color: #afafaf;
-  border: 2px #3d3d3d;
-  border-radius: 5px;
-  min-height: 100px;
-}
-
-.entry-area:hover {
-  background-color: #61ca61;
-  border: 2px #3d3d3d;
-  border-radius: 5px;
 }
 
 
@@ -129,11 +106,6 @@ body {
   background-color: red;
   color: black;
   border-color: #660101;
-}
-
-hr {
-  height: 1px;
-  border-top: 2px solid;
 }
 
 .text-link {

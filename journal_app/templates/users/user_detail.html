@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load static %}
+{% load static humanize %}
 
 {% block title %}My Profile{% endblock %}
 
@@ -9,23 +9,24 @@
   <div class="row mt-2">
     <div class="col-sm-12">
       {% if not object.entries_released %}
-        <h2 class="mt-2">
-          <b>Check-in due by:</b> {{ object.checkin_deadline|date }}
-          <a class="btn btn-theme" href="{% url "users:checkin" user.username %}" role="button"><i class="fas fa-calendar-check"></i> Check-in</a></h2>
+        <h5 class="mt-2">
+          <a class="entry-link" href="{% url "users:checkin" user.username %}" role="button">
+            <b>Check-in due by:</b> {{ object.checkin_deadline|naturaltime }}
+          </a></h5>
         <hr/>
       {% else %}
         <a class="btn btn-lg btn-danger btn-block my-4" href="{% url "users:retract" request.user.username %}" role="button">Your entries have been released.  Click here to retract</a>
       {% endif %}
-      <h2>
-        <u>My Profile</u><a class="btn btn-theme ml-2" href="{% url 'users:update' %}" role="button"><i class="far fa-edit"></i> Edit</a>
-      </h2>
+      <h4>
+        <a class="entry-link" href="{% url 'users:update' %}" role="button"><u>My Profile</u></a>
+      </h4>
       <p><b>Username:</b> {{ object.username }}<br/>
         <b>Email:</b> {{ object.email }}<br/>
       {% if object.name %}
         <br/>
         <b>Name:</b> {{ object.name }}<br/>
       {% endif %}
-        <a href="{% url "account_change_password" %}" class="btn btn-theme"><i class="fas fa-key"></i> Reset Password</a>
+        <a href="{% url "account_change_password" %}" class="entry-link"><b><u>Change Password</u></b></a>
       </p>
       <hr/>
     </div>
@@ -34,9 +35,14 @@
   <!-- Settings -->
   <div class="row">
     <div class="col-sm-12">
-      <h2>
-        <u>Settings</u><a class="btn btn-theme ml-2" href="{% url 'users:settings' %}" role="button"><i class="far fa-edit"></i> Edit</a>
-      </h2>
+      <h4>
+        <a class="entry-link" href="{% url 'users:settings' %}">
+          <u>Settings</u>
+        </a>
+      </h4>
+
+
+
       <p><b>Days to wait without check-in until posts are released: </b> {{ object.days_to_release_setting}} days</p>
       <hr/>
     </div>
@@ -45,7 +51,7 @@
   <!-- Subscription -->
   <div class="row">
     <div class="col-sm-12">
-      <h2><u>Subscription</u></h2>
+      <h4><u>Subscription</u></h4>
       <p>
         <b>Subscription Type:</b> <br/>
         <b>Subscription Expiration:</b>

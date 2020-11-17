@@ -19,5 +19,4 @@ urlpatterns = [
     path("settings/", view=settings_update_view, name='settings'),
     path("retract/<str:username>/", view=retract_posts_view, name="retract"),
     path("<str:username>/", view=user_detail_view, name="detail"),
-
 ]

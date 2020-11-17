@@ -9,16 +9,17 @@
 {% block content %}
   {% for entry in entry_list %}
       <div class="row">
-        <div class="col-lg-12 outside-entry-area mb-3 pb-3 mt-1">
-          <h1>{{ entry.title }}</h1>
-          <p><b>Last Updated:</b> {{ entry.updated|date:"SHORT_DATETIME_FORMAT"  }}</p>
-          <a href="{% if released %}{% url 'journal:released_entry_detail' contact.pk entry.pk %}{% else %}{{ entry.get_absolute_url }}{% endif %}" class="entry-link">
-            <div class="col-lg-12 entry-area mw-100">
+        <div class="col-lg-12 mt-1">
+          <a href="{% if released %}{% url 'journal:released_entry_detail' contact.pk entry.pk %}{% else %}{{ entry.get_absolute_url }}{% endif %}">
+            <h3 class="entry-link">{{ entry.title }}</h3>
+          </a>
+            <div class="col-lg-12 mw-100">
                 {{ entry.body|safe|truncatewords:75 }}
             </div>
-          </a>
+
         </div>
       </div>
+    <hr/>
   {% empty %}
     <h2>There are no entries yet. <a href="{% url 'journal:entry_create' %}" class="btn btn-theme btn-lg btn-block"><i class="fas fa-plus"></i> Add one here!</a></h2>
   {% endfor %}
