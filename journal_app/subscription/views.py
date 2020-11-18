@@ -8,7 +8,9 @@ from django.utils.timezone import datetime
 from django.views.decorators.csrf import csrf_exempt
 
 from journal_app.subscription.models import StripeCustomer
+from journal_app.journal_mail.models import Mail
 from journal_app.users.models import User
+
 
 
 @login_required
@@ -69,6 +71,13 @@ def create_checkout_session(request):
 
 @login_required
 def success(request):
+    subject = 'Thanks for subscribing'
+    mail = Mail(
+        user=request.user,
+        subject=subject,
+        header=subject,
+        template_name='subscription_success',
+    )
     return render(request, 'subscription/success.html')
 
 
