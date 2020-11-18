@@ -71,13 +71,6 @@ def create_checkout_session(request):
 
 @login_required
 def success(request):
-    subject = 'Thanks for subscribing'
-    mail = Mail(
-        user=request.user,
-        subject=subject,
-        header=subject,
-        template_name='subscription_success',
-    )
     return render(request, 'subscription/success.html')
 
 
@@ -121,6 +114,13 @@ def stripe_webhook(request):
             stripe_customer_id=stripe_customer_id,
             stripe_subscription_id=stripe_subscription_id,
         )
-        print(user.username + ' just subscribed.')
+        subject = 'Thanks for subscribing'
+        mail = Mail(
+            user=user,
+            subject=subject,
+            header=subject,
+            template_name='subscription_success',
+            )
+        mail.message()
 
     return HttpResponse(status=200)
