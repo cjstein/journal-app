@@ -4,7 +4,7 @@ from journal_app.users.models import User
 
 
 class StripeCustomer(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='subscription')
     stripe_customer_id = models.CharField(max_length=255)
     stripe_subscription_id = models.CharField(max_length=255)
 
