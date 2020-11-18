@@ -8,30 +8,15 @@ from django.utils.timezone import datetime
 from django.views.decorators.csrf import csrf_exempt
 
 from journal_app.subscription.models import StripeCustomer
+from journal_app.subscription.utils import get_subscription_status
 from journal_app.journal_mail.models import Mail
 from journal_app.users.models import User
-
 
 
 @login_required
 def home(request):
     try:
-        # Retrieve the subscription & product
-        stripe_customer = StripeCustomer.objects.get(user=request.user)
-        stripe.api_key = settings.STRIPE_SECRET_KEY
-        subscription = stripe.Subscription.retrieve(stripe_customer.stripe_subscription_id)
-        product = stripe.Product.retrieve(subscription.plan.product)
-        subscription_end = datetime.fromtimestamp(subscription.current_period_end)
-
-        # Feel free to fetch any additional data from 'subscription' or 'product'
-        # https://stripe.com/docs/api/subscriptions/object
-        # https://stripe.com/docs/api/products/object
-
-        return render(request, 'subscription/home.html', {
-            'subscription': subscription,
-            'product': product,
-            'subscription_end': subscription_end,
-        })
+        return render(request, 'subscription/home.html', get_subscription_status(request.user))
 
     except StripeCustomer.DoesNotExist:
         return render(request, 'subscription/home.html')
@@ -71,13 +56,6 @@ def create_checkout_session(request):
 
 @login_required
 def success(request):
-    subject = 'Thanks for subscribing'
-    mail = Mail(
-        user=request.user,
-        subject=subject,
-        header=subject,
-        template_name='subscription_success',
-    )
     return render(request, 'subscription/success.html')
 
 
@@ -121,6 +99,13 @@ def stripe_webhook(request):
             stripe_customer_id=stripe_customer_id,
             stripe_subscription_id=stripe_subscription_id,
         )
-        print(user.username + ' just subscribed.')
+        subject = 'Thanks for subscribing'
+        mail = Mail(
+            user=user,
+            subject=subject,
+            header=subject,
+            template_name='subscription_success',
+            )
+        mail.message()
 
     return HttpResponse(status=200)

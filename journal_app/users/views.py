@@ -7,6 +7,7 @@ from django.utils import timezone
 from django.views.generic import DetailView, RedirectView, UpdateView
 
 from journal_app.journal.models import Entry
+from journal_app.subscription.utils import get_subscription_status
 
 User = get_user_model()
 
@@ -17,6 +18,11 @@ class UserDetailView(LoginRequiredMixin, DetailView):
 
     def get_object(self):
         return User.objects.get(username=self.request.user.username)
+
+    def get_context_data(self, **kwargs):
+        context = super(UserDetailView, self).get_context_data()
+        context.update(get_subscription_status(self.request.user))
+        return context
 
 
 user_detail_view = UserDetailView.as_view()
