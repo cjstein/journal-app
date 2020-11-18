@@ -5,6 +5,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db import models
 from django.http import Http404
 from django.urls import reverse_lazy
+from django.utils import timezone
 from django.views.generic import (
     CreateView,
     DeleteView,
@@ -93,7 +94,11 @@ class EntryUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
 
     def form_valid(self, form):
         messages.add_message(self.request, messages.SUCCESS, 'Entry successfully updated')
-        return super().form_valid(form)
+        instance = super().form_valid(form)
+        entry = Entry.objects.get(uuid=self.kwargs['pk'])
+        entry.updated = timezone.now()
+        entry.save()
+        return instance
 
     def get_context_data(self, **kwargs):
         context = super(EntryUpdateView, self).get_context_data()
