@@ -1,0 +1,14 @@
+{% extends 'account/email/base_message.html' %}
+
+{% block tagline %}
+Final reminder before release!
+{% endblock %}
+
+{% block header %}
+Better checkin so your Entries don't get release, this is the FINAL REMINDER.
+{% endblock %}
+
+{% block content %}
+  {{ user.username }},<br/>
+  Your Entries will be released tomorrow.  If you don't want them to be released you better check-in again.  Please checkin again at {{ user.get_absolute_checkin_link }}
+{% endblock %}

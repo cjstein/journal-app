@@ -11,8 +11,8 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         subject = 'Checkin Deadline Approaching'
-        for user in User.objects.all():
-            if not user.entries_released and user.days_until_release < DAYS_FOR_REMINDER:
+        for user in User.objects.filter(entries_released=False):
+            if user.days_until_release < DAYS_FOR_REMINDER:
                 mail = Mail(
                     user=user,
                     subject=subject,
