@@ -18,7 +18,7 @@
             </ul>
             <ul class="navbar-nav ml-auto">
               <li class="nav-item">
-                <a href="{% url 'users:checkin' request.user.username %}" class="nav-link"><i class="fas fa-calendar-check"></i> Check-in</a>
+                <a href="{% url 'users:checkin' %}" class="nav-link"><i class="fas fa-calendar-check"></i> Check-in</a>
               </li>
               {% url 'journal:entry_create' as journal_url %}
               {% url 'journal:contact_create' as contact_url %}
@@ -38,7 +38,7 @@
             {% url 'users:detail' request.user.username as active_url %}
               <li class="nav-item">
                   {# URL provided by django-allauth/account/urls.py #}
-                  <a class="nav-link{% if request.path == active_url %} active{% endif %}" href="{% url 'users:detail' request.user.username  %}">My Profile</a>
+                  <a class="nav-link{% if request.path == active_url %} active{% endif %}" href="{% url 'users:detail' %}">My Profile</a>
               </li>
             {% url 'account_logout' as active_url %}
               <li class="nav-item">

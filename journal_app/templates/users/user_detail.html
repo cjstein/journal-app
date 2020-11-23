@@ -10,12 +10,12 @@
     <div class="col-sm-12">
       {% if not object.entries_released %}
         <h5 class="mt-2">
-          <a class="entry-link" href="{% url "users:checkin" user.username %}" role="button">
+          <a class="entry-link" href="{% url "users:checkin" %}" role="button">
             <b>Check-in due by:</b> {{ object.checkin_deadline|naturaltime }}
           </a></h5>
         <hr/>
       {% else %}
-        <a class="btn btn-lg btn-danger btn-block my-4" href="{% url "users:retract" request.user.username %}" role="button">Your entries have been released.  Click here to retract</a>
+        <a class="btn btn-lg btn-danger btn-block my-4" href="{% url "users:retract" %}" role="button">Your entries have been released.  Click here to retract</a>
       {% endif %}
       <h4>
         <a class="entry-link" href="{% url 'users:update' %}" role="button"><u>My Profile</u></a>

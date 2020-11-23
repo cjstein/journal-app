@@ -14,9 +14,9 @@ app_name = "users"
 urlpatterns = [
     path("~redirect/", view=user_redirect_view, name="redirect"),
     path("~update/", view=user_update_view, name="update"),
-    path("checkin/<str:username>/", view=user_checkin_view, name='checkin'),
     path("checkin/<str:username>/<uuid:uuid>/", view=anon_user_checkin_view, name='anon_checkin'),
+    path("checkin/", view=user_checkin_view, name='checkin'),
     path("settings/", view=settings_update_view, name='settings'),
-    path("retract/<str:username>/", view=retract_posts_view, name="retract"),
-    path("<str:username>/", view=user_detail_view, name="detail"),
+    path("retract/", view=retract_posts_view, name="retract"),
+    path("profile/", view=user_detail_view, name="detail"),
 ]
