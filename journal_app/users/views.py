@@ -17,7 +17,7 @@ class UserDetailView(LoginRequiredMixin, DetailView):
     model = User
 
     def get_object(self):
-        return User.objects.get(username=self.request.user.username)
+        return User.objects.get(username=self.kwargs['username'])
 
     def get_context_data(self, **kwargs):
         context = super(UserDetailView, self).get_context_data()

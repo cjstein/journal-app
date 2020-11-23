@@ -69,13 +69,6 @@ class TestUserDetailView:
         assert response.status_code == 302
         assert response.url == "/accounts/login/?next=/fake-url/"
 
-    def test_case_sensitivity(self, rf: RequestFactory):
-        request = rf.get("/fake-url/")
-        request.user = UserFactory(username="UserName")
-
-        with pytest.raises(Http404):
-            user_detail_view(request, username="username")
-
 
 class TestUserCheckinView(TestCase):
     def setUp(self):
@@ -92,7 +85,7 @@ class TestUserCheckinView(TestCase):
         self.client.force_login(user=self.user1)
         assert self.user1.last_checkin == timezone.datetime(year=2019, month=10, day=30)
         response = self.client.get(
-            reverse('users:checkin', kwargs={'username': self.user1.username}),
+            reverse('users:checkin'),
             follow=True,
         )
         self.assertRedirects(response,
