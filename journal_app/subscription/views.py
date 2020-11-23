@@ -18,7 +18,6 @@ def home(request):
     return render(request, 'subscription/home.html', get_subscription_status(request.user))
 
 
-
 @csrf_exempt
 def stripe_config(request):
     if request.method == 'GET':
