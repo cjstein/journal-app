@@ -15,11 +15,8 @@ from journal_app.users.models import User
 
 @login_required
 def home(request):
-    try:
-        return render(request, 'subscription/home.html', get_subscription_status(request.user))
+    return render(request, 'subscription/home.html', get_subscription_status(request.user))
 
-    except StripeCustomer.DoesNotExist:
-        return render(request, 'subscription/home.html')
 
 
 @csrf_exempt
