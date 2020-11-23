@@ -38,7 +38,7 @@
             {% url 'users:detail' request.user.username as active_url %}
               <li class="nav-item">
                   {# URL provided by django-allauth/account/urls.py #}
-                  <a class="nav-link{% if request.path == active_url %} active{% endif %}" href="{% url 'users:detail' %}">My Profile</a>
+                  <a class="nav-link{% if request.path == active_url %} active{% endif %}" href="{% url 'users:detail' request.user.username %}">My Profile</a>
               </li>
             {% url 'account_logout' as active_url %}
               <li class="nav-item">
