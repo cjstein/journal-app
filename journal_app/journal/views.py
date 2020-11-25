@@ -51,6 +51,7 @@ class EntryDetailView(UserPassesTestMixin, LoginRequiredMixin, DetailView):
 class EntryListView(LoginRequiredMixin, ListView):
     model = Entry
     paginate_by = 20
+    context_object_name = "entries"
 
     def get_queryset(self):
         return Entry.objects.filter(user=self.request.user)
@@ -191,6 +192,7 @@ class ContactEntryList(UserPassesTestMixin, LoginRequiredMixin, ListView):
     model = Entry
     template_name = 'journal/contact_entry_list.html'
     paginate_by = 20
+    context_object_name = "entries"
 
     def test_func(self):
         return test_user_owns(self.request, Contact, self.kwargs['pk'])
@@ -209,6 +211,7 @@ class ContactReleasedEntryList(UserPassesTestMixin, ListView):
     model = Entry
     template_name = 'journal/entry_list.html'
     paginate_by = 20
+    context_object_name = "entries"
 
     def get_queryset(self, *args, **kwargs):
         contact = Contact.objects.get(user=self.request.user, pk=self.kwargs['pk'])
