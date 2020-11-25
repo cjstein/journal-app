@@ -304,6 +304,7 @@ ACCOUNT_USERNAME_MIN_LENGTH = 5
 ACCOUNT_ADAPTER = "journal_app.users.adapters.AccountAdapter"
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
 SOCIALACCOUNT_ADAPTER = "journal_app.users.adapters.SocialAccountAdapter"
+ACCOUNT_USERNAME_BLACKLIST = env.list("USERNAME_BLACKLIST", default=[])
 # Your stuff...
 # ------------------------------------------------------------------------------
 # Tiny MCE settings

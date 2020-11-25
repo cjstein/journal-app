@@ -20,8 +20,8 @@ class UserDetailView(LoginRequiredMixin, DetailView):
         return User.objects.get(username=self.kwargs['username'])
 
     def get_context_data(self, **kwargs):
-        context = super(UserDetailView, self).get_context_data()
-        context.update(get_subscription_status(self.request.user))
+        context = super().get_context_data()
+        context['user'] = self.get_object()
         return context
 
 

@@ -94,6 +94,7 @@ def stripe_webhook(request):
             user=user,
             stripe_customer_id=stripe_customer_id,
             stripe_subscription_id=stripe_subscription_id,
+            status=StripeCustomer.Status.ACTIVE,
         )
         subject = 'Thanks for subscribing'
         mail = Mail(
