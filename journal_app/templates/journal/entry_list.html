@@ -23,6 +23,7 @@
   {% empty %}
     <h2>There are no entries yet. <a href="{% url 'journal:entry_create' %}" class="btn btn-theme btn-lg btn-block"><i class="fas fa-plus"></i> Add an entry here!</a></h2>
   {% endfor %}
+  {% include 'journal/pagination.html' %}
 
 
 {% endblock %}

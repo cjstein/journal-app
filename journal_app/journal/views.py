@@ -50,6 +50,7 @@ class EntryDetailView(UserPassesTestMixin, LoginRequiredMixin, DetailView):
 
 class EntryListView(LoginRequiredMixin, ListView):
     model = Entry
+    paginate_by = 20
 
     def get_queryset(self):
         return Entry.objects.filter(user=self.request.user)
@@ -189,6 +190,7 @@ class ContactAutoComplete(autocomplete.Select2QuerySetView):
 class ContactEntryList(UserPassesTestMixin, LoginRequiredMixin, ListView):
     model = Entry
     template_name = 'journal/contact_entry_list.html'
+    paginate_by = 20
 
     def test_func(self):
         return test_user_owns(self.request, Contact, self.kwargs['pk'])
@@ -202,6 +204,7 @@ class ContactEntryList(UserPassesTestMixin, LoginRequiredMixin, ListView):
 class ContactReleasedEntryList(UserPassesTestMixin, ListView):
     model = Entry
     template_name = 'journal/entry_list.html'
+    paginate_by = 20
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
