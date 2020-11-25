@@ -123,6 +123,7 @@ class RetractPosts(LoginRequiredMixin, RedirectView):
             entry.released = False
         Entry.objects.bulk_update(entries, ['released'])
         user.entries_released = False
+        user.last_checkin = timezone.now()
         user.save()
         return reverse("users:detail", kwargs={'username': self.request.user.username})
 

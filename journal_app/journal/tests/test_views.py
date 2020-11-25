@@ -1,6 +1,7 @@
 import pytest
 from django.core.exceptions import PermissionDenied
-from django.test import RequestFactory, TestCase
+from django.contrib.messages.storage.fallback import FallbackStorage
+from django.test import RequestFactory, TestCase, Client
 from django.urls import reverse
 
 from journal_app.journal.tests.factories import EntryFactory
@@ -20,6 +21,9 @@ class TestEntryViews(TestCase):
         self.factory = RequestFactory()
         self.entry1 = EntryFactory()
         self.entry2 = EntryFactory()
+        self.user = self.entry1.user
+        self.client = Client()
+        self.client.force_login(user=self.user)
 
     def test_detail_view(self):
         request = self.factory.get(reverse('journal:entry_detail', kwargs={'pk': self.entry1.uuid}))
@@ -42,7 +46,6 @@ class TestEntryViews(TestCase):
         callable_obj = EntryUpdateView.as_view()
         with self.assertRaises(PermissionDenied):
             callable_obj(request, pk=self.entry1.uuid)
-        # self.assertEqual(response.status_code, 403)
 
     def test_list_view(self):
         request = self.factory.get(reverse('journal:entry_list'))
@@ -54,10 +57,37 @@ class TestEntryViews(TestCase):
     def test_create_view(self):
         request = self.factory.get(reverse('journal:entry_create'))
         request.user = self.entry1.user
-        callable_obj = EntryCreateView.as_view()
-        response = callable_obj(request)
+        response = EntryCreateView.as_view()(request)
         self.assertEqual(response.status_code, 200, "Entry Create")
 
     def test_create_success_view(self):
-        request = self.factory.post(reverse('journal:entry_create'), data={'title': 'Test title', })
-        # TODO finish tests
+        response = self.client.post(
+            reverse('journal:entry_create'),
+            data={'title': 'Test title', 'body': 'random body data'},
+            follow=True,
+        )
+        self.assertEqual(response.status_code, 200, "Entry Create Success")
+        assert len(response.context['messages']) > 0
+
+    def test_update_success_view(self):
+        response = self.client.post(
+            reverse('journal:entry_update', kwargs={'pk': self.entry1.pk}),
+            data={'title': 'Test title 2', 'body': 'random updated body data'},
+            follow=True,
+        )
+        self.assertEqual(response.status_code, 200, "Entry Create Success")
+        assert len(response.context['messages']) > 0
+
+    def test_wrong_delete_view(self):
+        request = self.factory.get(reverse('journal:entry_delete', kwargs={'pk': self.entry1.uuid}))
+        request.user = self.entry2.user
+        callable_obj = EntryUpdateView.as_view()
+        with self.assertRaises(PermissionDenied):
+            callable_obj(request, pk=self.entry1.uuid)
+
+    def test_delete_view_success(self):
+        response = self.client.get(
+            reverse('journal:entry_delete', kwargs={'pk': self.entry1.pk}),
+            follow=True,
+        )
+        self.assertEqual(response.status_code, 200, "Entry Delete")
