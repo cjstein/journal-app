@@ -1,10 +1,10 @@
 import stripe
 from django.conf import settings
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.sites.models import Site
 from django.http.response import HttpResponse, JsonResponse
 from django.shortcuts import render
-from django.utils.timezone import datetime
 from django.views.decorators.csrf import csrf_exempt
 
 from journal_app.subscription.models import StripeCustomer
@@ -52,11 +52,13 @@ def create_checkout_session(request):
 
 @login_required
 def success(request):
+    messages.add_message(request, messages.SUCCESS, "Subscription confirmed")
     return render(request, 'subscription/success.html')
 
 
 @login_required
 def cancel(request):
+    messages.add_message(request, messages.ERROR, "Subscription not started successfully")
     return render(request, 'subscription/cancel.html')
 
 
