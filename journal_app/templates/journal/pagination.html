@@ -3,8 +3,8 @@
     <div class="pagination">
     <span class="step-links mx-auto">
         {% if page_obj.has_previous %}
-          <a href="?page=1" class="entry-link">&laquo; first</a>
-          <a href="?page={{ page_obj.previous_page_number }}" class="entry-link">previous</a>
+          <a href="?page=1" class="entry-link mr-2">&laquo; First</a>
+          <a href="?page={{ page_obj.previous_page_number }}" class="entry-link mr-2">Previous</a>
         {% endif %}
 
       <span class="current">
@@ -12,8 +12,8 @@
         </span>
 
       {% if page_obj.has_next %}
-        <a href="?page={{ page_obj.next_page_number }}" class="entry-link">next</a>
-        <a href="?page={{ page_obj.paginator.num_pages }}" class="entry-link">last &raquo;</a>
+        <a href="?page={{ page_obj.next_page_number }}" class="entry-link ml-2">Next</a>
+        <a href="?page={{ page_obj.paginator.num_pages }}" class="entry-link ml-2">Last &raquo;</a>
       {% endif %}
     </span>
     </div>
