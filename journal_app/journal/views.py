@@ -44,7 +44,7 @@ class EntryDetailView(UserPassesTestMixin, LoginRequiredMixin, DetailView):
         return test_user_owns(self.request, Entry, self.kwargs['pk'])
 
     def handle_no_permission(self):
-        # messages.add_message(self.request, messages.ERROR, 'Unable to find entry!')
+        messages.add_message(self.request, messages.ERROR, 'Unable to find entry!')
         return super(EntryDetailView, self).handle_no_permission()
 
 
@@ -119,16 +119,6 @@ class EntryDeleteView(UserPassesTestMixin, LoginRequiredMixin, DeleteView):
 
 
 # Contact Pages
-
-
-class ContactDetailView(LoginRequiredMixin, DetailView):
-    model = Contact
-
-    def test_func(self):
-        return test_user_owns(self.request, Contact, self.kwargs['pk'])
-
-    def handle_no_permission(self):
-        return Http404()
 
 
 class ContactListView(LoginRequiredMixin, ListView):
