@@ -17,7 +17,7 @@ class UserDetailView(LoginRequiredMixin, DetailView):
     model = User
 
     def get_object(self):
-        return User.objects.get(username=self.request.user.username)
+        return User.objects.get(username=self.kwargs['username'])
 
     def get_context_data(self, **kwargs):
         context = super(UserDetailView, self).get_context_data()
@@ -34,7 +34,7 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
     fields = ["name"]
 
     def get_success_url(self):
-        return reverse("users:detail", kwargs={"username": self.request.user.username})
+        return reverse("users:detail", kwargs={'username': self.request.user.username})
 
     def get_object(self):
         return User.objects.get(username=self.request.user.username)
@@ -54,7 +54,7 @@ class UserRedirectView(LoginRequiredMixin, RedirectView):
     permanent = False
 
     def get_redirect_url(self):
-        return reverse("users:detail", kwargs={"username": self.request.user.username})
+        return reverse("users:detail", kwargs={'username': self.request.user.username})
 
 
 user_redirect_view = UserRedirectView.as_view()
@@ -107,7 +107,6 @@ anon_user_checkin_view = AnonUserCheckinView.as_view()
 
 
 class RetractPosts(LoginRequiredMixin, RedirectView):
-    url = reverse_lazy('users:detail')
 
     def get_object(self):
         return User.objects.get(username=self.request.user.username)
@@ -125,7 +124,7 @@ class RetractPosts(LoginRequiredMixin, RedirectView):
         Entry.objects.bulk_update(entries, ['released'])
         user.entries_released = False
         user.save()
-        return reverse("users:detail", kwargs={'username': user.username})
+        return reverse("users:detail", kwargs={'username': self.request.user.username})
 
 
 retract_posts_view = RetractPosts.as_view()
@@ -135,6 +134,7 @@ class ProfileSettings(LoginRequiredMixin, UpdateView):
     model = User
     fields = ['days_to_release_setting']
     template_name = "users/user_settings_form.html"
+    url = reverse_lazy("users:detail")
 
     def get_object(self):
         return User.objects.get(username=self.request.user.username)
@@ -144,9 +144,6 @@ class ProfileSettings(LoginRequiredMixin, UpdateView):
             self.request, messages.SUCCESS, "Information successfully updated"
         )
         return super().form_valid(form)
-
-    def get_success_url(self):
-        return reverse("users:detail", kwargs={"username": self.request.user.username})
 
 
 settings_update_view = ProfileSettings.as_view()

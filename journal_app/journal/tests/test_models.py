@@ -23,18 +23,6 @@ def test_entry_get_absolute_url():
     assert url == f'/journal/entry/{entry.uuid}/'
 
 
-def test_entry_update():
-    entry = EntryFactory()
-    assert entry.created == entry.updated
-    assert entry.modified is False
-    # assert entry.modified is False
-    entry.body = 'Changing the body of the entry for the test to see if it is modified'
-    sleep(1)
-    entry.save()
-    assert entry.created != entry.updated
-    assert entry.modified is True
-
-
 # Contact Tests
 
 
