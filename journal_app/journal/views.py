@@ -1,4 +1,3 @@
-# Django imports
 from dal import autocomplete
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
@@ -15,7 +14,6 @@ from django.views.generic import (
 )
 
 from journal_app.journal.forms import ContactForm, EntryForm
-# Custom imports
 from journal_app.journal.models import Contact, Entry
 
 
