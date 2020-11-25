@@ -9,7 +9,7 @@
 
 {% block content %}
   <div class="row">
-    <h3>Entries to be shared with {{ contact.name }}</h3>
+    <h4>Entries to be shared with {{ contact.name }}</h4>
   </div>
     <div class="row">
       <div class="col-lg-12">
@@ -22,7 +22,7 @@
   {% for entry in entry_list %}
     <div class="row{% if forloop.first %} mt-2{% endif %}">
       <div class="col-lg-12">
-        <h2>{{ entry.title }}</h2>
+        <h3>{{ entry.title }}</h3>
         <p><b>Last Updated:</b> {{ entry.updated|naturaltime  }}</p>
         <a href="{{ entry.get_absolute_url }}" class="entry-link">
           <div class="col-lg-12 entry-area mw-100">
@@ -30,11 +30,12 @@
           </div>
         </a>
       </div>
-    </div>
+
     <hr/>
   {% empty %}
-    <h2>There are no entries yet. <a href="{% url 'journal:entry_create' %}" class="btn btn-theme btn-lg btn-block"><i class="fas fa-plus"></i> Add an entry here!</a></h2>
+    <h3>There are no entries yet.</h3>
   {% endfor %}
+    </div>
   {% include 'journal/pagination.html' %}
 
 

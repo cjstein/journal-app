@@ -200,11 +200,19 @@ class ContactEntryList(UserPassesTestMixin, LoginRequiredMixin, ListView):
         context.update(get_entries_from_contact(self.request, self.kwargs['pk']))
         return context
 
+    def get_queryset(self, *args, **kwargs):
+        contact = Contact.objects.get(user=self.request.user, pk=self.kwargs['pk'])
+        return contact.entry_set.all()
+
 
 class ContactReleasedEntryList(UserPassesTestMixin, ListView):
     model = Entry
     template_name = 'journal/entry_list.html'
     paginate_by = 20
+
+    def get_queryset(self, *args, **kwargs):
+        contact = Contact.objects.get(user=self.request.user, pk=self.kwargs['pk'])
+        return contact.entry_set.all().filter(released=True)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
