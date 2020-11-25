@@ -4,7 +4,7 @@
         <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <i class="fas fa-bars" style="color:#61ca61; font-size:28px;"></i>
         </button>
-        <a class="navbar-brand" href="{% url 'home' %}">Time Capsule Journal</a>
+        <a class="navbar-brand" href="{% url 'home' %}"><i class="fas fa-hourglass-half"></i> Time Capsule Journal</a>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
               {% url 'journal:entry_list' as active_url %}
