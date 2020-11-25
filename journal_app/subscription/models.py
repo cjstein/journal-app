@@ -32,4 +32,3 @@ class StripeCustomer(models.Model):
         self.subscription_start = datetime.fromtimestamp(subscription.current_period_start)
         self.status = subscription.status
         self.save()
-
