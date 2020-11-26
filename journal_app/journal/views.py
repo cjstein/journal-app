@@ -50,7 +50,7 @@ class EntryDetailView(UserPassesTestMixin, LoginRequiredMixin, DetailView):
 
 class EntryListView(LoginRequiredMixin, ListView):
     model = Entry
-    paginate_by = 20
+    paginate_by = 15
     context_object_name = "entries"
 
     def get_queryset(self):
@@ -181,7 +181,7 @@ class ContactAutoComplete(autocomplete.Select2QuerySetView):
 class ContactEntryList(UserPassesTestMixin, LoginRequiredMixin, ListView):
     model = Entry
     template_name = 'journal/contact_entry_list.html'
-    paginate_by = 20
+    paginate_by = 15
     context_object_name = "entries"
 
     def test_func(self):
@@ -200,7 +200,7 @@ class ContactEntryList(UserPassesTestMixin, LoginRequiredMixin, ListView):
 class ContactReleasedEntryList(UserPassesTestMixin, ListView):
     model = Entry
     template_name = 'journal/entry_list.html'
-    paginate_by = 20
+    paginate_by = 15
     context_object_name = "entries"
 
     def get_queryset(self, *args, **kwargs):
