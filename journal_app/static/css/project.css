@@ -55,7 +55,7 @@ body {
 
 .entry-link {
   color: #3d3d3d;
-  text-decoration: underline;
+  text-decoration: none;
 }
 
 .entry-link:hover {

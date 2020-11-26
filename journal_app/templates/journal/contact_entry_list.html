@@ -9,25 +9,29 @@
 
 {% block content %}
   <div class="row">
-    <h4>Entries to be shared with {{ contact.name }}</h4>
+    <div class="col-lg-12">
+      <h4><u>Entries to be shared with {{ contact.name }}</u></h4>
+    </div>
   </div>
     <div class="row">
-      <div class="col-lg-12">
+      <div class="col-lg-12 pb-2">
         <h5>
           <a href="{% url 'journal:contact_update' contact.uuid %}" class="entry-link"><i class="far fa-edit"></i> Edit {{ contact.name }}</a>
-          <a href="{% url 'journal:contact_delete' contact.uuid %}" class="text-link"><i class="far fa-trash-alt"></i> Delete {{ contact.name }}</a>
+          <a href="{% url 'journal:contact_delete' contact.uuid %}" class="entry-link"><i class="far fa-trash-alt"></i> Delete {{ contact.name }}</a>
         </h5>
       </div>
     </div>
   {% for entry in entries %}
-    <div class="row{% if forloop.first %} mt-2{% endif %}">
+    <div class="row">
       <div class="col-lg-12">
-        <h3>{{ entry.title }}</h3>
-        <a href="{{ entry.get_absolute_url }}" class="entry-link">
-          <div class="col-lg-12 entry-area mw-100">
-            {{ entry.body|safe|truncatewords:75 }}
-          </div>
+        <a href="{{ entry.get_absolute_url }}">
+          <h4 class="entry-link">{{ entry.title }}</h4>
         </a>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-12 mw-100">
+        {{ entry.body|safe|truncatewords:75 }}
       </div>
     </div>
     <hr/>
