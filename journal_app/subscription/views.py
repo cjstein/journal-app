@@ -26,7 +26,7 @@ def stripe_config(request):
 
 
 @csrf_exempt
-def create_checkout_session(request):
+def create_checkout_session(request, **kwargs):
     if request.method == 'GET':
         domain_url = Site.objects.get_current().domain
         domain_url = domain_url if domain_url.startswith('http') else fr'https://{domain_url}'
