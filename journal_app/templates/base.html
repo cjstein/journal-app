@@ -44,19 +44,21 @@
     {% else %}
       {% include 'navbar_new_user.html' %}
     {% endif %}
-    <div class="container">
+    <div id="wrap">
+      <div class="container clear-top" id="main">
 
-      {% if messages %}
-          {% for message in messages %}
-              <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">{{ message }}<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>
-          {% endfor %}
-      {% endif %}
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">{{ message }}<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>
+            {% endfor %}
+        {% endif %}
 
-      {% block content %}
+        {% block content %}
 
-      {% endblock content %}
+        {% endblock content %}
 
-    </div> <!-- /container -->
+      </div>
+    </div>
     {% block footer %}{% include 'footer.html' %}{% endblock %}
     {% block modal %}{% endblock modal %}
 

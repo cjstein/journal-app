@@ -1,7 +1,21 @@
 /* These styles are generated from project.scss. */
 
+html{
+  height: 100%;
+}
+
 body {
   font-family: "Roboto", sans-serif;
+  height: 94%;
+}
+
+#wrap{
+  min-height: 90%;
+}
+
+#main {
+  overflow: auto;
+  padding-bottom: 150px;
 }
 
 .alert-debug {
@@ -107,4 +121,32 @@ body {
 
 hr {
   border-color: #b0b0b0;
+}
+
+.lgreen {
+  background-color: #61ca61
+}
+
+.drgrey {
+  background-color: #3D3D3D;
+  color: white;
+}
+
+.footer {
+  position: relative;
+  margin-top: -150px;
+  height: 150px;
+  clear: both;
+  padding-top: 20px;
+  color: white;
+}
+
+.footer-link {
+  color: white;
+  text-decoration: underline;
+}
+
+.footer-link:hover {
+  color: #61ca61;
+  text-decoration: underline;
 }
