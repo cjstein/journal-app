@@ -1,22 +1,47 @@
-<div class="row">
-  <div class="col-sm-12">
-    <div class="pagination">
-    <span class="step-links mx-auto">
-        {% if page_obj.has_previous %}
-          <a href="?page=1" class="entry-link mr-2">&laquo; First</a>
-          <a href="?page={{ page_obj.previous_page_number }}" class="entry-link mr-2">Previous</a>
-        {% endif %}
-
-      <span class="current">
-            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
-        </span>
-
-      {% if page_obj.has_next %}
-        <a href="?page={{ page_obj.next_page_number }}" class="entry-link ml-2">Next</a>
-        <a href="?page={{ page_obj.paginator.num_pages }}" class="entry-link ml-2">Last &raquo;</a>
-      {% endif %}
-    </span>
-    </div>
-  </div>
-</div>
-
+<nav aria-label="Page navigation">
+  <ul class="pagination justify-content-center">
+    <li class="page-item{% if page_obj.paginator.num_pages == 1 %} disabled{% endif %}">
+      <a class="page-link" href="?page=1"{% if page_obj.paginator.num_pages == 1 %} tabindex="-1"{% endif %}>
+        &laquo; First
+      </a>
+    </li>
+  {% if page_obj.num_pages > 2 %}
+    <li class="page-item">
+      <a class="page-link" href="?page={{ page_obj.number|add:"-2" }}">
+        {{ page_obj.number|add:"-2" }}
+      </a>
+    </li>
+  {% endif %}
+  {% if page_obj.has_previous %}
+    <li class="page-item">
+      <a class="page-link" href="?page={{ page_obj.previous_page_number }}">
+        {{ page_obj.previous_page_number }}
+      </a>
+    </li>
+  {% endif %}
+    <li class="page-item">
+      <a class="page-link page-active" href="#">
+        {{ page_obj.number }}
+      </a>
+    </li>
+  {% if page_obj.has_next %}
+    <li class="page-item">
+      <a class="page-link" href="?page={{ page_obj.next_page_number }}">
+        {{ page_obj.next_page_number }}
+      </a>
+    </li>
+  {% endif %}
+  {% if page_obj.number|add:"2" < page_obj.paginator.num_pages %}
+    <li class="page-item">
+      <a class="page-link" href="?page={{ page_obj.number|add:"2" }}">
+        {{ page_obj.number|add:"2" }}
+      </a>
+    </li>
+  {% endif %}
+    <li class="page-item{% if page_obj.paginator.num_pages == 1 %} disabled{% endif %}">
+      <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}"{% if page_obj.paginator.num_pages == 1 %} tabindex="-1"{% endif %}>
+        Last: {{ page_obj.paginator.num_pages }}
+      </a>
+    </li>
+  </ul>
+</nav>

@@ -150,3 +150,18 @@ hr {
   color: #61ca61;
   text-decoration: underline;
 }
+
+.page-link {
+  background-color: #3D3D3D;
+  color: white;
+}
+
+.page-link:hover {
+  background-color: #3D3D3D;
+  color: #61ca61;
+}
+
+.page-link.page-active {
+  background-color: #61ca61;
+  color: black;
+}
