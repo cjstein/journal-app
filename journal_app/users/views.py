@@ -7,7 +7,6 @@ from django.utils import timezone
 from django.views.generic import DetailView, RedirectView, UpdateView
 
 from journal_app.journal.models import Entry
-from journal_app.subscription.utils import get_subscription_status
 
 User = get_user_model()
 
@@ -20,8 +19,8 @@ class UserDetailView(LoginRequiredMixin, DetailView):
         return User.objects.get(username=self.kwargs['username'])
 
     def get_context_data(self, **kwargs):
-        context = super(UserDetailView, self).get_context_data()
-        context.update(get_subscription_status(self.request.user))
+        context = super().get_context_data()
+        context['user'] = self.get_object()
         return context
 
 
@@ -123,6 +122,7 @@ class RetractPosts(LoginRequiredMixin, RedirectView):
             entry.released = False
         Entry.objects.bulk_update(entries, ['released'])
         user.entries_released = False
+        user.last_checkin = timezone.now()
         user.save()
         return reverse("users:detail", kwargs={'username': self.request.user.username})
 

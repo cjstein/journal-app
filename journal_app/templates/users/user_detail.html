@@ -51,10 +51,14 @@
   <!-- Subscription -->
   <div class="row">
     <div class="col-sm-12">
-      <h4><u>Subscription</u></h4>
+      <h4>
+        <a href="{% url 'subscription:home' %}" class="entry-link">
+          <u>Subscription</u>
+        </a>
+      </h4>
       <p>
-        <b>Subscription Type:</b>{% if subscription.status == "active" %} {{ product.name }}{% else %}Free{% endif %}<br/>
-        <b>Subscription Expiration:</b>{% if subscription.status == "active" %} {{ subscription_end|naturaltime }}{% else %}Free{% endif %}
+        <b>Subscription Type:</b>{% if user.subscription.get.status == "active" %} {{ user.subscription.get.get_status_display }}{% else %} Free{% endif %}<br/>
+        <b>Subscription Expiration:</b>{% if user.subscription.get.status == "active" %} {{ user.subscription.get.subscription_end|naturaltime }}{% else %} Never{% endif %}
       </p>
     </div>
   </div>

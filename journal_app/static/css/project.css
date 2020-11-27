@@ -1,7 +1,21 @@
 /* These styles are generated from project.scss. */
 
+html{
+  height: 100%;
+}
+
 body {
   font-family: "Roboto", sans-serif;
+  height: 94%;
+}
+
+#wrap{
+  min-height: 90%;
+}
+
+#main {
+  overflow: auto;
+  padding-bottom: 150px;
 }
 
 .alert-debug {
@@ -39,22 +53,9 @@ body {
   background-color: #3d3d3d;
 }
 
-.page-link {
-  color: #3d3d3d;
-  background-color: #b3b3b3;
-  font-size: 18px;
-  border-radius: 10px;
-  border: 10px black;
-}
-
-.page-link:hover {
-  color: #61ca61;
-  text-decoration: underline;
-}
-
 .entry-link {
   color: #3d3d3d;
-  text-decoration: underline;
+  text-decoration: none;
 }
 
 .entry-link:hover {
@@ -120,4 +121,47 @@ body {
 
 hr {
   border-color: #b0b0b0;
+}
+
+.lgreen {
+  background-color: #61ca61
+}
+
+.drgrey {
+  background-color: #3D3D3D;
+  color: white;
+}
+
+.footer {
+  position: relative;
+  margin-top: -150px;
+  height: 150px;
+  clear: both;
+  padding-top: 20px;
+  color: white;
+}
+
+.footer-link {
+  color: white;
+  text-decoration: underline;
+}
+
+.footer-link:hover {
+  color: #61ca61;
+  text-decoration: underline;
+}
+
+.page-link {
+  background-color: #3D3D3D;
+  color: white;
+}
+
+.page-link:hover {
+  background-color: #3D3D3D;
+  color: #61ca61;
+}
+
+.page-link.page-active {
+  background-color: #61ca61;
+  color: black;
 }

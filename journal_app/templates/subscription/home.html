@@ -5,9 +5,9 @@
 
 {% block content %}
   <div class="container mt-5">
-    {% if subscription.status == "active" %}
-      <h5>{{ product.name }}</h5>
-      <p>Subscription ends: {{ subscription_end|date:"SHORT_DATE_FORMAT" }}</p>
+    {% if user.subscription.get.status == "active" %}
+      <h5>{{ user.subscription.get.product_name }}</h5>
+      <p>Subscription ends: {{ user.subscription.get.subscription_end|date:"SHORT_DATE_FORMAT" }}</p>
     {% else %}
       <button type="submit" class="btn btn-large btn-block btn-theme" id="submitBtn">Subscribe</button>
     {% endif %}

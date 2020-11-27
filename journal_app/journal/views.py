@@ -1,4 +1,3 @@
-# Django imports
 from dal import autocomplete
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
@@ -15,7 +14,6 @@ from django.views.generic import (
 )
 
 from journal_app.journal.forms import ContactForm, EntryForm
-# Custom imports
 from journal_app.journal.models import Contact, Entry
 
 
@@ -46,12 +44,14 @@ class EntryDetailView(UserPassesTestMixin, LoginRequiredMixin, DetailView):
         return test_user_owns(self.request, Entry, self.kwargs['pk'])
 
     def handle_no_permission(self):
-        # messages.add_message(self.request, messages.ERROR, 'Unable to find entry!')
+        messages.add_message(self.request, messages.ERROR, 'Unable to find entry!')
         return super(EntryDetailView, self).handle_no_permission()
 
 
 class EntryListView(LoginRequiredMixin, ListView):
     model = Entry
+    paginate_by = 15
+    context_object_name = "entries"
 
     def get_queryset(self):
         return Entry.objects.filter(user=self.request.user)
@@ -121,16 +121,6 @@ class EntryDeleteView(UserPassesTestMixin, LoginRequiredMixin, DeleteView):
 # Contact Pages
 
 
-class ContactDetailView(LoginRequiredMixin, DetailView):
-    model = Contact
-
-    def test_func(self):
-        return test_user_owns(self.request, Contact, self.kwargs['pk'])
-
-    def handle_no_permission(self):
-        return Http404()
-
-
 class ContactListView(LoginRequiredMixin, ListView):
     model = Contact
 
@@ -191,6 +181,8 @@ class ContactAutoComplete(autocomplete.Select2QuerySetView):
 class ContactEntryList(UserPassesTestMixin, LoginRequiredMixin, ListView):
     model = Entry
     template_name = 'journal/contact_entry_list.html'
+    paginate_by = 15
+    context_object_name = "entries"
 
     def test_func(self):
         return test_user_owns(self.request, Contact, self.kwargs['pk'])
@@ -200,10 +192,20 @@ class ContactEntryList(UserPassesTestMixin, LoginRequiredMixin, ListView):
         context.update(get_entries_from_contact(self.request, self.kwargs['pk']))
         return context
 
+    def get_queryset(self, *args, **kwargs):
+        contact = Contact.objects.get(user=self.request.user, pk=self.kwargs['pk'])
+        return contact.entry_set.all()
+
 
 class ContactReleasedEntryList(UserPassesTestMixin, ListView):
     model = Entry
     template_name = 'journal/entry_list.html'
+    paginate_by = 15
+    context_object_name = "entries"
+
+    def get_queryset(self, *args, **kwargs):
+        contact = Contact.objects.get(user=self.request.user, pk=self.kwargs['pk'])
+        return contact.entry_set.all().filter(released=True)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()

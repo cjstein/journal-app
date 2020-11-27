@@ -4,7 +4,6 @@ from journal_app.journal.views import (
     ContactAutoComplete,
     ContactCreateView,
     ContactDeleteView,
-    ContactDetailView,
     ContactEntryList,
     ContactListView,
     ContactReleasedEntryDetail,
@@ -27,7 +26,6 @@ urlpatterns = [
     path("entry/<uuid:pk>/delete/", EntryDeleteView.as_view(), name='entry_delete'),
     # Contact urls
     path("contacts/", ContactListView.as_view(), name='contact_list'),
-    path("contact/<uuid:pk>/", ContactDetailView.as_view(), name='contact_detail'),
     path("contact/<uuid:pk>/entries/", ContactEntryList.as_view(), name='contact_entry_list'),
     path("contact/new/", ContactCreateView.as_view(), name='contact_create'),
     path("contact/<uuid:pk>/update/", ContactUpdateView.as_view(), name='contact_update'),

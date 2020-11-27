@@ -1,21 +1,20 @@
 import stripe
 from django.conf import settings
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.sites.models import Site
 from django.http.response import HttpResponse, JsonResponse
 from django.shortcuts import render
-from django.utils.timezone import datetime
 from django.views.decorators.csrf import csrf_exempt
 
 from journal_app.subscription.models import StripeCustomer
-from journal_app.subscription.utils import get_subscription_status
 from journal_app.journal_mail.models import Mail
 from journal_app.users.models import User
 
 
 @login_required
 def home(request):
-    return render(request, 'subscription/home.html', get_subscription_status(request.user))
+    return render(request, 'subscription/home.html', {'user': request.user})
 
 
 @csrf_exempt
@@ -26,7 +25,7 @@ def stripe_config(request):
 
 
 @csrf_exempt
-def create_checkout_session(request):
+def create_checkout_session(request, **kwargs):
     if request.method == 'GET':
         domain_url = Site.objects.get_current().domain
         domain_url = domain_url if domain_url.startswith('http') else fr'https://{domain_url}'
@@ -52,11 +51,16 @@ def create_checkout_session(request):
 
 @login_required
 def success(request):
+    messages.add_message(request, messages.SUCCESS, "Subscription confirmed")
+    user = User.objects.get(username=request.user.username)
+    customer = StripeCustomer.objects.get(user=user)
+    customer.get_subscription_status()
     return render(request, 'subscription/success.html')
 
 
 @login_required
 def cancel(request):
+    messages.add_message(request, messages.ERROR, "Subscription not started successfully")
     return render(request, 'subscription/cancel.html')
 
 
@@ -94,6 +98,7 @@ def stripe_webhook(request):
             user=user,
             stripe_customer_id=stripe_customer_id,
             stripe_subscription_id=stripe_subscription_id,
+            status=StripeCustomer.Status.ACTIVE,
         )
         subject = 'Thanks for subscribing'
         mail = Mail(

@@ -45,18 +45,6 @@ def test_contact_list_resolve():
     assert resolve('/journal/contacts/').view_name == 'journal:contact_list'
 
 
-@pytest.mark.django_db
-def test_contact_detail_reverse(contact): # noqa F811
-    url = reverse('journal:contact_detail', kwargs={'pk': contact.uuid})
-    assert url == f'/journal/contact/{contact.uuid}/'
-
-
-@pytest.mark.django_db
-def test_contact_detail_resolve(contact): # noqa F811
-    url = f'/journal/contact/{contact.uuid}/'
-    assert resolve(url).view_name == 'journal:contact_detail'
-
-
 def test_contact_add_reverse():
     assert reverse('journal:contact_create') == '/journal/contact/new/'
 
