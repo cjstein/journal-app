@@ -10,6 +10,6 @@ Better checkin so your Entries don't get release, this is the FINAL REMINDER.
 
 {% block content %}
   {{ user.username }},<br/>
-  Your Entries will be released tomorrow.  If you don't want them to be released you better check-in again.  Please checkin again <a href="{% url 'users:anon_checkin' user.username user.checkin_link %}">here</a> or by copy and pasting the link below:<br>
-  {% url 'users:anon_checkin' user.username user.checkin_link %}
+  Your Entries will be released tomorrow.  If you don't want them to be released you better check-in again.  Please checkin again <a href="{{ user.get_absolute_checkin_link }}">here</a> or by copy and pasting the link below:<br>
+  {{ user.get_absolute_checkin_link }}
 {% endblock %}
