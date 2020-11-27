@@ -1,6 +1,7 @@
 from django.core.management.base import BaseCommand
 
 from journal_app.journal.models import Entry
+from journal_app.journal_mail.models import Mail
 from journal_app.users.models import User
 
 
@@ -17,3 +18,13 @@ class Command(BaseCommand):
                     entry.save()
                 user.entries_released = True
                 user.save()
+                for contact in user.contact_set.all():
+                    subject = f"{user} has shared memories with you, read them here"
+                    mail = Mail(
+                        user=user,
+                        subject=subject,
+                        header=subject,
+                        template_name='release_to_contact'
+                    )
+                    mail.message(contact=contact)
+                    mail.save()
