@@ -52,6 +52,9 @@ def create_checkout_session(request, **kwargs):
 @login_required
 def success(request):
     messages.add_message(request, messages.SUCCESS, "Subscription confirmed")
+    user = User.objects.get(username=request.user.username)
+    customer = StripeCustomer.objects.get(user=user)
+    customer.get_subscription_status()
     return render(request, 'subscription/success.html')
 
 
