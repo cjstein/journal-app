@@ -8,14 +8,13 @@ from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 
 from journal_app.subscription.models import StripeCustomer
-from journal_app.subscription.utils import get_subscription_status
 from journal_app.journal_mail.models import Mail
 from journal_app.users.models import User
 
 
 @login_required
 def home(request):
-    return render(request, 'subscription/home.html', get_subscription_status(request.user))
+    return render(request, 'subscription/home.html', {'user': request.user})
 
 
 @csrf_exempt

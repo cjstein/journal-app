@@ -7,7 +7,6 @@ from django.utils import timezone
 from django.views.generic import DetailView, RedirectView, UpdateView
 
 from journal_app.journal.models import Entry
-from journal_app.subscription.utils import get_subscription_status
 
 User = get_user_model()
 

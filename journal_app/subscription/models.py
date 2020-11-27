@@ -19,6 +19,7 @@ class StripeCustomer(models.Model):
     status = models.CharField(max_length=10, choices=Status.choices, default=Status.TRIAL)
     subscription_start = models.DateTimeField(blank=True, null=True)
     subscription_end = models.DateTimeField(blank=True, null=True)
+    product_name = models.TextField(blank=True, null=True)
     product = models.TextField(blank=True, null=True)
 
     def __str__(self):
@@ -28,6 +29,7 @@ class StripeCustomer(models.Model):
         stripe.api_key = settings.STRIPE_SECRET_KEY
         subscription = stripe.Subscription.retrieve(self.stripe_subscription_id)
         self.product = stripe.Product.retrieve(subscription.plan.product)
+        self.product_name = self.product.name
         self.subscription_end = datetime.fromtimestamp(subscription.current_period_end)
         self.subscription_start = datetime.fromtimestamp(subscription.current_period_start)
         self.status = subscription.status
