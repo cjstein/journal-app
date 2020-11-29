@@ -28,10 +28,11 @@ class StripeCustomer(models.Model):
 
     def get_subscription_status(self):
         stripe.api_key = settings.STRIPE_SECRET_KEY
-        self.subscription = stripe.Subscription.retrieve(self.stripe_subscription_id)
-        self.product = stripe.Product.retrieve(self.subscription.plan.product)
+        subscription = stripe.Subscription.retrieve(self.stripe_subscription_id)
+        self.product = stripe.Product.retrieve(subscription.plan.product)
         self.product_name = self.product.name
-        self.subscription_end = datetime.fromtimestamp(self.subscription.current_period_end)
-        self.subscription_start = datetime.fromtimestamp(self.subscription.current_period_start)
-        self.status = self.subscription.status
+        self.subscription_end = datetime.fromtimestamp(subscription.current_period_end)
+        self.subscription_start = datetime.fromtimestamp(subscription.current_period_start)
+        self.status = subscription.status
+        self.subscription_cache = subscription
         self.save()

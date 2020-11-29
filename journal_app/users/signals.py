@@ -23,5 +23,4 @@ def create_stripe_customer(sender, instance, created, **kwargs):
             stripe_customer_id=customer.stripe_id,
             stripe_subscription_id=subscription.stripe_id,
         )
-        stripe_customer.save()
         stripe_customer.get_subscription_status()
