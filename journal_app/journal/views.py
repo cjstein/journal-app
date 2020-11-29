@@ -14,16 +14,7 @@ from django.views.generic import (
 
 from journal_app.journal.forms import ContactForm, EntryForm
 from journal_app.journal.models import Contact, Entry
-from journal_app.journal.utils import test_user_owns
-
-
-def get_entries_from_contact(request, pk):
-    context = {}
-    contact = Contact.objects.get(user=request.user, pk=pk)
-    entry_list = contact.entry_set.all()
-    context['contact'] = contact
-    context['entry_list'] = entry_list
-    return context
+from journal_app.journal.utils import test_user_owns, get_entries_from_contact
 
 
 # Entry Views
