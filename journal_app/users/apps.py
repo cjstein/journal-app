@@ -3,7 +3,7 @@ from django.apps import AppConfig
 
 class UsersConfig(AppConfig):
     name = "journal_app.users"
-    verbose_name = "Users"
+    verbose_name = "users"
 
     def ready(self):
         try:

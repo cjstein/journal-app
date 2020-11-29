@@ -21,16 +21,17 @@ class StripeCustomer(models.Model):
     subscription_end = models.DateTimeField(blank=True, null=True)
     product_name = models.TextField(blank=True, null=True)
     product = models.TextField(blank=True, null=True)
+    subscription_cache = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return str(self.user)
 
     def get_subscription_status(self):
         stripe.api_key = settings.STRIPE_SECRET_KEY
-        subscription = stripe.Subscription.retrieve(self.stripe_subscription_id)
-        self.product = stripe.Product.retrieve(subscription.plan.product)
+        self.subscription = stripe.Subscription.retrieve(self.stripe_subscription_id)
+        self.product = stripe.Product.retrieve(self.subscription.plan.product)
         self.product_name = self.product.name
-        self.subscription_end = datetime.fromtimestamp(subscription.current_period_end)
-        self.subscription_start = datetime.fromtimestamp(subscription.current_period_start)
-        self.status = subscription.status
+        self.subscription_end = datetime.fromtimestamp(self.subscription.current_period_end)
+        self.subscription_start = datetime.fromtimestamp(self.subscription.current_period_start)
+        self.status = self.subscription.status
         self.save()
