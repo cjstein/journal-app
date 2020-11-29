@@ -57,8 +57,8 @@
         </a>
       </h4>
       <p>
-        <b>Subscription Type:</b>{% if user.subscription.get.status == "active" %} {{ user.subscription.get.get_status_display }}{% else %} Free{% endif %}<br/>
-        <b>Subscription Expiration:</b>{% if user.subscription.get.status == "active" %} {{ user.subscription.get.subscription_end|naturaltime }}{% else %} Never{% endif %}
+        <b>Subscription Type:</b> {{ user.subscription.get_status_display }}<br/>
+        <b>Subscription Expiration:</b> {{ user.subscription.subscription_end|naturaltime }}<br/>
       </p>
     </div>
   </div>
