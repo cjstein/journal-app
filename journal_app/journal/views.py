@@ -1,7 +1,6 @@
 from dal import autocomplete
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.db import models
 from django.http import Http404
 from django.urls import reverse_lazy
 from django.utils import timezone
@@ -15,11 +14,7 @@ from django.views.generic import (
 
 from journal_app.journal.forms import ContactForm, EntryForm
 from journal_app.journal.models import Contact, Entry
-
-
-def test_user_owns(request, model: models.Model, pk):
-    test_model = model.objects.filter(pk=pk)[0]
-    return request.user == test_model.user
+from journal_app.journal.utils import test_user_owns
 
 
 def get_entries_from_contact(request, pk):
