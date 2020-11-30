@@ -50,14 +50,23 @@ class TestUserRedirectView:
         assert view.get_redirect_url() == f"/users/{user.username}/"
 
 
-class TestUserDetailView:
+class TestUserDetailView(TestCase):
+    def setUp(self):
+        self.user = UserFactory()
+        self.client = Client()
+        self.client.force_login(user=self.user)
+
     def test_authenticated(self, user: User, rf: RequestFactory):
-        request = rf.get("/fake-url/")
-        request.user = UserFactory()
+        response = self.client.get(
+            reverse('users:detail', kwargs={'username': self.user.username})
+        )
+        self.assertEqual(response.status_code, 200, "User profile")
 
-        response = user_detail_view(request, username=user.username)
-
-        assert response.status_code == 200
+    def test_authenticated_wrong_profile(self, user: User, rf: RequestFactory):
+        response = self.client.get(
+            reverse('users:detail', kwargs={'username': 'not-real-user'})
+        )
+        self.assertEqual(response.status_code, 403, "Wrong user profile")
 
     def test_not_authenticated(self, user: User, rf: RequestFactory):
         request = rf.get("/fake-url/")
@@ -77,10 +86,10 @@ class TestUserCheckinView(TestCase):
         self.user2 = UserFactory()
         self.user2.last_checkin = REFERENCE_DATE
         self.user2.save()
+        self.client = Client()
 
     def test_checkin(self):
         # Every test needs access to the request factory
-        self.client = Client()
         self.client.force_login(user=self.user1)
         assert self.user1.last_checkin == timezone.datetime(year=2019, month=10, day=30)
         response = self.client.get(
@@ -96,7 +105,6 @@ class TestUserCheckinView(TestCase):
         assert self.user1.last_checkin != REFERENCE_DATE
 
     def test_anon_checkin(self):
-        self.client = Client()
         assert self.user2.last_checkin == timezone.datetime(year=2019, month=10, day=30)
         response = self.client.get(
             reverse('users:anon_checkin', kwargs={'username': self.user2.username, 'uuid': self.user2.checkin_link}),
