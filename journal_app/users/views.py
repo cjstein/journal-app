@@ -31,7 +31,7 @@ class UserDetailView(UserPassesTestMixin, LoginRequiredMixin, DetailView):
 user_detail_view = UserDetailView.as_view()
 
 
-class UserUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
+class UserUpdateView(LoginRequiredMixin, UpdateView):
 
     model = User
     fields = ["name"]
@@ -48,9 +48,6 @@ class UserUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
         )
         return super().form_valid(form)
 
-    def test_func(self):
-        return user_viewing_own_profile(self.request, self.kwargs['username'])
-
 
 user_update_view = UserUpdateView.as_view()
 
@@ -66,7 +63,7 @@ class UserRedirectView(LoginRequiredMixin, RedirectView):
 user_redirect_view = UserRedirectView.as_view()
 
 
-class UserCheckinView(UserPassesTestMixin, LoginRequiredMixin, RedirectView):
+class UserCheckinView(LoginRequiredMixin, RedirectView):
     url = reverse_lazy('journal:entry_list')
 
     def get_object(self):
@@ -74,17 +71,21 @@ class UserCheckinView(UserPassesTestMixin, LoginRequiredMixin, RedirectView):
 
     def get_redirect_url(self, *args, **kwargs):
         user = User.objects.get(username=self.request.user.username)
-        user.last_checkin = timezone.now()
-        user.save()
-        messages.add_message(
-            self.request,
-            messages.SUCCESS,
-            f'Thanks for checking in. Your next deadline is {date(user.checkin_deadline, "SHORT_DATE_FORMAT")}.'
-        )
+        if user.entries_released:
+            messages.add_message(
+                self.request,
+                messages.ERROR,
+                'Your entries have already been released.  Go to your profile to retract!',
+            )
+        else:
+            user.last_checkin = timezone.now()
+            user.save()
+            messages.add_message(
+                self.request,
+                messages.SUCCESS,
+                f'Thanks for checking in. Your next deadline is {date(user.checkin_deadline, "SHORT_DATE_FORMAT")}.'
+            )
         return super().get_redirect_url(*args, **kwargs)
-
-    def test_func(self):
-        return user_viewing_own_profile(self.request, self.kwargs['username'])
 
 
 user_checkin_view = UserCheckinView.as_view()
@@ -95,7 +96,13 @@ class AnonUserCheckinView(RedirectView):
 
     def get_redirect_url(self, *args, **kwargs):
         user = User.objects.get(username=self.kwargs['username'])
-        if user.checkin_link == self.kwargs['uuid']:
+        if user.entries_released:
+            messages.add_message(
+                self.request,
+                messages.ERROR,
+                'Your entries have already been released.  Go to your profile to retract',
+            )
+        elif user.checkin_link == self.kwargs['uuid']:
             user.last_checkin = timezone.now()
             user.save()
             messages.add_message(
@@ -115,7 +122,7 @@ class AnonUserCheckinView(RedirectView):
 anon_user_checkin_view = AnonUserCheckinView.as_view()
 
 
-class RetractPosts(UserPassesTestMixin, LoginRequiredMixin, RedirectView):
+class RetractPosts(LoginRequiredMixin, RedirectView):
 
     def get_object(self):
         return User.objects.get(username=self.request.user.username)
@@ -136,14 +143,11 @@ class RetractPosts(UserPassesTestMixin, LoginRequiredMixin, RedirectView):
         user.save()
         return reverse("users:detail", kwargs={'username': self.request.user.username})
 
-    def test_func(self):
-        return user_viewing_own_profile(self.request, self.kwargs['username'])
-
 
 retract_posts_view = RetractPosts.as_view()
 
 
-class ProfileSettings(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
+class ProfileSettings(LoginRequiredMixin, UpdateView):
     model = User
     fields = ['days_to_release_setting']
     template_name = "users/user_settings_form.html"
@@ -157,9 +161,6 @@ class ProfileSettings(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
             self.request, messages.SUCCESS, "Information successfully updated"
         )
         return super().form_valid(form)
-
-    def test_func(self):
-        return user_viewing_own_profile(self.request, self.kwargs['username'])
 
 
 settings_update_view = ProfileSettings.as_view()
