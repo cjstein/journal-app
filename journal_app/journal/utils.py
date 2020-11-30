@@ -12,5 +12,5 @@ def get_entries_from_contact(request, pk):
     contact = Contact.objects.get(user=request.user, pk=pk)
     entry_list = contact.entry_set.all()
     context['contact'] = contact
-    context['entry_list'] = entry_list
+    context['entries'] = entry_list
     return context
