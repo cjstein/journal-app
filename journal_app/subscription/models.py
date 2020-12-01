@@ -9,11 +9,11 @@ from journal_app.users.models import User
 class StripeCustomer(models.Model):
     class Status(models.TextChoices):
         ACTIVE = "active", "Active"
-        TRIAL = "trial", "Trial"
+        TRIAL = "trialing", "Trial"
         CANCELLED = "cancelled", "Cancelled"
         UNPAID = "unpaid", "Unpaid"
         INCOMPLETE = "incomplete", "Incomplete"
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='subscription')
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='subscription')
     stripe_customer_id = models.CharField(max_length=255)
     stripe_subscription_id = models.CharField(max_length=255)
     status = models.CharField(max_length=10, choices=Status.choices, default=Status.TRIAL)
@@ -21,6 +21,7 @@ class StripeCustomer(models.Model):
     subscription_end = models.DateTimeField(blank=True, null=True)
     product_name = models.TextField(blank=True, null=True)
     product = models.TextField(blank=True, null=True)
+    subscription_cache = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return str(self.user)
@@ -33,4 +34,5 @@ class StripeCustomer(models.Model):
         self.subscription_end = datetime.fromtimestamp(subscription.current_period_end)
         self.subscription_start = datetime.fromtimestamp(subscription.current_period_start)
         self.status = subscription.status
+        self.subscription_cache = subscription
         self.save()

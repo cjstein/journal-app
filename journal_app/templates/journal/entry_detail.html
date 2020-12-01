@@ -42,7 +42,7 @@
 {#          {{ view.formset }}#}
 {#        </table>#}
 {#      </form>#}
-      {% if entry.contact.all and not released%}
+      {% if entry.contact.all and not released %}
         <p><b>Sharing:</b>
           {% for contact in entry.contact.all %}
             <a href="{{ contact.get_absolute_url }}" class="entry-link mr-2">{{ contact.name }}</a>

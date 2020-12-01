@@ -1,0 +1,17 @@
+{% extends 'account/email/base_message.html' %}
+
+{% block tagline %}
+  Entries have been released to you!
+{% endblock %}
+
+
+{% block header %}
+  {{ user }} has shared some memories with you.
+{% endblock %}
+
+{% block content %}
+  {{ contact.name }},<br/>
+  {{ user }} has shared memories with you.  You can read all the entries they shared with you <a href="{{ contact.released_entries_url }}">here</a><br>
+  If the link doesn't work, copy and paste the address below:<br>
+  {{ contact.released_entries_url }}
+{% endblock %}

@@ -4,6 +4,7 @@ import uuid
 # Django imports
 from django.db import models
 from django.urls import reverse
+from django.contrib.sites.models import Site
 
 # Custom imports
 from journal_app.users.models import User
@@ -34,6 +35,10 @@ class Contact(TimeStampedModel):
 
     def get_absolute_url(self):
         return reverse("journal:contact_entry_list", kwargs={"pk": self.uuid})
+
+    def released_entries_url(self):
+        domain = Site.objects.get_current().domain
+        return domain + reverse('journal:released_entries', kwargs={'contact': self.uuid})
 
     def __str__(self):
         return self.name

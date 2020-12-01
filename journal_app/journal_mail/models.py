@@ -33,8 +33,8 @@ class Mail(models.Model):
         context['user'] = self.user
         context['header'] = self.header
         self.html_message = render_to_string(self.get_full_template(), context)
-        self.save()
         self.send_mail()
+        return
 
     @property
     def plain_message(self):
@@ -45,7 +45,7 @@ class Mail(models.Model):
 
     def send_mail(self):
         mail.send_mail(self.subject, self.plain_message, None, [self.to], html_message=self.html_message)
-        self.save()
+        return
 
     def save(self, *args, **kwargs):
         if not self.to:

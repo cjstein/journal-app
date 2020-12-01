@@ -1,17 +1,18 @@
 from django.contrib import messages
 from django.contrib.auth import get_user_model
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.template.defaultfilters import date
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
 from django.views.generic import DetailView, RedirectView, UpdateView
 
 from journal_app.journal.models import Entry
+from journal_app.users.utils import user_viewing_own_profile
 
 User = get_user_model()
 
 
-class UserDetailView(LoginRequiredMixin, DetailView):
+class UserDetailView(UserPassesTestMixin, LoginRequiredMixin, DetailView):
 
     model = User
 
@@ -22,6 +23,9 @@ class UserDetailView(LoginRequiredMixin, DetailView):
         context = super().get_context_data()
         context['user'] = self.get_object()
         return context
+
+    def test_func(self):
+        return user_viewing_own_profile(self.request, self.kwargs['username'])
 
 
 user_detail_view = UserDetailView.as_view()
@@ -67,13 +71,20 @@ class UserCheckinView(LoginRequiredMixin, RedirectView):
 
     def get_redirect_url(self, *args, **kwargs):
         user = User.objects.get(username=self.request.user.username)
-        user.last_checkin = timezone.now()
-        user.save()
-        messages.add_message(
-            self.request,
-            messages.SUCCESS,
-            f'Thanks for checking in. Your next deadline is {date(user.checkin_deadline, "SHORT_DATE_FORMAT")}.'
-        )
+        if user.entries_released:
+            messages.add_message(
+                self.request,
+                messages.ERROR,
+                'Your entries have already been released.  Go to your profile to retract!',
+            )
+        else:
+            user.last_checkin = timezone.now()
+            user.save()
+            messages.add_message(
+                self.request,
+                messages.SUCCESS,
+                f'Thanks for checking in. Your next deadline is {date(user.checkin_deadline, "SHORT_DATE_FORMAT")}.'
+            )
         return super().get_redirect_url(*args, **kwargs)
 
 
@@ -85,7 +96,13 @@ class AnonUserCheckinView(RedirectView):
 
     def get_redirect_url(self, *args, **kwargs):
         user = User.objects.get(username=self.kwargs['username'])
-        if user.checkin_link == self.kwargs['uuid']:
+        if user.entries_released:
+            messages.add_message(
+                self.request,
+                messages.ERROR,
+                'Your entries have already been released.  Go to your profile to retract',
+            )
+        elif user.checkin_link == self.kwargs['uuid']:
             user.last_checkin = timezone.now()
             user.save()
             messages.add_message(
