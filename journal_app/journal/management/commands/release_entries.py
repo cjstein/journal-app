@@ -23,8 +23,9 @@ class Command(BaseCommand):
                     mail = Mail(
                         user=user,
                         subject=subject,
+                        to=contact.email,
                         header=subject,
                         template_name='release_to_contact'
                     )
-                    mail.message(contact=contact)
                     mail.save()
+                    mail.message(contact=contact)

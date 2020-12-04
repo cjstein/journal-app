@@ -17,5 +17,5 @@ class Command(BaseCommand):
                     header=subject,
                     template_name='final_reminder_email'
                 )
-                mail.message()
                 mail.save()
+                mail.message()
