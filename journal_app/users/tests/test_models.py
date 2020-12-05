@@ -1,7 +1,10 @@
 import pytest
+
+from django.test import TestCase
 from django.utils import timezone
 
 from journal_app.users.models import User
+from journal_app.users.tests.factories import UserFactory
 
 pytestmark = pytest.mark.django_db
 
@@ -24,3 +27,8 @@ def test_release_entries(user: User):
     assert not user.release_entries
     user.last_checkin = timezone.now() - timezone.timedelta(days=user.days_to_release_setting + 1)
     assert user.release_entries
+
+
+class TestUser(TestCase):
+    def setUp(self):
+        self.user = UserFactory()

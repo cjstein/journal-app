@@ -10,24 +10,4 @@ from journal_app.subscription.models import StripeCustomer
 def create_stripe_customer(sender, instance, created, **kwargs):
     stripe.api_key = settings.STRIPE_SECRET_KEY
     if created:
-        if settings.TEST:
-            pass
-        else:
-            customer = stripe.Customer.create(
-                name=str(instance),
-                email=instance.email,
-            )
-            subscription = stripe.Subscription.create(
-                customer=customer.stripe_id,
-                items=[
-                    {'price': 'price_1HllJ9EAWjMWH1XhSD8lRewP'},
-                ],
-                trial_period_days=14
-            )
-        stripe_customer = StripeCustomer.objects.create(
-            user=instance,
-            stripe_customer_id=customer.stripe_id,
-            stripe_subscription_id=subscription.stripe_id,
-        )
-        if not settings.TEST:
-            stripe_customer.get_subscription_status()
+        customer = StripeCustomer.objects.create()
