@@ -34,6 +34,7 @@ class Mail(models.Model):
         context['header'] = self.header
         self.html_message = render_to_string(self.get_full_template(), context)
         self.send_mail()
+        self.save()
         return
 
     @property

@@ -1,0 +1,14 @@
+{% extends 'account/email/base_message.html' %}
+
+{% block tagline %}
+Your Entries have been released!
+{% endblock %}
+
+{% block header %}
+You Entries have been released!
+{% endblock %}
+
+{% block content %}
+  {{ user.username }},<br/>
+  Your Entries have now been released, if this is an accident, please login and retract the posts here.
+{% endblock %}
