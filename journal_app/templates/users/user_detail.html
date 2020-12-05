@@ -58,7 +58,11 @@
       </h4>
       <p>
         <b>Subscription Type:</b> {{ user.subscription.get_status_display }}<br/>
-        <b>Subscription Expiration:</b> {{ user.subscription.subscription_end|naturaltime }}<br/>
+        {% if user.subscription.status == 'trialing' %}
+          <b>Trial Ends:</b> {{ user.subscription.trial_end|naturaltime }}
+        {% else %}
+          <b>Subscription Expiration:</b> {{ user.subscription.subscription_end|naturaltime }}
+        {% endif %}<br/>
       </p>
     </div>
   </div>
