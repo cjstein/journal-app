@@ -19,5 +19,4 @@ class Command(BaseCommand):
                     header=subject,
                     template_name='reminder_email'
                 )
-                mail.save()
                 mail.message()

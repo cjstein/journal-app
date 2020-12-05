@@ -27,5 +27,11 @@ class Command(BaseCommand):
                         header=subject,
                         template_name='release_to_contact'
                     )
-                    mail.save()
                     mail.message(contact=contact)
+                mail = Mail(
+                    user=user,
+                    subject='Your entries have been released',
+                    header='Your entries have been released',
+                    template_name='entries_released',
+                )
+                mail.message()
