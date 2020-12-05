@@ -10,4 +10,4 @@ from journal_app.subscription.models import StripeCustomer
 def create_stripe_customer(sender, instance, created, **kwargs):
     stripe.api_key = settings.STRIPE_SECRET_KEY
     if created:
-        customer = StripeCustomer.objects.create()
+        customer = StripeCustomer.objects.create(user=instance)

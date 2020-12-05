@@ -31,7 +31,21 @@ def create_checkout_session(request, **kwargs):
         domain_url = domain_url if domain_url.startswith('http') else fr'https://{domain_url}'
         stripe.api_key = settings.STRIPE_SECRET_KEY
         try:
+            customer = StripeCustomer.objects.get(user=request.user)
+            customer_id = customer.stripe_customer_id
+            subscription_id = customer.stripe_subscription_id
+            email = request.user.email
+
+        except StripeCustomer.DoesNotExist:
+            customer_id = None
+            email = request.user.email
+            subscription_id = None
+
+        try:
             checkout_session = stripe.checkout.Session.create(
+                customer=customer_id,
+                customer_email=email,
+                subscription=subscription_id,
                 client_reference_id=request.user.id if request.user.is_authenticated else None,
                 success_url=domain_url + '/subscription/success?session_id={CHECKOUT_SESSION_ID}',
                 cancel_url=domain_url + '/subscription/cancel/',
