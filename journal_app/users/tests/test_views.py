@@ -53,29 +53,21 @@ class TestUserRedirectView:
 class TestUserDetailView(TestCase):
     def setUp(self):
         self.user = UserFactory()
+        self.user2 = UserFactory()
         self.client = Client()
         self.client.force_login(user=self.user)
 
-    def test_authenticated(self, user: User, rf: RequestFactory):
+    def test_authenticated(self):
         response = self.client.get(
             reverse('users:detail', kwargs={'username': self.user.username})
         )
         self.assertEqual(response.status_code, 200, "User profile")
 
-    def test_authenticated_wrong_profile(self, user: User, rf: RequestFactory):
+    def test_authenticated_wrong_profile(self):
         response = self.client.get(
-            reverse('users:detail', kwargs={'username': 'not-real-user'})
+            reverse('users:detail', kwargs={'username': self.user2.username})
         )
         self.assertEqual(response.status_code, 403, "Wrong user profile")
-
-    def test_not_authenticated(self, user: User, rf: RequestFactory):
-        request = rf.get("/fake-url/")
-        request.user = AnonymousUser()  # type: ignore
-
-        response = user_detail_view(request, username=user.username)
-
-        assert response.status_code == 302
-        assert response.url == "/accounts/login/?next=/fake-url/"
 
 
 class TestUserCheckinView(TestCase):
@@ -115,3 +107,14 @@ class TestUserCheckinView(TestCase):
                              status_code=302,
                              target_status_code=200,
                              fetch_redirect_response=True)
+
+
+class TestAnonUser:
+    def test_not_authenticated(self, user: User, rf: RequestFactory):
+        request = rf.get("/fake-url/")
+        request.user = AnonymousUser()  # type: ignore
+
+        response = user_detail_view(request, username=user.username)
+
+        assert response.status_code == 302
+        assert response.url == "/accounts/login/?next=/fake-url/"

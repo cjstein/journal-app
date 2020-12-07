@@ -21,7 +21,7 @@ class Mail(models.Model):
     """
 
     subject = models.CharField(max_length=100, blank=True, null=True)
-    header = models.CharField(max_length=50)
+    header = models.CharField(max_length=100)
     to = models.EmailField(blank=True, null=True)
     datetime = models.DateTimeField(auto_now_add=True)
     email_from = models.EmailField(default=DEFAULT_FROM_EMAIL)

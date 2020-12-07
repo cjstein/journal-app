@@ -108,12 +108,14 @@ def stripe_webhook(request):
 
         # Get the user and create a new StripeCustomer
         user = User.objects.get(id=client_reference_id)
-        StripeCustomer.objects.create(
+        customer = StripeCustomer.objects.get(
             user=user,
-            stripe_customer_id=stripe_customer_id,
-            stripe_subscription_id=stripe_subscription_id,
-            status=StripeCustomer.Status.ACTIVE,
         )
+        if not customer.stripe_customer_id:
+            customer.stripe_customer_id = stripe_customer_id,
+            customer.stripe_subscription_id = stripe_subscription_id,
+        customer.status = StripeCustomer.Status.ACTIVE
+        customer.save()
         subject = 'Thanks for subscribing'
         mail = Mail(
             user=user,
