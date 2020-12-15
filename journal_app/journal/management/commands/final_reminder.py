@@ -18,4 +18,3 @@ class Command(BaseCommand):
                     template_name='final_reminder_email'
                 )
                 mail.message()
-                mail.save()

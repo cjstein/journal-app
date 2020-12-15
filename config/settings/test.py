@@ -49,3 +49,7 @@ EMAIL_BACKEND = "django.core.mail.backends.locmem.EmailBackend"
 
 # Your stuff...
 # ------------------------------------------------------------------------------
+DATABASES = {
+    "default": env.db("TEST_DATABASE_URL", default="postgres:///journal_app")
+}
+DATABASES["default"]["ATOMIC_REQUESTS"] = True

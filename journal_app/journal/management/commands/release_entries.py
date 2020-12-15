@@ -19,12 +19,23 @@ class Command(BaseCommand):
                 user.entries_released = True
                 user.save()
                 for contact in user.contact_set.all():
-                    subject = f"{user} has shared memories with you, read them here"
-                    mail = Mail(
-                        user=user,
-                        subject=subject,
-                        header=subject,
-                        template_name='release_to_contact'
-                    )
-                    mail.message(contact=contact)
-                    mail.save()
+                    if contact.email:
+                        subject = f"{user} has shared memories with you, read them here"
+                        mail = Mail(
+                            user=user,
+                            subject=subject,
+                            to=contact.email,
+                            header=subject,
+                            template_name='release_to_contact'
+                        )
+                        mail.message(contact=contact)
+                    if contact.phone:
+                        # TODO add phone method for notifying contact
+                        pass
+                mail = Mail(
+                    user=user,
+                    subject='Your entries have been released',
+                    header='Your entries have been released',
+                    template_name='entries_released',
+                )
+                mail.message()

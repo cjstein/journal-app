@@ -42,7 +42,11 @@ class User(AbstractUser):
 
     def get_absolute_checkin_link(self):
         domain = Site.objects.get_current().domain
-        return f"{domain}{reverse('users:anon_checkin', kwargs={'username': self.username, 'uuid': self.checkin_link})}"
+        url = reverse('users:anon_checkin',
+                      kwargs={'username': self.username,
+                              'uuid': self.checkin_link},
+                      )
+        return f"{domain}{url}"
 
     def __str__(self):
         return self.name if self.name else self.username
