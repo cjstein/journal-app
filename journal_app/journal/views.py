@@ -175,7 +175,7 @@ class ContactEntryList(UserPassesTestMixin, LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
-        context.update(get_entries_from_contact(self.request, self.kwargs['pk']))
+        context.update(get_entries_from_contact(self.kwargs['pk']))
         return context
 
     def get_queryset(self, *args, **kwargs):
