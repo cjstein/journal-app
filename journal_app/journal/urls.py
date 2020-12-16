@@ -33,6 +33,6 @@ urlpatterns = [
     path("contact/auto-complete/", ContactAutoComplete.as_view(), name='contact-autocomplete'),
     # Released urls
     path("released/<uuid:contact>/", ContactReleasedEntryList.as_view(), name='released_entries'),
-    path("released/<uuid:contact>/<uuid:pk>", ContactReleasedEntryDetail.as_view(), name='released_entry_detail'),
+    path("released/<uuid:contact>/<uuid:pk>/", ContactReleasedEntryDetail.as_view(), name='released_entry_detail'),
     path("", EntryListView.as_view(), name='entry_list'),
 ]
