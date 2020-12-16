@@ -4,18 +4,8 @@
     <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <i class="fas fa-bars" style="color:#61ca61; font-size:28px;"></i>
     </button>
-    <a class="navbar-brand" href="{% url 'home' %}"><i class="fas fa-hourglass-half"></i> Time Capsule Journal</a>
+    <a class="navbar-brand" href="{% url 'home' %}"><img src="{% static "images/logos/pill-logo-nav.png" %}" alt="Time capsule journal logo">  Time Capsule Journal</a>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav mr-auto">
-        {% url 'home' as active_url %}
-        <li class="nav-item">
-          <a class="nav-link{% if request.path == active_url %} active{% endif %}" href="{% url 'home' %}">Home <span class="sr-only">(current)</span></a>
-        </li>
-        {% url 'about' as active_url %}
-        <li class="nav-item">
-          <a class="nav-link{% if request.path == active_url %} active{% endif %}" href="{% url 'about' %}">About</a>
-        </li>
-      </ul>
       <ul class="navbar-nav ml-auto">
           {% url 'account_signup' as active_url %}
           <li class="nav-item">

@@ -1,0 +1,66 @@
+/* Background section */
+body{
+  background-color: #6d6d6d;
+}
+.container{
+  margin-top: 50px;
+  margin-bottom: 50px;
+  background-color: #3d3d3d;
+  color: white;
+  border-radius: 15px;
+}
+.background-section{
+  background-color: #3d3d3d ;
+  margin: 20px 50px;
+  height: 100vh;
+}
+
+
+.body-image img{
+  height: 50%;
+  width: 100%;
+  padding: 30px 30px;
+}
+
+.top-body-portion img{
+  height: 150px;
+  width: 150px;
+  float: left;
+  margin: 0 20px 0 0;
+}
+
+.homepage-information h3{
+  margin-top: 50px;
+}
+
+.homepage-information ol{
+  display: grid;
+  grid-template-columns: 1fr;
+  margin-left: 25%;
+}
+
+.body-section .signup-button{
+  display: flex;
+  flex-direction:column ;
+  justify-content: center;
+  align-items: center;
+}
+.body-section .signup-button a{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  color: #61ca61;
+  font-size: 1.5rem;
+  margin-bottom: 30px;
+  background-color: #4e4e4e;
+  height: 50px;
+  border-radius: 7px;
+  width: 100px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, .5);
+  border: none;
+}
+
+#main {
+  padding-bottom: 0;
+}
