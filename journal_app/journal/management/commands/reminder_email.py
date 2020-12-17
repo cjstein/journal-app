@@ -13,7 +13,7 @@ class Command(BaseCommand):
         subject = 'Checkin Deadline Approaching'
         for user in User.objects.filter(entries_released=False):
             if DAYS_FOR_REMINDER > user.days_until_release > 1:
-                mail = Mail(
+                mail = Mail.objects.create(
                     user=user,
                     subject=subject,
                     header=subject,

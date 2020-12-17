@@ -11,7 +11,7 @@ class Command(BaseCommand):
         subject = 'Final warning before release'
         for user in User.objects.filter(entries_released=False):
             if user.days_until_release < 2:
-                mail = Mail(
+                mail = Mail.objects.create(
                     user=user,
                     subject=subject,
                     header=subject,
