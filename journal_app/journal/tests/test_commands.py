@@ -70,7 +70,7 @@ class TestReleaseEntries(TestCase):
         contact1_emails = Mail.objects.filter(to=self.contact1.email)
         contact2_emails = Mail.objects.filter(to=self.contact2.email)
         self.assertEqual(contact1_emails[0].to, self.contact1.email)
-        self.assertEqual(contact2_emails, [])
+        self.assertQuerysetEqual(contact2_emails, [])
         assert self.user2.release_entries is False
         assert self.entry2.released is False
 
