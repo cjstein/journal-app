@@ -12,7 +12,7 @@ def user_confirmed_email(request, email_address, **kwargs):
     user = User.objects.get(email=email_address.email)
     domain = Site.objects.get_current()
     subject = f'Welcome to {domain}!'
-    mail = Mail(
+    mail = Mail.objects.create(
         user=user,
         subject=subject,
         header=subject,
