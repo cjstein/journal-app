@@ -7,9 +7,9 @@ def test_user_owns(request, model: models.Model, pk):
     return request.user == test_model.user
 
 
-def get_entries_from_contact(request, pk):
+def get_entries_from_contact(pk):
     context = {}
-    contact = Contact.objects.get(user=request.user, pk=pk)
+    contact = Contact.objects.get(pk=pk)
     entry_list = contact.entry_set.all()
     context['contact'] = contact
     context['entries'] = entry_list

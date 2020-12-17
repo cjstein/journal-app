@@ -3,7 +3,7 @@ from django.core.management.base import BaseCommand
 from journal_app.journal_mail.models import Mail
 from journal_app.users.models import User
 
-DAYS_FOR_REMINDER = 6
+DAYS_FOR_REMINDER = 5
 
 
 class Command(BaseCommand):
@@ -12,7 +12,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         subject = 'Checkin Deadline Approaching'
         for user in User.objects.filter(entries_released=False):
-            if user.days_until_release < DAYS_FOR_REMINDER:
+            if DAYS_FOR_REMINDER > user.days_until_release > 1:
                 mail = Mail(
                     user=user,
                     subject=subject,

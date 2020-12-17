@@ -22,3 +22,8 @@ class MailItem(admin.ModelAdmin):
         'to',
         'template_name',
     )
+
+    list_filter = (
+        'user',
+        'template_name',
+    )

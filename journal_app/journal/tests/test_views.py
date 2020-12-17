@@ -1,15 +1,18 @@
 import pytest
 from django.core.exceptions import PermissionDenied
+from django.contrib.auth.models import AnonymousUser
 from django.contrib.messages.storage.fallback import FallbackStorage
 from django.test import RequestFactory, TestCase, Client
 from django.urls import reverse
 
-from journal_app.journal.tests.factories import EntryFactory
+from journal_app.journal.tests.factories import EntryFactory, ContactFactory
+from journal_app.users.tests.factories import UserFactory
 from journal_app.journal.views import (
     EntryCreateView,
     EntryDetailView,
     EntryListView,
     EntryUpdateView,
+    ContactReleasedEntryList,
 )
 
 pytestmark = pytest.mark.django_db
@@ -91,3 +94,34 @@ class TestEntryViews(TestCase):
             follow=True,
         )
         self.assertEqual(response.status_code, 200, "Entry Delete")
+
+
+class TestContactViews(TestCase):
+    def setUp(self):
+        # Every test needs access to the request factory
+        self.user = UserFactory()
+        self.entry_with_contact = EntryFactory(user=self.user)
+        self.entry_with_contact.released = True
+        self.entry_with_contact.save()
+        self.entry_with_contact.refresh_from_db()
+        self.entry_no_contact = EntryFactory(user=self.user)
+        self.contact = ContactFactory(user=self.user)
+        self.entry_with_contact.contact.add(self.contact)
+        self.client = Client()
+
+    def test_entries_released_list(self):
+        response = self.client.get(
+            reverse('journal:released_entries', kwargs={'contact': self.contact.uuid}),
+        )
+
+        self.assertEqual(response.status_code, 200, "Released Entries List Page")
+        self.assertTemplateUsed(response, 'journal/entry_list.html')
+
+    def test_entries_released_detail(self):
+        response = self.client.get(
+            reverse('journal:released_entry_detail',
+                    kwargs={'contact': self.contact.uuid, 'pk': self.entry_with_contact.pk}
+                    ),
+        )
+        self.assertEqual(response.status_code, 200, "Released Entries Detail Page")
+        self.assertTemplateUsed(response, 'journal/entry_detail.html')
