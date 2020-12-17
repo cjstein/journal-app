@@ -23,7 +23,8 @@ class TestReleaseEntries(TestCase):
         self.user1 = self.entry1.user
         self.user2 = self.entry2.user
 
-        self.contact = ContactFactory(user=self.user1)
+        self.contact1 = ContactFactory(user=self.user1)
+        self.contact2 = ContactFactory(user=self.user1)
 
     def call_command(self, *args, **kwargs):
         """
@@ -46,10 +47,10 @@ class TestReleaseEntries(TestCase):
         assert self.user1.release_entries is False
         assert self.entry1.released is False
         self.assertQuerysetEqual(self.entry1.contact.all(), [])
-        self.entry1.contact.add(self.contact)
+        self.entry1.contact.add(self.contact1)
         self.entry1.save()
         self.user1.refresh_from_db()
-        self.assertQuerysetEqual(self.entry1.contact.all(), [str(self.contact)], transform=str)
+        self.assertQuerysetEqual(self.entry1.contact.all(), [str(self.contact1)], transform=str)
         assert self.user2.release_entries is False
         assert self.entry2.released is False
         out = self.call_command()
@@ -66,8 +67,10 @@ class TestReleaseEntries(TestCase):
         assert self.entry1.released is True
         user_email = Mail.objects.filter(to=self.user1.email)
         self.assertEqual(user_email[0].to, self.user1.email)
-        contact_emails = Mail.objects.filter(to=self.contact.email)
-        self.assertEqual(contact_emails[0].to, self.contact.email)
+        contact1_emails = Mail.objects.filter(to=self.contact1.email)
+        contact2_emails = Mail.objects.filter(to=self.contact2.email)
+        self.assertEqual(contact1_emails[0].to, self.contact1.email)
+        self.assertEqual(contact2_emails, [])
         assert self.user2.release_entries is False
         assert self.entry2.released is False
 
