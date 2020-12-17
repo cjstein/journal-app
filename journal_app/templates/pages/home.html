@@ -40,13 +40,15 @@
     </div>
     <div class="signup-button text-center">
       <h3>
-        Would you like to ensure your memories will be passed on?
-        <br/><br/>
-        Sign-up today for a 14-day free trial!
-      </h3>
-      <a href="{% url 'account_signup' %}">
-        Sign Up
-      </a>
+        Would you like to ensure your memories will be passed on?</h3>
+        {% if  not request.user.is_authenticated %}
+          <h3>
+            Sign-up today for a 14-day free trial!
+          </h3>
+          <a href="{% url 'account_signup' %}">
+            Sign Up
+          </a>
+        {% endif %}
     </div>
 
   </div>
