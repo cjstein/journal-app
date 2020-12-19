@@ -82,4 +82,14 @@ class TestReleaseEntries(TestCase):
         # Make sure the command didn't incorrectly trigger the other users release when it shouldn't
         assert self.user2.release_entries is False
         assert self.entry2.released is False
-
+        # Run the command again to make sure there weren't duplicate emails
+        out = self.call_command() # noqa F841
+        self.user1.refresh_from_db()
+        self.entry1.refresh_from_db()
+        self.entry2.refresh_from_db()
+        user_email = Mail.objects.filter(to=self.user1.email)
+        self.assertEqual(user_email[0].to, self.user1.email)
+        contact1_emails = Mail.objects.filter(to=self.contact1.email)
+        contact2_emails = Mail.objects.filter(to=self.contact2.email)
+        self.assertEqual(contact1_emails[0].to, self.contact1.email)
+        self.assertQuerysetEqual(contact2_emails, [])
