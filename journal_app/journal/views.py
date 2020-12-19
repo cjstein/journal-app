@@ -187,7 +187,11 @@ class ContactReleasedEntryList(UserPassesTestMixin, ListView):
     model = Entry
     template_name = 'journal/entry_list.html'
     paginate_by = 15
+    login_url = 'home'
+    raise_exception = False
     context_object_name = "entries"
+    redirect_field_name = 'home'
+    permission_denied_message = "That place you tried to reach isn't available. "
 
     def get_queryset(self, *args, **kwargs):
         contact = Contact.objects.get(pk=self.kwargs['contact'])
@@ -207,10 +211,14 @@ class ContactReleasedEntryList(UserPassesTestMixin, ListView):
 class ContactReleasedEntryDetail(UserPassesTestMixin, DetailView):
     model = Entry
     template_name = 'journal/entry_detail.html'
+    login_url = 'home'
+    raise_exception = False
+    redirect_field_name = 'home'
+    permission_denied_message = "That place you tried to reach isn't available. "
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
-        context.update(get_entries_from_contact(self.kwargs['pk']))
+        context.update(get_entries_from_contact(self.kwargs['contact']))
         context['released'] = True
         return context
 
