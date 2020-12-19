@@ -1,7 +1,6 @@
 import pytest
 from django.core.exceptions import PermissionDenied
-from django.contrib.auth.models import AnonymousUser
-from django.contrib.messages.storage.fallback import FallbackStorage
+from django.core.management import call_command
 from django.test import RequestFactory, TestCase, Client
 from django.urls import reverse
 
@@ -12,8 +11,8 @@ from journal_app.journal.views import (
     EntryDetailView,
     EntryListView,
     EntryUpdateView,
-    ContactReleasedEntryList,
 )
+from journal_app.users.tests.test_views import REFERENCE_DATE
 
 pytestmark = pytest.mark.django_db
 
@@ -99,14 +98,17 @@ class TestEntryViews(TestCase):
 class TestContactViews(TestCase):
     def setUp(self):
         # Every test needs access to the request factory
-        self.user = UserFactory()
+        self.user = UserFactory(last_checkin=REFERENCE_DATE)
         self.entry_with_contact = EntryFactory(user=self.user)
-        self.entry_with_contact.released = True
-        self.entry_with_contact.save()
-        self.entry_with_contact.refresh_from_db()
         self.entry_no_contact = EntryFactory(user=self.user)
         self.contact = ContactFactory(user=self.user)
         self.entry_with_contact.contact.add(self.contact)
+        self.entry_with_contact.save()
+        call_command('release_entries')
+        self.user.refresh_from_db()
+        self.entry_with_contact.refresh_from_db()
+        self.entry_no_contact.refresh_from_db()
+        self.contact.refresh_from_db()
         self.client = Client()
 
     def test_entries_released_list(self):
