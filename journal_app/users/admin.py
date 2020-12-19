@@ -21,5 +21,6 @@ class UserAdmin(auth_admin.UserAdmin):
             "entries_released",
         )
     }),) + auth_admin.UserAdmin.fieldsets
-    list_display = ["username", "name", "is_superuser"]
-    search_fields = ["name"]
+    list_display = ["username", "name", "entries_released"]
+    search_fields = ["name", "username", "email"]
+    list_filter = ['entries_released']
