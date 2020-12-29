@@ -1,6 +1,6 @@
 import requests
 import json
-
+# TODO import settings config token and update below.
 
 
 def shortener(link):
