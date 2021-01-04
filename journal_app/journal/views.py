@@ -23,10 +23,6 @@ class EntryDetailView(UserPassesTestMixin, LoginRequiredMixin, DetailView):
     model = Entry
     redirect_field_name = 'journal:entry_list'
 
-    def get_queryset(self):
-        user_entries = Entry.objects.filter(user=self.request.user)
-        return user_entries
-
     def test_func(self):
         return test_user_owns(self.request, Entry, self.kwargs['pk'])
 
