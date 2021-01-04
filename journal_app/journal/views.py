@@ -2,6 +2,7 @@ from dal import autocomplete
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.http import Http404
+from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.views.generic import (
@@ -183,7 +184,7 @@ class ContactEntryList(UserPassesTestMixin, LoginRequiredMixin, ListView):
         return contact.entry_set.all()
 
 
-class ContactReleasedEntryList(UserPassesTestMixin, ListView):
+class ContactReleasedEntryList(ListView):
     model = Entry
     template_name = 'journal/entry_list.html'
     paginate_by = 15
@@ -214,7 +215,7 @@ class ContactReleasedEntryDetail(UserPassesTestMixin, DetailView):
     login_url = 'home'
     raise_exception = False
     redirect_field_name = 'home'
-    permission_denied_message = "That place you tried to reach isn't available. "
+    permission_denied_message = "That place you tried to reach isn't available."
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
