@@ -13,6 +13,7 @@ from django.views.generic import (
 )
 
 from journal_app.journal.forms import ContactForm, EntryForm
+from journal_app.journal.mixins import UserHasSubscriptionTest
 from journal_app.journal.models import Contact, Entry
 from journal_app.journal.utils import test_user_owns, get_entries_from_contact
 
@@ -59,7 +60,7 @@ class EntryCreateView(LoginRequiredMixin, CreateView):
         return context
 
 
-class EntryUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
+class EntryUpdateView(UserHasSubscriptionTest, LoginRequiredMixin, UpdateView):
     model = Entry
     form_class = EntryForm
     raise_exception = True
@@ -70,9 +71,6 @@ class EntryUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
         kwargs = super(EntryUpdateView, self).get_form_kwargs()
         kwargs['user'] = self.request.user
         return kwargs
-
-    def test_func(self):
-        return test_user_owns(self.request, Entry, self.kwargs['pk'])
 
     def form_valid(self, form):
         messages.add_message(self.request, messages.SUCCESS, 'Entry successfully updated')
@@ -91,6 +89,7 @@ class EntryUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
 class EntryDeleteView(UserPassesTestMixin, LoginRequiredMixin, DeleteView):
     model = Entry
     template_name = 'journal/entry_delete.html'
+    raise_exception = True
 
     def get_success_url(self):
         messages.add_message(self.request, messages.SUCCESS, 'Entry Successfully deleted!')
@@ -120,14 +119,11 @@ class ContactCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class ContactUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
+class ContactUpdateView(UserHasSubscriptionTest, LoginRequiredMixin, UpdateView):
     model = Contact
     form_class = ContactForm
 
     action = 'Update'
-
-    def test_func(self):
-        return test_user_owns(self.request, Contact, self.kwargs['pk'])
 
     def get_success_url(self):
         return reverse_lazy('journal:contact_detail', kwargs={'pk': self.kwargs['pk']})
