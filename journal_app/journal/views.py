@@ -4,6 +4,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.http import Http404
 from django.urls import reverse_lazy
 from django.utils import timezone
+from django.shortcuts import redirect
 from django.views.generic import (
     CreateView,
     DeleteView,
@@ -15,7 +16,7 @@ from django.views.generic import (
 from journal_app.journal.forms import ContactForm, EntryForm
 from journal_app.journal.mixins import UserHasSubscriptionTest
 from journal_app.journal.models import Contact, Entry
-from journal_app.journal.utils import test_user_owns, get_entries_from_contact
+from journal_app.journal.utils import test_user_owns, get_entries_from_contact, test_user_has_subscription
 
 
 # Entry Views
@@ -60,7 +61,7 @@ class EntryCreateView(LoginRequiredMixin, CreateView):
         return context
 
 
-class EntryUpdateView(UserHasSubscriptionTest, LoginRequiredMixin, UpdateView):
+class EntryUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
     model = Entry
     form_class = EntryForm
     raise_exception = True
@@ -84,6 +85,22 @@ class EntryUpdateView(UserHasSubscriptionTest, LoginRequiredMixin, UpdateView):
         context = super(EntryUpdateView, self).get_context_data()
         context['contacts'] = Contact.objects.filter(user=self.request.user)
         return context
+
+    def test_func(self):
+        owner_valid = test_user_owns(self.request, Entry, self.kwargs['pk'])
+        subscription_valid = test_user_has_subscription(self.request)
+        return owner_valid and subscription_valid
+
+    def handle_no_permission(self):
+        owner_valid = test_user_owns(self.request, Contact, self.kwargs['pk'])
+        subscription_valid = test_user_has_subscription(self.request)
+        if subscription_valid and not owner_valid:
+            messages.add_message(self.request, messages.ERROR, 'Unable to access that object')
+            return redirect('journal:entry_list')
+
+        if owner_valid and not subscription_valid:
+            messages.add_message(self.request, messages.ERROR, 'Please activate your subscription')
+            return redirect('users:settings')
 
 
 class EntryDeleteView(UserPassesTestMixin, LoginRequiredMixin, DeleteView):
@@ -119,17 +136,29 @@ class ContactCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class ContactUpdateView(UserHasSubscriptionTest, LoginRequiredMixin, UpdateView):
+class ContactUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
     model = Contact
     form_class = ContactForm
-
     action = 'Update'
 
     def get_success_url(self):
         return reverse_lazy('journal:contact_detail', kwargs={'pk': self.kwargs['pk']})
 
+    def test_func(self):
+        owner_valid = test_user_owns(self.request, Contact, self.kwargs['pk'])
+        subscription_valid = test_user_has_subscription(self.request)
+        return owner_valid and subscription_valid
+
     def handle_no_permission(self):
-        return Http404()
+        owner_valid = test_user_owns(self.request, Contact, self.kwargs['pk'])
+        subscription_valid = test_user_has_subscription(self.request)
+        if subscription_valid and not owner_valid:
+            messages.add_message(self.request, messages.ERROR, 'Unable to access that object')
+            return redirect('journal:entry_list')
+
+        if owner_valid and not subscription_valid:
+            messages.add_message(self.request, messages.ERROR, 'Please activate your subscription')
+            return redirect('users:settings')
 
 
 class ContactDeleteView(UserPassesTestMixin, LoginRequiredMixin, DeleteView):
@@ -179,15 +208,14 @@ class ContactReleasedEntryList(ListView):
     model = Entry
     template_name = 'journal/entry_list.html'
     paginate_by = 15
-    login_url = 'home'
-    raise_exception = False
     context_object_name = "entries"
-    redirect_field_name = 'home'
-    permission_denied_message = "That place you tried to reach isn't available. "
 
     def get_queryset(self, *args, **kwargs):
         contact = Contact.objects.get(pk=self.kwargs['contact'])
-        return contact.user.entry_set.all().filter(public=True, released=True)
+        contact_entries = contact.entry_set.all().filter(released=True)
+        public = contact.user.entry_set.all().filter(public=True, released=True)
+        combined = contact_entries | public
+        return combined.order_by('created')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
@@ -200,12 +228,13 @@ class ContactReleasedEntryDetail(UserPassesTestMixin, DetailView):
     model = Entry
     template_name = 'journal/entry_detail.html'
     login_url = 'home'
-    raise_exception = False
-    redirect_field_name = 'home'
-    permission_denied_message = "That place you tried to reach isn't available."
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
         context.update(get_entries_from_contact(self.kwargs['contact']))
         context['released'] = True
         return context
+
+    def test_func(self):
+        contact = Contact.objects.get(pk=self.kwargs['contact'])
+        return contact.user.entries_released
