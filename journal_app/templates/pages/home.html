@@ -7,49 +7,51 @@
 {% endblock %}
 
 {% block content %}
-  <div class="body-section">
-    <div class="body-image">
-      <img src="{% static 'images/backgrounds/suess-final.png' %}" alt="Time capsule photo with quote">
-    </div>
-    <div class="body-information">
-      <div class="top-body-portion">
-        <div class="floating-logo">
-          <img src="{% static 'images/logos/pill-logo.png' %}" alt="Time Capsule Jounral Logo">
-        </div>
-
-        <h3>
-          Have you ever had valuable information to share, but knew the recipient would be too young to understand it at this moment in time? Have you ever wanted to keep track of pictures and meaningful life stories until your child is the right age?
-        </h3>
+  <div class="container" id="home">
+    <div class="body-section">
+      <div class="body-image">
+        <img src="{% static 'images/backgrounds/suess-final.png' %}" alt="Time capsule photo with quote">
       </div>
-      <div class="homepage-information">
+      <div class="body-information">
+        <div class="top-body-portion">
+          <div class="floating-logo">
+            <img src="{% static 'images/logos/pill-logo.png' %}" alt="Time Capsule Jounral Logo">
+          </div>
 
-        <h3>
-          The way the journal works:
-        </h3>
-        <ol>
-          <li>Create an account</li>
-          <li>Add family and friends as contacts</li>
-          <li>Write about lessons and stories you would like to be passed on</li>
-          <li>Fill the journal with useful knowledge and quotes</li>
-          <li>Check-in regularly before your deadline</li>
-          <li>You can set a specific time to release this information to your contacts or just let it release automatically when you are unable to check-in</li>
-          <li>If you don't check-in before your deadline, your journal entries will be released to the contacts you connected</li>
-          <li>Your loved ones will be able to read the entries you have shared with them</li>
-        </ol>
-      </div>
-    </div>
-    <div class="signup-button text-center">
-      <h3>
-        Would you like to ensure your memories will be passed on?</h3>
-        {% if  not request.user.is_authenticated %}
           <h3>
-            Sign-up today for a 14-day free trial!
+            Have you ever had valuable information to share, but knew the recipient would be too young to understand it at this moment in time? Have you ever wanted to keep track of pictures and meaningful life stories until your child is the right age?
           </h3>
-          <a href="{% url 'account_signup' %}">
-            Sign Up
-          </a>
-        {% endif %}
-    </div>
+        </div>
+        <div class="homepage-information">
 
+          <h3>
+            The way the journal works:
+          </h3>
+          <ol>
+            <li>Create an account</li>
+            <li>Add family and friends as contacts</li>
+            <li>Write about lessons and stories you would like to be passed on</li>
+            <li>Fill the journal with useful knowledge and quotes</li>
+            <li>Check-in regularly before your deadline</li>
+            <li>You can set a specific time to release this information to your contacts or just let it release automatically when you are unable to check-in</li>
+            <li>If you don't check-in before your deadline, your journal entries will be released to the contacts you connected</li>
+            <li>Your loved ones will be able to read the entries you have shared with them</li>
+          </ol>
+        </div>
+      </div>
+      <div class="signup-button text-center">
+        <h3>
+          Would you like to ensure your memories will be passed on?</h3>
+          {% if  not request.user.is_authenticated %}
+            <h3>
+              Sign-up today for a 14-day free trial!
+            </h3>
+            <a href="{% url 'account_signup' %}">
+              Sign Up
+            </a>
+          {% endif %}
+      </div>
+
+    </div>
   </div>
 {% endblock %}

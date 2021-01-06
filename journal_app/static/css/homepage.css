@@ -2,15 +2,15 @@
 body{
   background-color: #6d6d6d;
 }
-.container{
-  margin-top: 50px;
+#home{
+  margin-top: 10px;
   margin-bottom: 50px;
   background-color: #3d3d3d;
   color: white;
   border-radius: 15px;
 }
 .background-section{
-  background-color: #3d3d3d ;
+  background-color: #3d3d3d;
   margin: 20px 50px;
   height: 100vh;
 }
