@@ -81,11 +81,13 @@ class TestEntryViews(TestCase):
         assert len(response.context['messages']) > 0
 
     def test_wrong_delete_view(self):
-        request = self.factory.get(reverse('journal:entry_delete', kwargs={'pk': self.entry1.uuid}))
-        request.user = self.entry2.user
-        callable_obj = EntryUpdateView.as_view()
-        with self.assertRaises(PermissionDenied):
-            callable_obj(request, pk=self.entry1.uuid)
+        self.client.force_login(user=self.entry2.user)
+        response = self.client.get(
+            reverse('journal:entry_delete', kwargs={'pk': self.entry1.uuid}),
+            follow=True
+        )
+        self.assertEqual(response.status_code, 200, "Wrong Entry Delete Success")
+        self.assertTemplateUsed()
 
     def test_delete_view_success(self):
         response = self.client.get(
