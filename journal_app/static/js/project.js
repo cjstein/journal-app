@@ -20,8 +20,4 @@ function EntryDeleteConfirmAction(msg, pk){
 }
 
 
-$(function() {
-    $( "#scheduled_time" ).datepicker({
-        dateFormat: "yy-mm-dd"
-    });
-});
+

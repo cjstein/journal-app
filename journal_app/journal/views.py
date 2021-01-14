@@ -6,14 +6,13 @@ from django.utils import timezone
 from django.shortcuts import redirect
 from django.views.generic import (
     CreateView,
-    DeleteView,
     DetailView,
     ListView,
     UpdateView,
     RedirectView,
 )
 
-from journal_app.journal.forms import ContactForm, EntryForm
+from journal_app.journal.forms import ContactForm, EntryForm, EntryScheduleForm
 from journal_app.journal.models import Contact, Entry
 from journal_app.journal.utils import test_user_owns, get_entries_from_contact, test_user_has_subscription
 
@@ -100,6 +99,28 @@ class EntryUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
         if owner_valid and not subscription_valid:
             messages.add_message(self.request, messages.ERROR, 'Please activate your subscription')
             return redirect('users:settings')
+
+
+class EntryScheduleView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
+    model = Entry
+    form_class = EntryScheduleForm
+    raise_exception = True
+    template_name = 'journal/entry_schedule.html'
+
+    action = 'Update'
+
+    def form_valid(self, form):
+        messages.add_message(self.request, messages.SUCCESS, 'Entry successfully scheduled')
+        instance = super().form_valid(form)
+        entry = Entry.objects.get(uuid=self.kwargs['pk'])
+        entry.updated = timezone.now()
+        entry.save()
+        return instance
+
+    def test_func(self):
+        owner_valid = test_user_owns(self.request, Entry, self.kwargs['pk'])
+        subscription_valid = test_user_has_subscription(self.request)
+        return owner_valid and subscription_valid
 
 
 class EntryDeleteView(UserPassesTestMixin, LoginRequiredMixin, RedirectView):
