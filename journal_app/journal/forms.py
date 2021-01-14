@@ -42,6 +42,7 @@ class EntryScheduleForm(ModelForm):
             'scheduled_time': DateInput(),
         }
 
+
 class ContactForm(ModelForm):
 
     def clean(self):
