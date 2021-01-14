@@ -130,9 +130,14 @@ class ContactCreateView(LoginRequiredMixin, CreateView):
     form_class = ContactForm
 
     def form_valid(self, form):
-        messages.add_message(self.request, messages.SUCCESS, 'Contact successfully added')
+        name = form.cleaned_data['name']
+        messages.add_message(self.request, messages.SUCCESS, f'{name} successfully added')
         form.instance.user = self.request.user
         return super().form_valid(form)
+
+    def get_success_url(self):
+        # messages.add_message(self.request, messages.SUCCESS, "")
+        return reverse_lazy('journal:contact_list')
 
 
 class ContactUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
@@ -140,8 +145,14 @@ class ContactUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
     form_class = ContactForm
     action = 'Update'
 
+    def form_valid(self, form):
+        name = form.cleaned_data['name']
+        messages.add_message(self.request, messages.SUCCESS, f'{name} successfully updated')
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+
     def get_success_url(self):
-        return reverse_lazy('journal:contact_detail', kwargs={'pk': self.kwargs['pk']})
+        return reverse_lazy('journal:contact_list')
 
     def test_func(self):
         owner_valid = test_user_owns(self.request, Contact, self.kwargs['pk'])
