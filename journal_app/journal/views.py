@@ -160,19 +160,6 @@ class ContactUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
             return redirect('users:settings')
 
 
-# class ContactDeleteView(UserPassesTestMixin, LoginRequiredMixin, DeleteView):
-#     model = Contact
-#     template_name = 'journal/contact_delete.html'
-#
-#     def test_func(self):
-#         return test_user_owns(self.request, Contact, self.kwargs['pk'])
-#
-#     def get_success_url(self):
-#         messages.add_message(self.request, messages.SUCCESS, 'Contact Successfully deleted!')
-#         return reverse_lazy('journal:contact_list')
-
-# Testing a JS button to delete a contact
-
 class ContactDeleteView(LoginRequiredMixin, RedirectView):
 
     def get_redirect_url(self, *args, **kwargs):
