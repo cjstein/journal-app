@@ -61,6 +61,8 @@ class Entry(TimeStampedModel):
     # If Public is flagged as True, when the posts get released, these entries will be viewable by all contacts.
     public = models.BooleanField(default=False)
     contact = models.ManyToManyField(Contact, blank=True)
+    is_scheduled = models.BooleanField(default=False)
+    scheduled_time = models.DateField(blank=True, null=True)
 
     @property
     def modified(self):

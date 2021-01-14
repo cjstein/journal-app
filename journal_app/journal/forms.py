@@ -1,8 +1,13 @@
 from dal import autocomplete
+from django import forms
 from django.forms import ModelForm, ValidationError
 from tinymce.widgets import TinyMCE
 
 from journal_app.journal.models import Contact, Entry
+
+
+class DateInput(forms.DateInput):
+    input_type = 'text'
 
 
 class EntryForm(ModelForm):
@@ -28,6 +33,14 @@ class EntryForm(ModelForm):
             'contact': 'Share with:',
         }
 
+
+class EntryScheduleForm(ModelForm):
+    class Meta:
+        model = Entry
+        fields = ['scheduled_time']
+        widgets = {
+            'scheduled_time': DateInput(),
+        }
 
 class ContactForm(ModelForm):
 
