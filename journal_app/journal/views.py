@@ -102,17 +102,17 @@ class EntryUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
             return redirect('users:settings')
 
 
-class EntryDeleteView(UserPassesTestMixin, LoginRequiredMixin, DeleteView):
-    model = Entry
-    template_name = 'journal/entry_delete.html'
-    raise_exception = True
-
-    def get_success_url(self):
-        messages.add_message(self.request, messages.SUCCESS, 'Entry Successfully deleted!')
-        return reverse_lazy('journal:entry_list')
+class EntryDeleteView(UserPassesTestMixin, LoginRequiredMixin, RedirectView):
 
     def test_func(self):
         return test_user_owns(self.request, Entry, self.kwargs['pk'])
+
+    def get_redirect_url(self, *args, **kwargs):
+        entry = Entry.objects.get(pk=self.kwargs['pk'])
+        title = entry.title
+        entry.delete()
+        messages.add_message(self.request, messages.SUCCESS, f"{title} successfully deleted!")
+        return reverse_lazy('journal:entry_list')
 
 
 # Contact Pages
@@ -171,7 +171,7 @@ class ContactUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
             return redirect('users:settings')
 
 
-class ContactDeleteView(LoginRequiredMixin, RedirectView):
+class ContactDeleteView(UserPassesTestMixin, LoginRequiredMixin, RedirectView):
 
     def get_redirect_url(self, *args, **kwargs):
         contact = Contact.objects.get(pk=self.kwargs['pk'])
@@ -179,6 +179,9 @@ class ContactDeleteView(LoginRequiredMixin, RedirectView):
         contact.delete()
         messages.add_message(self.request, messages.SUCCESS, f"{name} successfully deleted!")
         return reverse_lazy('journal:contact_list')
+
+    def test_func(self):
+        return test_user_owns(self.request, Entry, self.kwargs['pk'])
 
 
 class ContactAutoComplete(autocomplete.Select2QuerySetView):
