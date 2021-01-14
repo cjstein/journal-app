@@ -181,7 +181,7 @@ class ContactDeleteView(UserPassesTestMixin, LoginRequiredMixin, RedirectView):
         return reverse_lazy('journal:contact_list')
 
     def test_func(self):
-        return test_user_owns(self.request, Entry, self.kwargs['pk'])
+        return test_user_owns(self.request, Contact, self.kwargs['pk'])
 
 
 class ContactAutoComplete(autocomplete.Select2QuerySetView):
