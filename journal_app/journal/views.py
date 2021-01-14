@@ -1,7 +1,6 @@
 from dal import autocomplete
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.http import Http404
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.shortcuts import redirect
@@ -11,6 +10,7 @@ from django.views.generic import (
     DetailView,
     ListView,
     UpdateView,
+    RedirectView,
 )
 
 from journal_app.journal.forms import ContactForm, EntryForm
@@ -160,15 +160,26 @@ class ContactUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
             return redirect('users:settings')
 
 
-class ContactDeleteView(UserPassesTestMixin, LoginRequiredMixin, DeleteView):
-    model = Contact
-    template_name = 'journal/contact_delete.html'
+# class ContactDeleteView(UserPassesTestMixin, LoginRequiredMixin, DeleteView):
+#     model = Contact
+#     template_name = 'journal/contact_delete.html'
+#
+#     def test_func(self):
+#         return test_user_owns(self.request, Contact, self.kwargs['pk'])
+#
+#     def get_success_url(self):
+#         messages.add_message(self.request, messages.SUCCESS, 'Contact Successfully deleted!')
+#         return reverse_lazy('journal:contact_list')
 
-    def test_func(self):
-        return test_user_owns(self.request, Contact, self.kwargs['pk'])
+# Testing a JS button to delete a contact
 
-    def get_success_url(self):
-        messages.add_message(self.request, messages.SUCCESS, 'Contact Successfully deleted!')
+class ContactDeleteView(LoginRequiredMixin, RedirectView):
+
+    def get_redirect_url(self, *args, **kwargs):
+        contact = Contact.objects.get(pk=self.kwargs['pk'])
+        name = contact.name
+        contact.delete()
+        messages.add_message(self.request, messages.SUCCESS, f"{name} successfully deleted!")
         return reverse_lazy('journal:contact_list')
 
 

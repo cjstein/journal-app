@@ -17,19 +17,19 @@
       {% endif %}
       <tbody>
       <tr>
-        <th><a href="{{ contact.get_absolute_url }}" class="table-link">{{ contact.name }}</a></th>
-        <td class="text-center">
+        <th class="align-middle"><a href="{{ contact.get_absolute_url }}" class="table-link">{{ contact.name }}</a></th>
+        <td class="text-center align-middle">
           {% if contact.email %}
             <i class="fas fa-check"></i>
           {% endif %}
         </td>
-        <td class="text-center">
+        <td class="text-center align-middle">
           {% if contact.phone %}
             <i class="fas fa-check"></i>
           {% endif %}
         </td>
-        <td class="text-center">
-          <a href="{% url 'journal:contact_delete' contact.pk %}" class="table-link"><i class="far fa-trash-alt"></i> Delete</a>
+        <td class="text-center align-middle">
+          <button type="submit" value="1" class="btn btn-danger" onclick="return ConfirmAction('Are you sure you want to remove this contact?', '{{ contact.pk }}');"><i class="far fa-trash-alt"> Delete</i></button>
         </td>
       </tr>
 
@@ -38,7 +38,7 @@
       </table>
     {% endif %}
     {% empty %}
-    <h2>There are no entries yet. <a href="{% url 'journal:contact_create' %}" class="btn btn-theme btn-lg btn-block"><i class="fas fa-plus"></i> Add a contact here!</a></h2>
+    <h2>There are no Contacts yet. <a href="{% url 'journal:contact_create' %}" class="btn btn-theme btn-lg btn-block"><i class="fas fa-plus"></i> Add a contact here!</a></h2>
   {% endfor %}
 
 {% endblock %}
