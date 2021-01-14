@@ -251,7 +251,12 @@ class ContactReleasedEntryList(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
-        context.update(get_entries_from_contact(self.kwargs['contact']))
+        contact = Contact.objects.get(pk=self.kwargs['contact'])
+        context['contact'] = contact
+        contact_entries = contact.entry_set.all().filter(released=True)
+        public = contact.user.entry_set.all().filter(public=True, released=True)
+        combined = contact_entries | public
+        context['entries'] = combined.order_by('created')
         context['released'] = True
         return context
 
@@ -263,7 +268,8 @@ class ContactReleasedEntryDetail(UserPassesTestMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
-        context.update(get_entries_from_contact(self.kwargs['contact']))
+        context['contact'] = Contact.objects.get(pk=self.kwargs['contact'])
+        context['entry'] = Entry.objects.get(pk=self.kwargs['pk'])
         context['released'] = True
         return context
 

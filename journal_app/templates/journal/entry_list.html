@@ -14,7 +14,13 @@
             <h4 class="entry-link">{{ entry.title }}</h4>
           </a>
           {% if entry.released %}
-            <p><b>Created: </b> {{ entry.created }}</p>
+            <p>
+              <b>Created: </b>
+              {{ entry.created }}
+              {% if entry.public %}
+                <i class="fas fa-users small yellow"></i> For All Contacts
+              {% endif %}
+            </p>
           {% endif %}
         </div>
       </div>
