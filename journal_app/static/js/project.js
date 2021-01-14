@@ -7,3 +7,14 @@ function ContactDeleteConfirmAction(msg, pk){
         return false;
     }
 }
+
+
+function EntryDeleteConfirmAction(msg, pk){
+    // triggers a popup to make sure user is ok with a destructive operation
+    if(confirm(msg)){
+        window.location.replace("/journal/entry/" + pk + "/delete/")
+        // fetch("/journal/contact/" + pk + "/delete/").then(r => location.reload());
+    } else {
+        return false;
+    }
+}
