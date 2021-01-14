@@ -16,8 +16,8 @@
     <div class="row">
       <div class="col-lg-12 pb-2">
         <h5>
-          <a href="{% url 'journal:contact_update' contact.uuid %}" class="entry-link"><i class="far fa-edit"></i> Edit {{ contact.name }}</a>
-          <a href="{% url 'journal:contact_delete' contact.uuid %}" class="entry-link"><i class="far fa-trash-alt"></i> Delete {{ contact.name }}</a>
+          <a href="{% url 'journal:contact_update' contact.uuid %}" class="btn btn-warning"><i class="far fa-edit"></i> Edit {{ contact.name }}</a>
+          <button type="submit" value="1" class="btn btn-danger" onclick="return ContactDeleteConfirmAction('Are you sure you want to remove this contact?', '{{ contact.pk }}')"><i class="far fa-trash-alt"> Delete</i></button>
         </h5>
       </div>
     </div>
