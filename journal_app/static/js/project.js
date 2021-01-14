@@ -18,3 +18,10 @@ function EntryDeleteConfirmAction(msg, pk){
         return false;
     }
 }
+
+
+$(function() {
+    $( "#scheduled_time" ).datepicker({
+        dateFormat: "yy-mm-dd"
+    });
+});
