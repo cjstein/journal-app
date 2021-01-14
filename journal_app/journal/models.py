@@ -62,6 +62,13 @@ class Entry(TimeStampedModel):
     public = models.BooleanField(default=False)
     contact = models.ManyToManyField(Contact, blank=True)
 
+    @property
+    def modified(self):
+        if self.updated:
+            return True
+        else:
+            return False
+
     def get_absolute_url(self):
         return reverse("journal:entry_detail", kwargs={"pk": self.uuid})
 
