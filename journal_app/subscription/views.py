@@ -124,5 +124,25 @@ def stripe_webhook(request):
             template_name='subscription_success',
             )
         mail.message()
+    if event['type'] in ["customer.subscription.created", "customer.subscription.updated"]:
+        # Occurs whenever a customer is signed up for a new plan.
+        # Occurs whenever a subscription changes
+        # (e.g., switching from one plan to another,
+        # or changing the status from trial to active).
+        session = event['data']['object']
+        stripe_subscription_id = session.get('id')
+        customer = StripeCustomer.objects.get(stripe_subscription_id=stripe_subscription_id)
+        customer.subscription_start = session.get('current_period_start')
+        customer.subscription_end = session.get('current_period_end')
+        customer.product = session.get('id')
+        customer.status = StripeCustomer.Status.ACTIVE
+        customer.save()
+    if event['type'] == " customer.subscription.deleted":
+        # Occurs whenever a customer's subscription ends.
+        session = event['data']['object']
+        stripe_subscription_id = session.get('id')
+        customer = StripeCustomer.objects.get(stripe_subscription_id=stripe_subscription_id)
+        customer.status = StripeCustomer.Status.CANCELLED
+        customer.save()
 
     return HttpResponse(status=200)
