@@ -28,11 +28,8 @@ class Contact(TimeStampedModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     # Fields below will only need at least one filled out
-    email = PhoneField(blank=True, E164_only=True)
-    phone = models.CharField(max_length=15, blank=True, null=True)
-    # Possibly add whatsapp bot
-    # Possibly add Telegrambot
-    # Possibly add signal bot
+    email = models.EmailField(blank=True, null=True)
+    phone = PhoneField(blank=True, null=True, E164_only=True)
 
     def get_absolute_url(self):
         return reverse("journal:contact_entry_list", kwargs={"pk": self.uuid})
