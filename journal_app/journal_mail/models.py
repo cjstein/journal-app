@@ -69,7 +69,7 @@ class Mail(models.Model):
 class TextMessage(models.Model):
     contact = models.ForeignKey(Contact, on_delete=models.SET_NULL, null=True)
     body = models.TextField(blank=False)
-    to = PhoneField(blank=True)
+    to = PhoneField(blank=True, null=True, E164_only=True)
     sent_on = models.DateTimeField(blank=True)
     sid = models.TextField
 
