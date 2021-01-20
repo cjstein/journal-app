@@ -64,6 +64,9 @@ class ContactForm(ModelForm):
             'email',
             'phone',
         ]
+        labels = {
+            'phone': 'Phone Number: (Only works for US numbers)'
+        }
 
 
 class EntryContactAddForm(ModelForm):
