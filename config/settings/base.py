@@ -78,7 +78,6 @@ THIRD_PARTY_APPS = [
     "django_celery_beat",
     "tinymce",
     "stripe",
-    'phone_field',
 ]
 
 LOCAL_APPS = [

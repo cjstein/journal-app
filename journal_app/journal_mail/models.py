@@ -1,14 +1,20 @@
 from django.core import mail
+from django.core.validators import RegexValidator
 from django.db import models
 from django.template.loader import render_to_string
 from django.utils import timezone
 from django.utils.html import strip_tags
-from phone_field import PhoneNumber
 from twilio.rest import Client
 
 from config.settings.base import DEFAULT_FROM_EMAIL, TWILIO_NUMBER, TWILIO_AUTH_TOKEN, TWILIO_ACCOUNT_SID
 from journal_app.users.models import User
 from journal_app.journal.models import Contact
+
+
+phone_regex = RegexValidator(
+    regex=r'^\d{10}$',
+    message="Phone number must be 10 digits long with no spaces, dashes, or parenthesis",
+)
 
 
 class Mail(models.Model):
@@ -69,7 +75,7 @@ class Mail(models.Model):
 class TextMessage(models.Model):
     contact = models.ForeignKey(Contact, on_delete=models.SET_NULL, null=True)
     body = models.TextField(blank=False)
-    to = models.CharField(max_length=15, blank=True, null=True)
+    number = models.CharField(validators=[phone_regex], max_length=17, blank=True, null=True)
     sent_on = models.DateTimeField(blank=True)
     sid = models.TextField(blank=True, null=True)
     status = models.TextField(blank=True, null=True)
@@ -79,9 +85,13 @@ class TextMessage(models.Model):
         return f'{self.contact}'
 
     def save(self, *args, **kwargs):
-        if not self.to:
-            self.to = self.contact.phone
+        if not self.number:
+            self.number = self.contact.phone
         super().save(*args, **kwargs)
+
+    @property
+    def to(self):
+        return f'+1{self.number}'
 
     def send_text(self):
         client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
