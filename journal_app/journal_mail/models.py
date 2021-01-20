@@ -71,7 +71,9 @@ class TextMessage(models.Model):
     body = models.TextField(blank=False)
     to = PhoneField(blank=True, null=True, E164_only=True)
     sent_on = models.DateTimeField(blank=True)
-    sid = models.TextField
+    sid = models.TextField(blank=True, null=True)
+    status = models.TextField(blank=True, null=True)
+    error_message = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return f'{self.contact}'
@@ -90,4 +92,6 @@ class TextMessage(models.Model):
         )
         self.sid = message.sid
         self.sent_on = timezone.now()
+        self.status = message.status
+        self.error_message = message.error_message
         self.save()
