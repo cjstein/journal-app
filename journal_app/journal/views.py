@@ -14,8 +14,7 @@ from django.views.generic import (
 
 from journal_app.journal.forms import ContactForm, EntryForm, EntryScheduleForm
 from journal_app.journal.models import Contact, Entry
-from journal_app.journal.utils import test_user_owns, get_entries_from_contact, test_user_has_subscription
-
+from journal_app.journal.utils import test_user_owns, test_user_has_subscription
 
 # Entry Views
 class EntryDetailView(UserPassesTestMixin, LoginRequiredMixin, DetailView):
