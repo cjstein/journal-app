@@ -1,4 +1,5 @@
 from django.core.management.base import BaseCommand
+from django.conf import settings
 
 from journal_app.journal.models import Entry
 from journal_app.journal_mail.models import Mail
@@ -12,7 +13,7 @@ class Command(BaseCommand):
         users = User.objects.filter(entries_released=False)
         for user in users:
             if user.release_entries:
-                entries = Entry.objects.filter(user=user)
+                entries = Entry.objects.filter(user=user, is_scheduled=False)
                 for entry in entries:
                     entry.released = True
                     entry.save()
@@ -32,8 +33,10 @@ class Command(BaseCommand):
                             contact_mail.save()
                             contact_mail.message(contact=contact)
                         if contact.phone:
-                            # TODO add phone method for notifying contact
-                            pass
+                            # Sends the contact a text with the bitly link to the site
+                            account_sid = settings.TWILIO_ACCOUNT_SID
+                            auth_token = settings.TWILIO_AUTH_TOKEN
+                            from_number = settings.TWILIO_NUMBER
                 user_mail = Mail.objects.create(
                     user=user,
                     subject='Your entries have been released',
