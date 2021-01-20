@@ -2,9 +2,11 @@ from django.core import mail
 from django.db import models
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
+from phone_field import PhoneField
 
 from config.settings.base import DEFAULT_FROM_EMAIL
 from journal_app.users.models import User
+from journal_app.journal.models import Contact
 
 
 class Mail(models.Model):
@@ -58,3 +60,9 @@ class Mail(models.Model):
 
     def __repr__(self):
         return f'{self.__class__.__name__}({self.user}, {self.template_name}, {self.datetime})'
+
+
+class TextMessage(models.Model):
+    contact = models.ForeignKey(Contact, on_delete=models.SET_NULL, null=True)
+    body = models.TextField(blank=False)
+    to = PhoneField(blank=True)
