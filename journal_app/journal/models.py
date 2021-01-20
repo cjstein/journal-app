@@ -5,7 +5,6 @@ import uuid
 from django.db import models
 from django.urls import reverse
 from django.contrib.sites.models import Site
-from phone_field import PhoneField
 
 # Custom imports
 from journal_app.users.models import User
@@ -29,7 +28,11 @@ class Contact(TimeStampedModel):
     uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     # Fields below will only need at least one filled out
     email = models.EmailField(blank=True, null=True)
-    phone = PhoneField(blank=True, null=True, E164_only=True)
+    phone = models.CharField(max_length=15, blank=True, null=True)
+    phone_formatted = models.CharField(max_length=15, blank=True, null=True)
+    # Possibly add whatsapp bot
+    # Possibly add Telegrambot
+    # Possibly add signal bot
 
     def get_absolute_url(self):
         return reverse("journal:contact_entry_list", kwargs={"pk": self.uuid})

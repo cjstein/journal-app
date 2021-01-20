@@ -2,6 +2,7 @@ from dal import autocomplete
 from django import forms
 from django.forms import ModelForm, ValidationError
 from tinymce.widgets import TinyMCE
+from phone_field.forms import PhoneFormField, PhoneWidget
 
 from journal_app.journal.models import Contact, Entry
 

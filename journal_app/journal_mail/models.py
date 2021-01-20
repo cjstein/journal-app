@@ -3,7 +3,7 @@ from django.db import models
 from django.template.loader import render_to_string
 from django.utils import timezone
 from django.utils.html import strip_tags
-from phone_field import PhoneField
+from phone_field import PhoneNumber
 from twilio.rest import Client
 
 from config.settings.base import DEFAULT_FROM_EMAIL, TWILIO_NUMBER, TWILIO_AUTH_TOKEN, TWILIO_ACCOUNT_SID
@@ -69,7 +69,7 @@ class Mail(models.Model):
 class TextMessage(models.Model):
     contact = models.ForeignKey(Contact, on_delete=models.SET_NULL, null=True)
     body = models.TextField(blank=False)
-    to = PhoneField(blank=True, null=True, E164_only=True)
+    to = models.CharField(max_length=15, blank=True, null=True)
     sent_on = models.DateTimeField(blank=True)
     sid = models.TextField(blank=True, null=True)
     status = models.TextField(blank=True, null=True)
