@@ -328,3 +328,8 @@ TEST_STRIPE_PRICE_ID = env("TEST_STRIPE_PRICE_ID", default='')
 TWILIO_NUMBER = env("TWILIO_NUMBER", default='')
 TWILIO_AUTH_TOKEN = env("TWILIO_AUTH_TOKEN", default='')
 TWILIO_ACCOUNT_SID = env("TWILIO_ACCOUNT_SID", default='')
+
+
+# Bitly Settings
+# ---------------------------------------------------------------------------
+BITLY_TOKEN = env("BITLY_TOKEN", default='')
