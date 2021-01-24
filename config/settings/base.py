@@ -321,3 +321,10 @@ STRIPE_LIVE_MODE = env.bool("STRIPE_LIVE_MODE", False)
 STRIPE_ENDPOINT_SECRET = env("STRIPE_ENDPOINT_SECRET", default='whsec_xxx')
 WEBHOOK_URL = env("WEBHOOK_URL", default='webhook/')
 TEST_STRIPE_PRICE_ID = env("TEST_STRIPE_PRICE_ID", default='')
+
+
+# Twilio Setting Modules
+# ----------------------------------------------------
+TWILIO_NUMBER = env("TWILIO_NUMBER", default='')
+TWILIO_AUTH_TOKEN = env("TWILIO_AUTH_TOKEN", default='')
+TWILIO_ACCOUNT_SID = env("TWILIO_ACCOUNT_SID", default='')

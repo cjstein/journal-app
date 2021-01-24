@@ -6,7 +6,8 @@ redis==3.5.3  # https://github.com/andymccurdy/redis-py
 hiredis==1.1.0  # https://github.com/redis/hiredis-py
 celery==4.4.6  # pyup: < 5.0,!=4.4.7  # https://github.com/celery/celery
 pytest==6.0.2  # https://github.com/pytest-dev/pytest
-stripe==2.55.0 #https://github.com/stripe/stripe-python
+stripe==2.55.0 # https://github.com/stripe/stripe-python
+twilio==6.51.0
 
 # Django
 # ------------------------------------------------------------------------------
@@ -21,4 +22,3 @@ pytest-django==3.10.0  # https://github.com/pytest-dev/pytest-django
 django-extensions==3.0.9  # https://github.com/django-extensions/django-extensions
 django-tinymce==3.1.0
 django-autocomplete-light==3.8.1 # https://django-autocomplete-light.readthedocs.io/en/master/
-

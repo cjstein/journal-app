@@ -1,10 +1,20 @@
 from django.core import mail
+from django.core.validators import RegexValidator
 from django.db import models
 from django.template.loader import render_to_string
+from django.utils import timezone
 from django.utils.html import strip_tags
+from twilio.rest import Client
 
-from config.settings.base import DEFAULT_FROM_EMAIL
+from config.settings.base import DEFAULT_FROM_EMAIL, TWILIO_NUMBER, TWILIO_AUTH_TOKEN, TWILIO_ACCOUNT_SID
 from journal_app.users.models import User
+from journal_app.journal.models import Contact
+
+
+phone_regex = RegexValidator(
+    regex=r'^\d{10}$',
+    message="Phone number must be 10 digits long with no spaces, dashes, or parenthesis",
+)
 
 
 class Mail(models.Model):
@@ -58,3 +68,40 @@ class Mail(models.Model):
 
     def __repr__(self):
         return f'{self.__class__.__name__}({self.user}, {self.template_name}, {self.datetime})'
+
+
+# Text message model
+
+class TextMessage(models.Model):
+    contact = models.ForeignKey(Contact, on_delete=models.SET_NULL, null=True)
+    body = models.TextField(blank=False)
+    number = models.CharField(validators=[phone_regex], max_length=17, blank=True, null=True)
+    sent_on = models.DateTimeField(blank=True)
+    sid = models.TextField(blank=True, null=True)
+    status = models.TextField(blank=True, null=True)
+    error_message = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return f'{self.contact}'
+
+    def save(self, *args, **kwargs):
+        if not self.number:
+            self.number = self.contact.phone
+        super().save(*args, **kwargs)
+
+    @property
+    def to(self):
+        return f'+1{self.number}'
+
+    def send_text(self):
+        client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
+        message = client.messages.create(
+            body=self.body,
+            from_=TWILIO_NUMBER,
+            to=self.to,
+        )
+        self.sid = message.sid
+        self.sent_on = timezone.now()
+        self.status = message.status
+        self.error_message = message.error_message
+        self.save()

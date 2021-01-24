@@ -14,6 +14,7 @@ from journal_app.journal.views import (
     EntryDetailView,
     EntryListView,
     EntryUpdateView,
+    EntryScheduleView,
 )
 
 app_name = "journal"
@@ -24,6 +25,7 @@ urlpatterns = [
     path("entry/new/", EntryCreateView.as_view(), name='entry_create'),
     path("entry/<uuid:pk>/update/", EntryUpdateView.as_view(), name='entry_update'),
     path("entry/<uuid:pk>/delete/", EntryDeleteView.as_view(), name='entry_delete'),
+    path("entry/<uuid:pk>/schedule/", EntryScheduleView.as_view(), name='entry_schedule'),
     # Contact urls
     path("contacts/", ContactListView.as_view(), name='contact_list'),
     path("contact/<uuid:pk>/entries/", ContactEntryList.as_view(), name='contact_entry_list'),

@@ -1,8 +1,14 @@
 from dal import autocomplete
+from django import forms
 from django.forms import ModelForm, ValidationError
 from tinymce.widgets import TinyMCE
+from phone_field.forms import PhoneFormField, PhoneWidget
 
 from journal_app.journal.models import Contact, Entry
+
+
+class DateInput(forms.DateInput):
+    input_type = 'text'
 
 
 class EntryForm(ModelForm):
@@ -29,6 +35,15 @@ class EntryForm(ModelForm):
         }
 
 
+class EntryScheduleForm(ModelForm):
+    class Meta:
+        model = Entry
+        fields = ['scheduled_time']
+        widgets = {
+            'scheduled_time': DateInput(),
+        }
+
+
 class ContactForm(ModelForm):
 
     def clean(self):
@@ -50,6 +65,9 @@ class ContactForm(ModelForm):
             'email',
             'phone',
         ]
+        labels = {
+            'phone': 'Phone Number: (Only works for US numbers)'
+        }
 
 
 class EntryContactAddForm(ModelForm):

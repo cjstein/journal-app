@@ -1,7 +1,8 @@
 from django.core.management.base import BaseCommand
 
 from journal_app.journal.models import Entry
-from journal_app.journal_mail.models import Mail
+from journal_app.journal_mail.models import Mail, TextMessage
+from journal_app.journal_mail.utils import bitly_shortener
 from journal_app.users.models import User
 
 
@@ -12,7 +13,7 @@ class Command(BaseCommand):
         users = User.objects.filter(entries_released=False)
         for user in users:
             if user.release_entries:
-                entries = Entry.objects.filter(user=user)
+                entries = Entry.objects.filter(user=user, is_scheduled=False)
                 for entry in entries:
                     entry.released = True
                     entry.save()
@@ -32,8 +33,15 @@ class Command(BaseCommand):
                             contact_mail.save()
                             contact_mail.message(contact=contact)
                         if contact.phone:
-                            # TODO add phone method for notifying contact
-                            pass
+                            # Sends the contact a text with the bitly link to the site
+                            url = bitly_shortener(contact.released_entries_url)
+                            body = f'{user} has shared entries with you on Time Capsule Journal.  Click {url} to view.'
+                            message = TextMessage.objects.create(
+                                contact=contact,
+                                body=body
+                            )
+                            message.send_text()
+                            message.save()
                 user_mail = Mail.objects.create(
                     user=user,
                     subject='Your entries have been released',

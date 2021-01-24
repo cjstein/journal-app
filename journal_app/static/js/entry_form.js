@@ -16,3 +16,10 @@
         newTable.slideDown()
     })
 })($)
+
+
+$(function() {
+    $( "#id_scheduled_time" ).datepicker({
+        dateFormat: "yy-mm-dd"
+    });
+});

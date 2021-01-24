@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load crispy_forms_tags %}
+{% load crispy_forms_tags static %}
 
 {% block title %}{{ user.username }}{% endblock %}
 
@@ -14,4 +14,8 @@
       </div>
     </div>
   </form>
+{% endblock %}
+
+{% block extra_css %}
+  <link href="{% static 'css/days_to_release_settings.css' %}" rel="stylesheet">
 {% endblock %}

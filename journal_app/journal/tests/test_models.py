@@ -1,5 +1,3 @@
-from time import sleep
-
 import pytest
 
 from journal_app.journal.tests.factories import ContactFactory, EntryFactory
