@@ -5,7 +5,7 @@ argon2-cffi==20.1.0  # https://github.com/hynek/argon2_cffi
 redis==3.5.3  # https://github.com/andymccurdy/redis-py
 hiredis==1.1.0  # https://github.com/redis/hiredis-py
 celery==4.4.6  # pyup: < 5.0,!=4.4.7  # https://github.com/celery/celery
-pytest==6.0.2  # https://github.com/pytest-dev/pytest
+pytest==6.2.1  # https://github.com/pytest-dev/pytest
 stripe==2.55.1 # https://github.com/stripe/stripe-python
 twilio==6.51.0
 requests==2.25.1
