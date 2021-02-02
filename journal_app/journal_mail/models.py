@@ -76,7 +76,7 @@ class TextMessage(models.Model):
     contact = models.ForeignKey(Contact, on_delete=models.SET_NULL, null=True)
     body = models.TextField(blank=False)
     number = models.CharField(validators=[phone_regex], max_length=17, blank=True, null=True)
-    sent_on = models.DateTimeField(blank=True)
+    sent_on = models.DateTimeField(blank=True, null=True)
     sid = models.TextField(blank=True, null=True)
     status = models.TextField(blank=True, null=True)
     error_message = models.TextField(blank=True, null=True)
