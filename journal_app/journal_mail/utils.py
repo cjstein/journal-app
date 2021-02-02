@@ -1,6 +1,18 @@
 import requests
+import json
+from django.conf import settings
 
 
-def bitly_shortener(long_url):
-    # TODO Do some magic with bitly to shorten
-    return long_url
+def bitly_shortener(link):
+    api_link = 'https://api-ssl.bitly.com/v4/shorten'
+    headers = {
+        'Authorization': f'Bearer {settings.BITLY_TOKEN}',
+        'Content-Type': 'application/json',
+    }
+    data = {
+        "long_url": f'{link}',
+
+    }
+    response = requests.post(api_link, headers=headers, data=json.dumps(data))
+    returned_data = json.loads(response.text)
+    return returned_data['id']
