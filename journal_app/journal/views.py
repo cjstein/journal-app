@@ -17,6 +17,9 @@ from journal_app.journal.models import Contact, Entry
 from journal_app.journal.utils import test_user_owns, test_user_has_subscription
 
 # Entry Views
+# -------------------------------------------------------------------------------------------------------
+
+
 class EntryDetailView(UserPassesTestMixin, LoginRequiredMixin, DetailView):
     model = Entry
     redirect_field_name = 'journal:entry_list'
@@ -136,6 +139,7 @@ class EntryDeleteView(UserPassesTestMixin, LoginRequiredMixin, RedirectView):
 
 
 # Contact Pages
+# ------------------------------------------------------------------------------------------------------------
 
 
 class ContactListView(LoginRequiredMixin, ListView):
@@ -238,6 +242,10 @@ class ContactEntryList(UserPassesTestMixin, LoginRequiredMixin, ListView):
     def get_queryset(self, *args, **kwargs):
         contact = Contact.objects.get(user=self.request.user, pk=self.kwargs['pk'])
         return contact.entry_set.all()
+
+
+# Released Views
+# -----------------------------------------------------------------------------------------------------------------
 
 
 class ContactReleasedEntryList(ListView):

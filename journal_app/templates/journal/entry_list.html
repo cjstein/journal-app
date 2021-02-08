@@ -17,15 +17,16 @@
             <p>
               <b>Created: </b>
               {{ entry.created }}
-              {% if entry.public %}
-                <i class="fas fa-users small yellow"></i> For All Contacts
-              {% endif %}
+
             </p>
           {% endif %}
         </div>
       </div>
       <div class="row">
         <div class="col-lg-12 mw-100">
+          {% if entry.public %}
+            <i class="fas fa-users small yellow"></i> All Contacts
+          {% endif %}
           {{ entry.body|safe|truncatewords:75 }}
         </div>
       </div>

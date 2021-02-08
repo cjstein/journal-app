@@ -3,7 +3,7 @@ import json
 from django.conf import settings
 
 
-def bitly_shortener(link):
+def shortener(link):
     api_link = 'https://api-ssl.bitly.com/v4/shorten'
     headers = {
         'Authorization': f'Bearer {settings.BITLY_TOKEN}',
