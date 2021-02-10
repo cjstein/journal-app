@@ -1,8 +1,8 @@
 from dal import autocomplete
 from django import forms
 from django.forms import ModelForm, ValidationError
+from django.utils import timezone
 from tinymce.widgets import TinyMCE
-from phone_field.forms import PhoneFormField, PhoneWidget
 
 from journal_app.journal.models import Contact, Entry
 
@@ -36,6 +36,15 @@ class EntryForm(ModelForm):
 
 
 class EntryScheduleForm(ModelForm):
+
+    def clean(self):
+        clean_data = super().clean()
+        date = clean_data['scheduled_time']
+        if date <= timezone.now().date():
+            raise ValidationError({
+                'scheduled_time': 'Scheduled time has to be in the future',
+            })
+
     class Meta:
         model = Entry
         fields = ['scheduled_time']

@@ -116,6 +116,7 @@ class EntryScheduleView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
         instance = super().form_valid(form)
         entry = Entry.objects.get(uuid=self.kwargs['pk'])
         entry.updated = timezone.now()
+        entry.is_scheduled = True
         entry.save()
         return instance
 
