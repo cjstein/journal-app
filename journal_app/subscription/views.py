@@ -144,5 +144,4 @@ def stripe_webhook(request):
         customer = StripeCustomer.objects.get(stripe_subscription_id=stripe_subscription_id)
         customer.status = StripeCustomer.Status.CANCELLED
         customer.save()
-
     return HttpResponse(status=200)

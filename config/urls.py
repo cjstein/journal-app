@@ -16,7 +16,8 @@ urlpatterns = [
     path("tinymce/", include('tinymce.urls')),
     path("", TemplateView.as_view(template_name="pages/home.html"), name="home"),
     path("subscription/", include('journal_app.subscription.urls')),
-    path("privacy-policy/", TemplateView.as_view(template_name="pages/privacy_policy.html"), name="privacy-policy")
+    path("privacy-policy/", TemplateView.as_view(template_name="pages/privacy_policy.html"), name="privacy-policy"),
+    path("terms/", TemplateView.as_view(template_name="pages/terms.html"), name="terms"),
     # Your stuff: custom urls includes go here
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
