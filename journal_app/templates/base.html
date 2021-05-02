@@ -59,8 +59,11 @@
 
       </div>
     </div>
-    {% block footer %}{% include 'footer.html' %}{% endblock %}
+    <footer class="page-footer font-small pt-3 drgrey">
+      {% block footer %}{% include 'footer.html' %}{% endblock %}
+    </footer>
     {% block modal %}{% endblock modal %}
+
 
     {% block javascript %}
       <script src="{% static 'js/project.js' %}"></script>
