@@ -132,13 +132,13 @@ hr {
   color: white;
 }
 
-.footer {
-  position: relative;
-  margin-top: -150px;
-  height: 150px;
+footer {
+  position: absolute;
+  bottom: 0;
   clear: both;
-  padding-top: 20px;
+  padding: 10px 10px 0 10px ;
   color: white;
+  min-width: 100%;
 }
 
 .footer-link {
