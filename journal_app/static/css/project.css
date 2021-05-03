@@ -6,11 +6,11 @@ html{
 
 body {
   font-family: "Roboto", sans-serif;
-  height: 94%;
+
 }
 
 #wrap{
-  min-height: 90%;
+  min-height: calc(100vh - 142px);
 }
 
 #main {
@@ -132,9 +132,9 @@ hr {
   color: white;
 }
 
-footer {
-  position: absolute;
-  bottom: 0;
+.footer {
+  position: relative;
+  height: 80px;
   clear: both;
   padding: 10px 10px 0 10px ;
   color: white;
