@@ -19,8 +19,9 @@ class UserAdmin(auth_admin.UserAdmin):
             "last_checkin",
             "days_to_release_setting",
             "entries_released",
+            "email_verified"
         )
     }),) + auth_admin.UserAdmin.fieldsets
-    list_display = ["username", "name", "entries_released"]
+    list_display = ["username", "name", "entries_released", "email_verified"]
     search_fields = ["name", "username", "email"]
     list_filter = ['entries_released']
