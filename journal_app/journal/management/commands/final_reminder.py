@@ -9,7 +9,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         subject = 'Final warning before release'
-        for user in User.objects.filter(entries_released=False):
+        for user in User.objects.filter(entries_released=False, email_verified=True):
             if user.days_until_release < 2:
                 mail = Mail.objects.create(
                     user=user,
