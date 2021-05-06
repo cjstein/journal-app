@@ -21,6 +21,7 @@ class User(AbstractUser):
     # How many days after check-in until release.  This may be a customizable field in the future.
     days_to_release_setting = IntegerField(default=7)
     entries_released = BooleanField(default=False)
+    email_verified = BooleanField(default=False)
 
     def get_absolute_url(self):
         return reverse("users:detail", kwargs={"username": self.username})

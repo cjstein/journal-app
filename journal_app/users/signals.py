@@ -1,4 +1,5 @@
 import stripe
+from allauth.account.signals import email_confirmed
 from django.db.models.signals import post_save
 from django.conf import settings
 from django.dispatch import receiver
@@ -11,3 +12,10 @@ def create_stripe_customer(sender, instance, created, **kwargs):
     stripe.api_key = settings.STRIPE_SECRET_KEY
     if created:
         customer = StripeCustomer.objects.create(user=instance)
+
+
+@receiver(email_confirmed)
+def user_email_confirmed(request, email_address, **kwargs):
+    user = email_address.user
+    user.email_verified = True
+    user.save()
