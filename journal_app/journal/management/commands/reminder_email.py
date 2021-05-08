@@ -20,4 +20,3 @@ class Command(BaseCommand):
                     template_name='reminder_email'
                 )
                 mail.message()
-
