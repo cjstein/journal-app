@@ -3,7 +3,7 @@ from django import forms
 from django.forms import ModelForm, ValidationError
 from django.utils import timezone
 from tinymce.widgets import TinyMCE
-
+from bootstrap_datepicker_plus import DatePickerInput
 from journal_app.journal.models import Contact, Entry
 
 
@@ -32,24 +32,6 @@ class EntryForm(ModelForm):
         labels = {
             'public': 'Release everyone on your contact list?',
             'contact': 'Share with:',
-        }
-
-
-class EntryScheduleForm(ModelForm):
-
-    def clean(self):
-        clean_data = super().clean()
-        date = clean_data['scheduled_time']
-        if date <= timezone.now().date():
-            raise ValidationError({
-                'scheduled_time': 'Scheduled time has to be in the future',
-            })
-
-    class Meta:
-        model = Entry
-        fields = ['scheduled_time']
-        widgets = {
-            'scheduled_time': DateInput(),
         }
 
 
@@ -92,4 +74,17 @@ class EntryContactAddForm(ModelForm):
         ]
         widgets = {
             'contact': autocomplete.ModelSelect2Multiple(url='journal:contact-autocomplete'),
+        }
+
+
+class EntryScheduleForm(forms.ModelForm):
+    class Meta:
+        model = Entry
+        fields = ['scheduled_time']
+        widgets = {
+            'scheduled_time': DatePickerInput(
+                options={
+                    'minDate': str(timezone.now()+timezone.timedelta(days=1))
+                }
+            )
         }

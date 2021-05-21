@@ -165,3 +165,9 @@ hr {
   background-color: #61ca61;
   color: black;
 }
+
+.entry-form {
+  min-height: 100%;
+  padding-bottom: 50%;
+  overflow: visible;
+}

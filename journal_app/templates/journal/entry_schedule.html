@@ -1,21 +1,22 @@
 {% extends "base.html" %}
 
 {% load static %}
-{% load crispy_forms_tags %}
+{% load bootstrap4 %}
+{% block extrahead %}
+  {{ form.media }}
+{% endblock %}
 
 {% block title %}Schedule Entry{% endblock %}
 
 {% block content %}
     <h1>Schedule Entry</h1>
-    <div>
+    <div class="entry-form">
       <form method="post" action="">
         {% csrf_token %}
-        {{ form|crispy }}
+        {% bootstrap_form form %}
         <button type="submit" class="btn btn-theme">Save</button>
       </form>
     </div>
 {% endblock %}
 
-{% block extra_js %}
-  <script type="text/javascript" src="{% static 'js/entry_form.js' %}"></script>
-{% endblock %}
+

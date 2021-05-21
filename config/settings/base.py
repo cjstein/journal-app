@@ -78,6 +78,9 @@ THIRD_PARTY_APPS = [
     "django_celery_beat",
     "tinymce",
     "stripe",
+    'bootstrap4',
+    'bootstrap_datepicker_plus',
+
 ]
 
 LOCAL_APPS = [
