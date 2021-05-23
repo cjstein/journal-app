@@ -24,3 +24,5 @@ django-extensions==3.0.9  # https://github.com/django-extensions/django-extensio
 django-tinymce==3.1.0
 django-autocomplete-light==3.8.1 # https://django-autocomplete-light.readthedocs.io/en/master/
 django-phone-field==1.8.1 # https://github.com/stefanfoulis/django-phonenumber-field
+django-bootstrap4==3.0.1 # https://github.com/zostera/django-bootstrap4
+django-bootstrap-datepicker-plus==3.0.5 # https://github.com/monim67/django-bootstrap-datepicker-plus
