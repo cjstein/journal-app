@@ -88,3 +88,4 @@ class EntryScheduleForm(forms.ModelForm):
                 }
             )
         }
+        # TODO create a way to validate the form so only dates after today can be input
