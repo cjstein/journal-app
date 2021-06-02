@@ -10,7 +10,7 @@ class Command(BaseCommand):
     help = "Checks user last checkin and if it is past due, it releases their entries"
 
     def handle(self, *args, **options):
-        users = User.objects.filter(entries_released=False, email_verified=True)
+        users = User.objects.filter(entries_released=False)
         for user in users:
             if user.release_entries:
                 entries = Entry.objects.filter(user=user, is_scheduled=False)
@@ -21,7 +21,7 @@ class Command(BaseCommand):
                 user.save()
                 for contact in user.contact_set.all():
                     if contact.entry_set.all():
-                        if contact.email:
+                        if contact.email and user.email_verified:
                             subject = f"{user} has shared memories with you, read them here"
                             contact_mail = Mail(
                                 user=user,
