@@ -11,7 +11,6 @@ from django.views.generic import (
     UpdateView,
     RedirectView,
 )
-
 from journal_app.journal.forms import ContactForm, EntryForm, EntryScheduleForm
 from journal_app.journal.models import Contact, Entry
 from journal_app.journal.utils import test_user_owns, test_user_has_subscription
@@ -87,12 +86,12 @@ class EntryUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
         return context
 
     def test_func(self):
-        owner_valid = test_user_owns(self.request, Entry, self.kwargs['pk'])
+        owner_valid = test_user_owns(self.request, Entry, pk=self.kwargs['pk'])
         subscription_valid = test_user_has_subscription(self.request)
         return owner_valid and subscription_valid
 
     def handle_no_permission(self):
-        owner_valid = test_user_owns(self.request, Contact, self.kwargs['pk'])
+        owner_valid = test_user_owns(self.request, Entry, self.kwargs['pk'])
         subscription_valid = test_user_has_subscription(self.request)
         if subscription_valid and not owner_valid:
             messages.add_message(self.request, messages.ERROR, 'Unable to access that object')
@@ -116,6 +115,7 @@ class EntryScheduleView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
         instance = super().form_valid(form)
         entry = Entry.objects.get(uuid=self.kwargs['pk'])
         entry.updated = timezone.now()
+        entry.is_scheduled = True
         entry.save()
         return instance
 

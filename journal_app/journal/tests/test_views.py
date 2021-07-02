@@ -46,11 +46,15 @@ class TestEntryViews(TestCase):
         self.assertTemplateUsed(r'journal/entry_list.html')
 
     def test_wrong_update_view(self):
-        request = self.factory.get(reverse('journal:entry_update', kwargs={'pk': self.entry1.uuid}))
-        request.user = self.entry2.user
-        callable_obj = EntryUpdateView.as_view()
-        with self.assertRaises(PermissionDenied):
-            callable_obj(request, pk=self.entry1.uuid)
+        self.client = Client()
+        self.client.force_login(user=self.entry1.user)
+        response = self.client.get(
+            reverse('journal:entry_update', kwargs={'pk': self.entry2.uuid}),
+            follow=True,
+        )
+        self.assertEqual(response.status_code, 200, "Redirects correctly")
+        self.assertTemplateNotUsed(r'journal/entry_update.html')
+        self.assertTemplateUsed(r'journal/entry_list.html')
 
     def test_list_view(self):
         request = self.factory.get(reverse('journal:entry_list'))
@@ -89,8 +93,7 @@ class TestEntryViews(TestCase):
             reverse('journal:entry_delete', kwargs={'pk': self.entry1.uuid}),
             follow=True
         )
-        self.assertEqual(response.status_code, 200, "Wrong Entry Delete Success")
-        self.assertTemplateUsed()
+        self.assertEqual(response.status_code, 403, "Wrong Entry Delete Success")
 
     def test_delete_view_success(self):
         response = self.client.get(

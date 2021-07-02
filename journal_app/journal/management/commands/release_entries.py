@@ -21,7 +21,7 @@ class Command(BaseCommand):
                 user.save()
                 for contact in user.contact_set.all():
                     if contact.entry_set.all():
-                        if contact.email:
+                        if contact.email and user.email_verified:
                             subject = f"{user} has shared memories with you, read them here"
                             contact_mail = Mail(
                                 user=user,

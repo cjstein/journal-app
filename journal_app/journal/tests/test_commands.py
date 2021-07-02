@@ -21,7 +21,12 @@ class TestReleaseEntries(TestCase):
         self.entry2 = EntryFactory()
 
         self.user1 = self.entry1.user
+        self.user1.email_verified = True
+        self.user1.save()
+
         self.user2 = self.entry2.user
+        self.user2.email_verified = True
+        self.user2.save()
 
         self.contact1 = ContactFactory(user=self.user1)
         self.contact2 = ContactFactory(user=self.user1)

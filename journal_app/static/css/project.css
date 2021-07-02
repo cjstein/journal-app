@@ -6,11 +6,11 @@ html{
 
 body {
   font-family: "Roboto", sans-serif;
-  height: 94%;
+
 }
 
 #wrap{
-  min-height: 90%;
+  min-height: calc(100vh - 142px);
 }
 
 #main {
@@ -134,11 +134,11 @@ hr {
 
 .footer {
   position: relative;
-  margin-top: -150px;
-  height: 150px;
+  height: 80px;
   clear: both;
-  padding-top: 20px;
+  padding: 10px 10px 0 10px ;
   color: white;
+  min-width: 100%;
 }
 
 .footer-link {
@@ -164,4 +164,10 @@ hr {
 .page-link.page-active {
   background-color: #61ca61;
   color: black;
+}
+
+.entry-form {
+  min-height: 100%;
+  padding-bottom: 50%;
+  overflow: visible;
 }

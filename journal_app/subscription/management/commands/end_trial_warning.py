@@ -10,7 +10,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         for customer in StripeCustomer.objects.filter(status=StripeCustomer.Status.TRIAL):
-            if customer.trial_end - timezone.timedelta(days=3) < timezone.now():
+            if customer.trial_end - timezone.timedelta(days=3) < timezone.now() and customer.user.email_verified:
                 mail = Mail.objects.create(
                     user=customer.user,
                     subject="Trial is ending soon at Time Capsule Journal!",

@@ -1,4 +1,7 @@
-{% load static i18n %}<!DOCTYPE html>
+{% load static i18n bootstrap4 %}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -28,6 +31,11 @@
     <!-- Font Awesome  https://fontawesome.com/start -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
     <!-- This file stores project-specific CSS -->
+    <!-- Moment JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.23.0/moment.min.js" integrity="sha256-VBLiveTKyUZMEzJd6z2mhfxIqz3ZATCuVMawPZGzIfA=" crossorigin="anonymous"></script>
+    <!-- Tempus Dominus -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.1.2/css/tempusdominus-bootstrap-4.min.css" integrity="sha256-XPTBwC3SBoWHSmKasAk01c08M6sIA5gF5+sRxqak2Qs=" crossorigin="anonymous" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.1.2/js/tempusdominus-bootstrap-4.min.js" integrity="sha256-z0oKYg6xiLq3yJGsp/LsY9XykbweQlHl42jHv2XTBz4=" crossorigin="anonymous"></script>
 
 
     {% block css %}
@@ -44,6 +52,8 @@
     {% else %}
       {% include 'navbar_new_user.html' %}
     {% endif %}
+    {% block extrahead %}
+    {% endblock %}
     <div id="wrap">
       <div class="container clear-top" id="main">
 
@@ -54,16 +64,17 @@
         {% endif %}
 
         {% block content %}
-
         {% endblock content %}
 
       </div>
     </div>
-    {% block footer %}{% include 'footer.html' %}{% endblock %}
+    <footer class="page-footer font-small pt-3 drgrey">
+      {% block footer %}{% include 'footer.html' %}{% endblock %}
+    </footer>
     {% block modal %}{% endblock modal %}
 
+    <script src="{% static 'js/project.js' %}"></script>
     {% block javascript %}
-      <script src="{% static 'js/project.js' %}"></script>
     {% endblock javascript %}
     {% block extra_js %}{% endblock %}
   </body>
