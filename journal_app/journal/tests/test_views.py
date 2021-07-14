@@ -112,6 +112,8 @@ class TestEntryViews(TestCase):
         )
         self.assertEqual(response.status_code, 200, "Entry Delete")
 
+    # TODO create scheduled test view
+
 
 class TestContactViews(TestCase):
     # These tests are for contact views
