@@ -10,7 +10,7 @@ class Command(BaseCommand):
     help = "Checks user last checkin and if it is past due, it releases their entries"
 
     def handle(self, *args, **options):
-        users = User.objects.filter(entries_released=False)
+        users = User.objects.filter(entries_released=False, email_verified=True)
         for user in users:
             if user.release_entries:
                 entries = Entry.objects.filter(user=user, is_scheduled=False)
