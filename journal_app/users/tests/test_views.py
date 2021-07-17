@@ -9,8 +9,6 @@ from journal_app.users.tests.factories import UserFactory
 from journal_app.users.views import (
     UserRedirectView,
     UserUpdateView,
-    anon_user_checkin_view,
-    user_checkin_view,
     user_detail_view,
 )
 
