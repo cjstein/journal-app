@@ -5,12 +5,9 @@
 
 {% block content %}
   <div class="container mt-5">
-    {% if user.subscription.get.status == "active" %}
-      <h5>{{ user.subscription.get.product_name }}</h5>
-      <p>Subscription ends: {{ user.subscription.get.subscription_end|date:"SHORT_DATE_FORMAT" }}</p>
-    {% else %}
-      <button type="submit" class="btn btn-large btn-block btn-theme" id="submitBtn">Subscribe</button>
-    {% endif %}
+    <form method="POST" action="/subscription/create-customer-portal-session/">
+      <button type="submit">Manage billing</button>
+    </form>
   </div>
 {% endblock %}
 

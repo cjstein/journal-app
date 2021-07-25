@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.sites.models import Site
 from django.http.response import HttpResponse, JsonResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 
 from journal_app.subscription.models import StripeCustomer
@@ -145,3 +145,16 @@ def stripe_webhook(request):
         customer.status = StripeCustomer.Status.CANCELLED
         customer.save()
     return HttpResponse(status=200)
+
+
+@csrf_exempt
+def create_stripe_portal_session(request):
+    stripe.api_key = settings.STRIPE_SECRET_KEY
+    domain_url = Site.objects.get_current().domain
+    domain_url = domain_url if domain_url.startswith('http') else fr'https://{domain_url}'
+    customer = StripeCustomer.objects.get(user=request.user)
+    session = stripe.billing_portal.Session.create(
+        customer=customer.stripe_customer_id,
+        return_url=f'{domain_url}/subscription/success.html',
+    )
+    return redirect(session.url)
