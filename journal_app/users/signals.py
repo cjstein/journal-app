@@ -12,6 +12,12 @@ def create_stripe_customer(sender, instance, created, **kwargs):
     stripe.api_key = settings.STRIPE_SECRET_KEY
     if created:
         customer = StripeCustomer.objects.create(user=instance)
+        stripe_customer = stripe.Customer.create(
+            email=instance.email,
+            description=str(instance),
+        )
+        customer.stripe_customer_id = stripe_customer.stripe_id
+        customer.save()
 
 
 @receiver(email_confirmed)
