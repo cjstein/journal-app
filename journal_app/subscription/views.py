@@ -144,6 +144,8 @@ def stripe_webhook(request):
         customer = StripeCustomer.objects.get(stripe_subscription_id=stripe_subscription_id)
         customer.status = StripeCustomer.Status.CANCELLED
         customer.save()
+    if event['type'] == 'checkout.session.completed':
+        session = event['data']['object']
     return HttpResponse(status=200)
 
 
@@ -155,6 +157,6 @@ def create_stripe_portal_session(request):
     customer = StripeCustomer.objects.get(user=request.user)
     session = stripe.billing_portal.Session.create(
         customer=customer.stripe_customer_id,
-        return_url=f'{domain_url}/subscription/success.html',
+        return_url=f'{domain_url}/journal',
     )
     return redirect(session.url)
