@@ -5,9 +5,11 @@
 
 {% block content %}
   <form method="post">{% csrf_token %}
-    <div class="row mt-3"><div class="col-lg-12">
-      <h2><strong>Delete Post: </strong> {{ entry.title }}</h2>
-    <button class="btn btn-lg btn-danger btn-block">Click here to confirm that you want to delete the post!</button>
-    </div></div>
+    <div class="row mt-3">
+      <div class="col-lg-12">
+        <h2><strong>Delete Post: </strong> {{ entry.title }}</h2>
+        <button class="btn btn-lg btn-danger btn-block">Click here to confirm that you want to delete the post!</button>
+      </div>
+    </div>
   </form>
 {% endblock %}
