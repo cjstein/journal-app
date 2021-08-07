@@ -14,7 +14,12 @@ from journal_app.users.models import User
 
 @login_required
 def home(request):
-    return render(request, 'subscription/home.html', {'user': request.user})
+    customer = StripeCustomer.objects.get(user=request.user)
+    context = {
+        'user': request.user,
+        'customer': customer,
+    }
+    return render(request, 'subscription/home.html', context)
 
 
 @csrf_exempt
@@ -157,6 +162,6 @@ def create_stripe_portal_session(request):
     customer = StripeCustomer.objects.get(user=request.user)
     session = stripe.billing_portal.Session.create(
         customer=customer.stripe_customer_id,
-        return_url=f'{domain_url}/journal',
+        return_url=f'{domain_url}/subscription/',
     )
     return redirect(session.url)
