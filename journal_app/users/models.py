@@ -18,7 +18,6 @@ class User(AbstractUser):
     name = CharField(blank=True, max_length=255)
     checkin_link = UUIDField(default=uuid.uuid4)
     last_checkin = DateTimeField(default=timezone.now)
-    # How many days after check-in until release.  This may be a customizable field in the future.
     days_to_release_setting = IntegerField(default=7)
     entries_released = BooleanField(default=False)
     email_verified = BooleanField(default=False)

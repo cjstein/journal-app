@@ -33,12 +33,17 @@ class StripeCustomer(models.Model):
         return str(self.user)
 
     def get_subscription_status(self):
-        stripe.api_key = settings.STRIPE_SECRET_KEY
-        subscription = stripe.Subscription.retrieve(self.stripe_subscription_id)
-        self.product = stripe.Product.retrieve(subscription.plan.product)
-        self.product_name = self.product.name
-        self.subscription_end = timezone.datetime.fromtimestamp(subscription.current_period_end)
-        self.subscription_start = timezone.datetime.fromtimestamp(subscription.current_period_start)
-        self.status = subscription.status
-        self.subscription_cache = subscription
-        self.save()
+        if self.stripe_subscription_id:
+            stripe.api_key = settings.STRIPE_SECRET_KEY
+            subscription = stripe.Subscription.retrieve(self.stripe_subscription_id)
+            self.product = stripe.Product.retrieve(subscription.plan.product)
+            self.product_name = self.product.name
+            self.subscription_end = timezone.datetime.fromtimestamp(subscription.current_period_end)
+            self.subscription_start = timezone.datetime.fromtimestamp(subscription.current_period_start)
+            self.status = subscription.status
+            self.subscription_cache = subscription
+            self.save()
+        else:
+            if self.trial_end < timezone.now():
+                self.status = self.status.UNPAID
+                self.save()
