@@ -42,7 +42,3 @@ class StripeCustomer(models.Model):
         self.status = subscription.status
         self.subscription_cache = subscription
         self.save()
-
-
-class Product(models.Model):
-    price_key = models.CharField(max_length=30)
