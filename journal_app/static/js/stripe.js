@@ -10,12 +10,31 @@ fetch("/subscription/config/")
         const stripe = Stripe(data.publicKey);
 
         // new
-        // Event handler
-        let submitBtn = document.querySelector("#submitBtn");
-        if (submitBtn !== null) {
-            submitBtn.addEventListener("click", () => {
+        // Event handler for Annual Subscription
+        let annualBtn = document.querySelector("#price_1IVpLVEAWjMWH1Xh1LyZ2lx8");
+        if (annualBtn !== null) {
+            annualBtn.addEventListener("click", () => {
+                var price = annualBtn.id
                 // Get Checkout Session ID
-                fetch("/subscription/create-checkout-session/")
+                fetch("/subscription/create-checkout-session/?price=" + price)
+                    .then((result) => { return result.json(); })
+                    .then((data) => {
+                        console.log(data);
+                        // Redirect to Stripe Checkout
+                        return stripe.redirectToCheckout({sessionId: data.sessionId})
+                    })
+                    .then((res) => {
+                        console.log(res);
+                    });
+            });
+        }
+        // Event handler for Monthly Subscription
+        let monthlyBtn = document.querySelector("#price_1IVpLVEAWjMWH1XhtRoR63IS");
+        if (monthlyBtn !== null) {
+            monthlyBtn.addEventListener("click", () => {
+                var price = monthlyBtn.id
+                // Get Checkout Session ID
+                fetch(`/subscription/create-checkout-session/?price=${price}`)
                     .then((result) => { return result.json(); })
                     .then((data) => {
                         console.log(data);
