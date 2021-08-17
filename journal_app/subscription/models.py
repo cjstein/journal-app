@@ -1,4 +1,5 @@
 import stripe
+import uuid
 from django.conf import settings
 from django.db import models
 from django.utils import timezone
@@ -47,3 +48,14 @@ class StripeCustomer(models.Model):
             if self.trial_end < timezone.now():
                 self.status = self.status.CANCELLED
                 self.save()
+
+
+class Product(models.Model):
+    stripe_price_id = models.CharField(max_length=30, blank=False, null=False)
+    uuid = models.UUIDField(editable=False, default=uuid.uuid4)
+    name = models.CharField(max_length=50, blank=False, null=False)
+    price = models.IntegerField(blank=False, null=False)
+    bullet_point_1 = models.CharField(max_length=75)
+    bullet_point_2 = models.CharField(max_length=75)
+    bullet_point_3 = models.CharField(max_length=75)
+    bullet_point_4 = models.CharField(max_length=75)
