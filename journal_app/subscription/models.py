@@ -51,10 +51,15 @@ class StripeCustomer(models.Model):
 
 
 class Subscription(models.Model):
+    class PriceUnit(models.TextChoices):
+        MONTHLY = 'monthly', "/ month"
+        YEARLY = 'yearly', "/ year"
+        LIFETIME = 'lifetime', 'forever'
     stripe_price_id = models.CharField(max_length=30, blank=False, null=False)
     uuid = models.UUIDField(editable=False, default=uuid.uuid4)
     name = models.CharField(max_length=50, blank=False, null=False)
     price = models.IntegerField(blank=False, null=False)
+    price_unit = models.CharField(max_length=10, choices=PriceUnit.choices, default=PriceUnit.MONTHLY)
     bullet_point_1 = models.CharField(max_length=75)
     bullet_point_2 = models.CharField(max_length=75)
     bullet_point_3 = models.CharField(max_length=75)

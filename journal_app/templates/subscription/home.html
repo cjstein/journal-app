@@ -20,7 +20,7 @@
             <h4 class="my-0 font-weight-normal">{{ subscription.name }}</h4>
           </div>
           <div class="card-body">
-            <h1 class="card-title pricing-card-title">$2 <small class="text-muted">/ mo</small></h1>
+            <h1 class="card-title pricing-card-title">${{ subscription.price }} <small class="text-muted">{{ subscription.price_unit }}</small></h1>
             <ul class="list-unstyled mt-3 mb-4">
               <li>{{ subscription.bullet_point_1 }}</li>
               <li>{% if subscription.bullet_point_2 %}{{ subscription.bullet_point_2 }}{% else %}<br>{% endif %}</li>
