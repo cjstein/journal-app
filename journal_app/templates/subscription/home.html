@@ -5,91 +5,49 @@
 
 {% block content %}
 <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
-    {% if customer.status == 'active' %}
       <h1 class="display-4">Subscriptions</h1>
-      <p class="lead">Manage your subscription</p>
-    {% else %}
-      <h1 class="display-4">Pricing</h1>
-      <p class="lead">Sign up now for a special founder's discount</p>
-    {% endif %}
+      <p class="lead">View all subscriptions here</p>
     <div class="container">
       <div class="card-deck mb-3 text-center">
       {% for subscription in subscriptions %}
         <div class="card mb-4 box-shadow">
           <div class="card-header">
-            <h4 class="my-0 font-weight-normal">{{ subscription.name }}</h4>
+            <h4 class="my-0 font-weight-normal mh-100">{{ subscription.name }}</h4>
           </div>
-          <div class="card-body">
-            <h1 class="card-title pricing-card-title">${{ subscription.price }} <small class="text-muted">{{ subscription.price_unit }}</small></h1>
+          <div class="card-body d-flex flex-column">
+            <h1 class="card-title pricing-card-title">${{ subscription.price }} <small class="text-muted">{{ subscription.get_price_unit_display }}</small></h1>
             <ul class="list-unstyled mt-3 mb-4">
               <li>{{ subscription.bullet_point_1 }}</li>
               <li>{% if subscription.bullet_point_2 %}{{ subscription.bullet_point_2 }}{% else %}<br>{% endif %}</li>
               <li>{% if subscription.bullet_point_3 %}{{ subscription.bullet_point_3 }}{% else %}<br>{% endif %}</li>
               <li>{% if subscription.bullet_point_4 %}{{ subscription.bullet_point_4 }}{% else %}<br>{% endif %}</li>
             </ul>
-            <button id="{{ subscription.stripe_price_id }}" type="button" class="btn btn-lg btn-block btn-theme">Get started</button>
+            <button id="{{ subscription.stripe_price_id }}" type="button" class="mt-auto btn btn-lg btn-block btn-theme">Get started</button>
           </div>
         </div>
       {% endfor %}
-        {% if customer.status == "trial" %}
-          <div class="card mb-4 box-shadow">
-            <div class="card-header">
-              <h4 class="my-0 font-weight-normal">Trial</h4>
-              <ul class="list-unstyled mt-3 mb-4">
-                <li>Test the journal and reminder system</li>
-                <li>No </li>
-                <li>Email support</li>
-                <li>Help center access</li>
-              </ul>
-            </div>
-            <div class="card-body">
-              <h1 class="card-title pricing-card-title">$0 <small class="text-muted">/ mo</small></h1>
-              <ul class="list-unstyled mt-3 mb-4">
-                <li>Test the journal and reminder system</li>
-                <li>No </li>
-                <li>Email support</li>
-                <li>Help center access</li>
-              </ul>
-              <button type="button" class="btn btn-lg btn-block btn-outline-primary">Sign up for free</button>
-            </div>
-          </div>
-        {% endif %}
+      {% if customer.status == "trial" %}
         <div class="card mb-4 box-shadow">
           <div class="card-header">
-            <h4 class="my-0 font-weight-normal">Founder's Monthly Subscription</h4>
+            <h4 class="my-0 font-weight-normal">Trial</h4>
+            <ul class="list-unstyled mt-3 mb-4">
+              <li>Test the journal and reminder system</li>
+              <li>No </li>
+              <li>Email support</li>
+              <li>Help center access</li>
+            </ul>
           </div>
           <div class="card-body">
-            <h1 class="card-title pricing-card-title">$2 <small class="text-muted">/ mo</small></h1>
+            <h1 class="card-title pricing-card-title">$0 <small class="text-muted">/ mo</small></h1>
             <ul class="list-unstyled mt-3 mb-4">
-              <li>Unlimited contacts</li>
-              <li>Unlimited journal entries</li>
-              <li>Your memories can be carried on forever</li>
-              <li><br></li>
+              <li>Test the journal and reminder system</li>
+              <li>No entries will be sent to contacts</li>
+              <li>last 14 days</li>
             </ul>
-            <button id="price_1IVpLVEAWjMWH1XhtRoR63IS" type="button" class="btn btn-lg btn-block btn-theme">Get started</button>
+            <button type="button" class="btn btn-lg btn-block btn-outline-primary">Sign up for free</button>
           </div>
         </div>
-        <div class="card mb-4 box-shadow">
-          <div class="card-header">
-            <h4 class="my-0 font-weight-normal">Founder's Annual Subscription</h4>
-          </div>
-          <div class="card-body">
-            <h1 class="card-title pricing-card-title">$20 <small class="text-muted">/ year</small></h1>
-            <ul class="list-unstyled mt-3 mb-4">
-              <li>Unlimited contacts</li>
-              <li>Unlimited journal entries</li>
-              <li>Your memories can be carried on forever</li>
-              <li>Get a discount for paying a year at a time</li>
-            </ul>
-            {% if customer.status == 'active' %}
-              <form method="POST" action="/subscription/create-customer-portal-session">
-                <button type="submit" class="btn btn-lg btn-block btn-theme">Manage subscription</button>
-              </form>
-            {% else %}
-              <button id="price_1IVpLVEAWjMWH1Xh1LyZ2lx8" type="button" class="btn btn-lg btn-block btn-theme">Get started</button>
-            {% endif %}
-          </div>
-        </div>
+      {% endif %}
       </div>
     </div>
 </div>
