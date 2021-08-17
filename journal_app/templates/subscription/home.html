@@ -14,6 +14,23 @@
     {% endif %}
     <div class="container">
       <div class="card-deck mb-3 text-center">
+      {% for subscription in subscriptions %}
+        <div class="card mb-4 box-shadow">
+          <div class="card-header">
+            <h4 class="my-0 font-weight-normal">{{ subscription.name }}</h4>
+          </div>
+          <div class="card-body">
+            <h1 class="card-title pricing-card-title">$2 <small class="text-muted">/ mo</small></h1>
+            <ul class="list-unstyled mt-3 mb-4">
+              <li>{{ subscription.bullet_point_1 }}</li>
+              <li>{% if subscription.bullet_point_2 %}{{ subscription.bullet_point_2 }}{% else %}<br>{% endif %}</li>
+              <li>{% if subscription.bullet_point_3 %}{{ subscription.bullet_point_3 }}{% else %}<br>{% endif %}</li>
+              <li>{% if subscription.bullet_point_4 %}{{ subscription.bullet_point_4 }}{% else %}<br>{% endif %}</li>
+            </ul>
+            <button id="{{ subscription.stripe_price_id }}" type="button" class="btn btn-lg btn-block btn-theme">Get started</button>
+          </div>
+        </div>
+      {% endfor %}
         {% if customer.status == "trial" %}
           <div class="card mb-4 box-shadow">
             <div class="card-header">
