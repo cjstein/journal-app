@@ -46,7 +46,7 @@ class StripeCustomer(models.Model):
             self.save()
         else:
             if self.trial_end < timezone.now():
-                self.status = self.status.CANCELLED
+                self.status = self.Status.CANCELLED
                 self.save()
 
 
