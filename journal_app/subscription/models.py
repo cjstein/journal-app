@@ -50,7 +50,7 @@ class StripeCustomer(models.Model):
                 self.save()
 
 
-class Product(models.Model):
+class Subscription(models.Model):
     stripe_price_id = models.CharField(max_length=30, blank=False, null=False)
     uuid = models.UUIDField(editable=False, default=uuid.uuid4)
     name = models.CharField(max_length=50, blank=False, null=False)

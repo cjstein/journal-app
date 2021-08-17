@@ -7,7 +7,7 @@ from django.http.response import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 
-from journal_app.subscription.models import StripeCustomer
+from journal_app.subscription.models import StripeCustomer, Subscription
 from journal_app.journal_mail.models import Mail
 from journal_app.users.models import User
 
@@ -15,9 +15,11 @@ from journal_app.users.models import User
 @login_required
 def home(request):
     customer = StripeCustomer.objects.get(user=request.user)
+    subscriptions = Subscription.objects.all()
     context = {
         'user': request.user,
         'customer': customer,
+        'subscriptions': subscriptions
     }
     return render(request, 'subscription/home.html', context)
 
