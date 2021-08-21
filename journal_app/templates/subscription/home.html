@@ -22,7 +22,7 @@
               <li>{% if subscription.bullet_point_3 %}{{ subscription.bullet_point_3 }}{% else %}<br>{% endif %}</li>
               <li>{% if subscription.bullet_point_4 %}{{ subscription.bullet_point_4 }}{% else %}<br>{% endif %}</li>
             </ul>
-            <button id="{{ subscription.stripe_price_id }}" type="button" class="stripe-button mt-auto btn btn-lg btn-block btn-theme" onclick="checkout(this.id)">Get started</button>
+            <button id="{{ subscription.uuid }}" type="button" class="stripe-button mt-auto btn btn-lg btn-block btn-theme" onclick="checkout(this.id)">Get started</button>
           </div>
         </div>
       {% endfor %}

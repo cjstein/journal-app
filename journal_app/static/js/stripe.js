@@ -2,7 +2,7 @@
 
 console.log("Sanity check!");
 
-function checkout(price) {
+function checkout(price_uuid) {
 // Get Stripe publishable key
     fetch("/subscription/config/")
         .then((result) => { return result.json(); })
@@ -10,7 +10,7 @@ function checkout(price) {
             // Initialize Stripe.js
             const stripe = Stripe(data.publicKey);
             // Get Checkout Session ID
-            fetch("/subscription/create-checkout-session/?price=" + price)
+            fetch("/subscription/create-checkout-session/?price=" + price_uuid)
                 .then((result) => {
                     return result.json();
                 })
