@@ -27,6 +27,9 @@ class Subscription(models.Model):
     bullet_point_3 = models.CharField(max_length=75, blank=True, null=True)
     bullet_point_4 = models.CharField(max_length=75, blank=True, null=True)
 
+    def __str__(self):
+        return self.name
+
 
 class StripeCustomer(models.Model):
     class Status(models.TextChoices):
@@ -36,7 +39,7 @@ class StripeCustomer(models.Model):
         UNPAID = "unpaid", "Unpaid"
         INCOMPLETE = "incomplete", "Incomplete"
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='customer')
-    subscription = models.ManyToManyField(Subscription, blank=True)
+    subscription = models.ForeignKey(Subscription, on_delete=models.SET_NULL,null=True, blank=True)
     stripe_customer_id = models.CharField(max_length=255, blank=True, null=True)
     stripe_subscription_id = models.CharField(max_length=255, blank=True, null=True)
     status = models.CharField(max_length=10, choices=Status.choices, default=Status.TRIAL)
@@ -54,14 +57,13 @@ class StripeCustomer(models.Model):
         if self.stripe_subscription_id:
             stripe.api_key = settings.STRIPE_SECRET_KEY
             subscription = stripe.Subscription.retrieve(self.stripe_subscription_id)
-            print(subscription)
             self.product = stripe.Product.retrieve(subscription.plan.product)
             self.product_name = self.product.name
             self.subscription_end = timezone.datetime.fromtimestamp(int(subscription.current_period_end))
             self.subscription_start = timezone.datetime.fromtimestamp(int(subscription.current_period_start))
             self.status = subscription.status
             self.subscription_cache = subscription
-            # TODO connect Subscription to Customer
+            self.subscription = Subscription.objects.get(uuid=subscription.plan.metadata.uuid)
             self.save()
         else:
             if self.trial_end < timezone.now():

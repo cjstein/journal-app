@@ -37,7 +37,8 @@ def create_checkout_session(request, **kwargs):
         domain_url = Site.objects.get_current().domain
         domain_url = domain_url if domain_url.startswith('http') else fr'https://{domain_url}'
         stripe.api_key = settings.STRIPE_SECRET_KEY
-        price = request.GET.get('price', None)
+        price_uuid = request.GET.get('price', None)
+        product = Subscription.objects.get(uuid = price_uuid)
         try:
             customer = StripeCustomer.objects.get(user=request.user)
             customer_id = customer.stripe_customer_id
@@ -60,7 +61,7 @@ def create_checkout_session(request, **kwargs):
                 mode='subscription',
                 line_items=[
                     {
-                        'price': price,
+                        'price': product.stripe_price_id,
                         'quantity': 1,
                     }
                 ]
@@ -103,9 +104,9 @@ def stripe_webhook(request):
     except stripe.error.SignatureVerificationError as e:
         # Invalid signature
         return HttpResponse(status=400, content=e)
-
+    print(event)
     # Handle the checkout.session.completed event
-    if event['type'] == 'checkout.session.completed':
+    if event['type'].strip() == 'checkout.session.completed':
         session = event['data']['object']
 
         # Fetch all the required data from session
@@ -134,25 +135,34 @@ def stripe_webhook(request):
             template_name='subscription_success',
             )
         mail.message()
-    # if event['type'] in ["customer.subscription.created", "customer.subscription.updated"]:
-    #     # Occurs whenever a customer is signed up for a new plan.
-    #     # Occurs whenever a subscription changes
-    #     # (e.g., switching from one plan to another,
-    #     # or changing the status from trial to active).
-    #     session = event['data']['object']
-    #     stripe_subscription_id = session.get('id')
-    #     customer = StripeCustomer.objects.get(stripe_subscription_id=stripe_subscription_id)
-    #     customer.subscription_start = session.get('current_period_start')
-    #     customer.subscription_end = session.get('current_period_end')
-    #     customer.product = session.get('id')
-    #     customer.status = StripeCustomer.Status.ACTIVE
-    #     customer.save()
-    if event['type'] == " customer.subscription.deleted":
-        # Occurs whenever a customer's subscription ends.
-        stripe_subscription_id = event['data']['object']['id']
-        customer = StripeCustomer.objects.get(stripe_subscription_id=stripe_subscription_id)
-        customer.status = StripeCustomer.Status.CANCELLED
+        customer.get_subscription_status()
+    if event['type'].strip() == "customer.subscription.created" or event['type'].strip() == "customer.subscription.updated":
+        print("updating...")
+        # Occurs whenever a customer is signed up for a new plan.
+        # Occurs whenever a subscription changes
+        # (e.g., switching from one plan to another,
+        # or changing the status from trial to active).
+        session = event['data']['object']
+        stripe_customer_id = session.get('customer').strip()
+        customer = StripeCustomer.objects.get(stripe_customer_id=stripe_customer_id)
+        customer.subscription_start = int(session.get('current_period_start'))
+        customer.subscription_end = int(session.get('current_period_end'))
+        customer.product = session.get('id')
+        customer.subscription = Subscription.objects.get(uuid=session.get('metadata')['uuid'])
+        customer.status = StripeCustomer.Status.ACTIVE
         customer.save()
+    if event['type'].strip() == "customer.subscription.deleted":
+        print('deleting...')
+        # Occurs whenever a customer's subscription ends.
+        stripe_customer_id = event['data']['object']['customer'].strip()
+        print(stripe_customer_id)
+        customer = StripeCustomer.objects.get(stripe_customer_id=stripe_customer_id)
+        customer.status = StripeCustomer.Status.CANCELLED
+        customer.stripe_subscription_id = None
+        customer.subscription_end = None
+        customer.subscription_start = None
+        customer.save()
+        # TODO add an email to confirm cancellation
     return HttpResponse(status=200)
 
 
