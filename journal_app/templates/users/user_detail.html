@@ -54,11 +54,11 @@
         </a>
       </h4>
       <p>
-        <b>Subscription Type:</b> {{ user.subscription.get_status_display }}<br/>
-        {% if user.subscription.status == 'trialing' %}
-          <b>Trial Ends:</b> {{ user.subscription.trial_end|naturaltime }}
+        <b>Subscription Type:</b> {{ user.customer.get_status_display }}<br/>
+        {% if customer.status == 'trialing' %}
+          <b>Trial Ends:</b> {{ user.customer.trial_end|date }}
         {% else %}
-          <b>Subscription Expiration:</b> {{ user.subscription.subscription_end|naturaltime }}
+          <b>Subscription Expiration:</b> {{ user.customer.subscription_end|date }}
         {% endif %}<br/>
       </p>
     </div>
