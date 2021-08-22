@@ -10,6 +10,6 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         for user in User.objects.all():
             try:
-                user.subscription.get_subscription_status()
+                user.customer.get_subscription_status()
             except StripeCustomer.DoesNotExist:
                 pass
