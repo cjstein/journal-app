@@ -61,6 +61,7 @@ class StripeCustomer(models.Model):
             self.subscription_start = timezone.datetime.fromtimestamp(int(subscription.current_period_start))
             self.status = subscription.status
             self.subscription_cache = subscription
+            # TODO connect Subscription to Customer
             self.save()
         else:
             if self.trial_end < timezone.now():
