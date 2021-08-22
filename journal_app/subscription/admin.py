@@ -36,6 +36,7 @@ class SubscriptionAdmin(admin.ModelAdmin):
         'price',
         'price_unit',
         'stripe_price_id',
+        'uuid',
     ]
 
     sortable_by = [
@@ -46,3 +47,5 @@ class SubscriptionAdmin(admin.ModelAdmin):
     list_filter = [
         'price_unit',
     ]
+
+    readonly_fields = ['uuid']
