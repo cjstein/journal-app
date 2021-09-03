@@ -17,9 +17,9 @@ class TestTrialEndCommand(TestCase):
         self.active_user = UserFactory()
         self.second_active_user = UserFactory()
         self.expired_user = UserFactory()
-        self.expired_user.subscription.trial_end = REFERENCE_DATE
-        self.expired_user.subscription.status = StripeCustomer.Status.CANCELLED
-        self.expired_user.subscription.save()
+        self.expired_user.customer.trial_end = REFERENCE_DATE
+        self.expired_user.customer.status = StripeCustomer.Status.CANCELLED
+        self.expired_user.customer.save()
 
     def refresh_users_from_db(self):
         self.active_user.refresh_from_db()
@@ -28,9 +28,9 @@ class TestTrialEndCommand(TestCase):
 
     def test_setup(self):
         self.refresh_users_from_db()
-        self.assertEqual(self.active_user.subscription.status, 'trialing')
-        self.assertEqual(self.second_active_user.subscription.status, 'trialing')
-        self.assertEqual(self.expired_user.subscription.status, 'cancelled')
+        self.assertEqual(self.active_user.customer.status, 'trialing')
+        self.assertEqual(self.second_active_user.customer.status, 'trialing')
+        self.assertEqual(self.expired_user.customer.status, 'cancelled')
 
     def call_command(self, *args, **kwargs):
         """
@@ -47,8 +47,8 @@ class TestTrialEndCommand(TestCase):
         return out.getvalue()
 
     def test_trial_end_command(self):
-        self.active_user.subscription.trial_end = REFERENCE_DATE
-        self.active_user.subscription.save()
+        self.active_user.customer.trial_end = REFERENCE_DATE
+        self.active_user.customer.save()
         self.call_command()
         self.active_user_subscription = StripeCustomer.objects.get(user=self.active_user)
         self.second_active_user_subscription = StripeCustomer.objects.get(user=self.second_active_user)
