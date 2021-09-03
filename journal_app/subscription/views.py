@@ -33,42 +33,43 @@ def stripe_config(request):
 
 @csrf_exempt
 def create_checkout_session(request, **kwargs):
-    if request.method == 'GET':
-        domain_url = Site.objects.get_current().domain
-        domain_url = domain_url if domain_url.startswith('http') else fr'https://{domain_url}'
-        stripe.api_key = settings.STRIPE_SECRET_KEY
-        price_uuid = request.GET.get('price', None)
-        product = Subscription.objects.get(uuid = price_uuid)
-        try:
-            customer = StripeCustomer.objects.get(user=request.user)
-            customer_id = customer.stripe_customer_id
-            subscription_id = customer.stripe_subscription_id
-            email = request.user.email
+    if request.method != 'GET':
+        return
+    domain_url = Site.objects.get_current().domain
+    domain_url = domain_url if domain_url.startswith('http') else fr'https://{domain_url}'
+    stripe.api_key = settings.STRIPE_SECRET_KEY
+    price_uuid = request.GET.get('price', None)
+    product = Subscription.objects.get(uuid = price_uuid)
+    try:
+        customer = StripeCustomer.objects.get(user=request.user)
+        customer_id = customer.stripe_customer_id
+        subscription_id = customer.stripe_subscription_id
+        email = request.user.email
 
-        except StripeCustomer.DoesNotExist:
-            customer_id = None
-            email = request.user.email
-            subscription_id = None
+    except StripeCustomer.DoesNotExist:
+        customer_id = None
+        email = request.user.email
+        subscription_id = None
 
-        try:
-            checkout_session = stripe.checkout.Session.create(
-                customer=customer_id,
-                subscription=subscription_id,
-                client_reference_id=request.user.id if request.user.is_authenticated else None,
-                success_url=domain_url + '/subscription/success?session_id={CHECKOUT_SESSION_ID}',
-                cancel_url=domain_url + '/subscription/cancel/',
-                payment_method_types=['card'],
-                mode='subscription',
-                line_items=[
-                    {
-                        'price': product.stripe_price_id,
-                        'quantity': 1,
-                    }
-                ]
-            )
-            return JsonResponse({'sessionId': checkout_session['id']})
-        except Exception as e:
-            return JsonResponse({'error': str(e)})
+    try:
+        checkout_session = stripe.checkout.Session.create(
+            customer=customer_id,
+            subscription=subscription_id,
+            client_reference_id=request.user.id if request.user.is_authenticated else None,
+            success_url=domain_url + '/subscription/success?session_id={CHECKOUT_SESSION_ID}',
+            cancel_url=domain_url + '/subscription/cancel/',
+            payment_method_types=['card'],
+            mode='subscription',
+            line_items=[
+                {
+                    'price': product.stripe_price_id,
+                    'quantity': 1,
+                }
+            ]
+        )
+        return JsonResponse({'sessionId': checkout_session['id']})
+    except Exception as e:
+        return JsonResponse({'error': str(e)})
 
 
 @login_required
