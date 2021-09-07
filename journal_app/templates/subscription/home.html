@@ -23,7 +23,9 @@
               <li>{% if subscription.bullet_point_4 %}{{ subscription.bullet_point_4 }}{% else %}<br>{% endif %}</li>
             </ul>
             {% if customer.subscription.uuid == subscription.uuid %}
-              <button id="{{ subscription.uuid }}" type="button" class="stripe-button mt-auto btn btn-lg btn-block btn-theme" onclick="checkout(this.id)">Get started</button>
+              <a href="{% url "subscription:customer_portal" %}" class="">
+                <button id="{{ subscription.uuid }}" type="submit" class="mt-auto stripe-button btn btn-lg btn-block btn-theme-outline">Manage Subscription</button>
+              </a>
             {% else %}
               <button id="{{ subscription.uuid }}" type="button" class="stripe-button mt-auto btn btn-lg btn-block btn-theme" onclick="checkout(this.id)">Get started</button>
             {% endif %}
