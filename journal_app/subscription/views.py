@@ -105,7 +105,6 @@ def stripe_webhook(request):
     except stripe.error.SignatureVerificationError as e:
         # Invalid signature
         return HttpResponse(status=400, content=e)
-    print(event)
     # Handle the checkout.session.completed event
     if event['type'].strip() == 'checkout.session.completed':
         session = event['data']['object']
@@ -114,9 +113,6 @@ def stripe_webhook(request):
         client_reference_id = session.get('client_reference_id')
         stripe_customer_id = session.get('customer')
         stripe_subscription_id = session.get('subscription')
-        print(client_reference_id)
-        print(stripe_customer_id)
-        print(stripe_subscription_id)
 
         # Get the user and create a new StripeCustomer
         user = User.objects.get(id=client_reference_id)
@@ -138,20 +134,27 @@ def stripe_webhook(request):
         mail.message()
         customer.get_subscription_status()
     if event['type'].strip() == "customer.subscription.created" or event['type'].strip() == "customer.subscription.updated":
-        print("updating...")
+        if event['type'].strip() == "customer.subscription.created":
+            print("creating...")
+        else:
+            print('updating...')
         # Occurs whenever a customer is signed up for a new plan.
         # Occurs whenever a subscription changes
         # (e.g., switching from one plan to another,
         # or changing the status from trial to active).
         session = event['data']['object']
         stripe_customer_id = session.get('customer').strip()
-        customer = StripeCustomer.objects.get(stripe_customer_id=stripe_customer_id)
-        customer.subscription_start = int(session.get('current_period_start'))
-        customer.subscription_end = int(session.get('current_period_end'))
-        customer.product = session.get('id')
-        customer.subscription = Subscription.objects.get(uuid=session.get('metadata')['uuid'])
-        customer.status = StripeCustomer.Status.ACTIVE
-        customer.save()
+        try:
+            customer = StripeCustomer.objects.get(stripe_customer_id=stripe_customer_id)
+            customer.subscription_start = int(session.get('current_period_start'))
+            customer.subscription_end = int(session.get('current_period_end'))
+            customer.product = session.get('id')
+            customer.subscription = Subscription.objects.get(uuid=session.get('metadata')['uuid'])
+            customer.status = StripeCustomer.Status.ACTIVE
+            customer.save()
+        except StripeCustomer.DoesNotExist as e:
+            print(stripe_customer_id)
+            print(e)
     if event['type'].strip() == "customer.subscription.deleted":
         print('deleting...')
         # Occurs whenever a customer's subscription ends.
