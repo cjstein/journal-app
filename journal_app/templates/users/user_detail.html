@@ -55,7 +55,7 @@
       </h4>
       <p>
         <b>Subscription Type:</b> {{ user.customer.get_status_display }}<br/>
-        {% if customer.status == 'trialing' %}
+        {% if user.customer.status == 'trialing' %}
           <b>Trial Ends:</b> {{ user.customer.trial_end|date }}
         {% else %}
           <b>Subscription Expiration:</b> {{ user.customer.subscription_end|date }}
