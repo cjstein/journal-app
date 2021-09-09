@@ -39,7 +39,7 @@ class StripeCustomer(models.Model):
         UNPAID = "unpaid", "Unpaid"
         INCOMPLETE = "incomplete", "Incomplete"
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='customer')
-    subscription = models.ForeignKey(Subscription, on_delete=models.SET_NULL,null=True, blank=True)
+    subscription = models.ForeignKey(Subscription, on_delete=models.SET_NULL, null=True, blank=True)
     stripe_customer_id = models.CharField(max_length=255, blank=True, null=True)
     stripe_subscription_id = models.CharField(max_length=255, blank=True, null=True)
     status = models.CharField(max_length=10, choices=Status.choices, default=Status.TRIAL)
