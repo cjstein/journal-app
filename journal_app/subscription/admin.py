@@ -7,6 +7,7 @@ from journal_app.subscription.models import StripeCustomer, Subscription
 class StripeCustomerAdmin(admin.ModelAdmin):
     list_display = [
         'user',
+        'stripe_customer_id',
         'status',
         'subscription_end',
     ]
