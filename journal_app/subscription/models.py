@@ -65,7 +65,7 @@ class StripeCustomer(models.Model):
             self.subscription_start = timezone.datetime.fromtimestamp(int(subscription.current_period_start))
             self.status = subscription.status
             self.subscription_cache = subscription
-            self.subscription = Subscription.objects.get(uuid=subscription.plan.metadata.uuid)
+            self.subscription = Subscription.objects.get(stripe_price_id=subscription['items']['data'][0]['price']['id'])
             self.save()
 
     def check_trial_status(self):

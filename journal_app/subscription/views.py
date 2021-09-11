@@ -144,12 +144,13 @@ def stripe_webhook(request):
         # or changing the status from trial to active).
         session = event['data']['object']
         stripe_customer_id = session.get('customer').strip()
+        print(session.get('items')['data'][0]['price']['id'])
         try:
             customer = StripeCustomer.objects.get(stripe_customer_id=stripe_customer_id)
             customer.subscription_start = int(session.get('current_period_start'))
             customer.subscription_end = int(session.get('current_period_end'))
             customer.product = session.get('id')
-            customer.subscription = Subscription.objects.get(uuid=session.get('metadata')['uuid'])
+            customer.subscription = Subscription.objects.get(stripe_price_id=session.get('items')['data'][0]['price']['id'])
             customer.status = StripeCustomer.Status.ACTIVE
             customer.save()
         except StripeCustomer.DoesNotExist as e:
