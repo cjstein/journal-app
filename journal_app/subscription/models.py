@@ -54,8 +54,8 @@ class StripeCustomer(models.Model):
         return str(self.user)
 
     def get_subscription_status(self):
-        if self.status == 'trialing':
-            self.check_trial_status()
+        # if self.status == 'trialing':
+        #     self.check_trial_status()
         if self.stripe_subscription_id:
             stripe.api_key = settings.STRIPE_SECRET_KEY
             subscription = stripe.Subscription.retrieve(self.stripe_subscription_id)

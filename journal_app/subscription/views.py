@@ -39,10 +39,11 @@ def create_checkout_session(request, **kwargs):
     domain_url = domain_url if domain_url.startswith('http') else fr'https://{domain_url}'
     stripe.api_key = settings.STRIPE_SECRET_KEY
     price_uuid = request.GET.get('price', None)
-    product = Subscription.objects.get(uuid = price_uuid)
+    product = Subscription.objects.get(uuid=price_uuid)
     try:
         customer = StripeCustomer.objects.get(user=request.user)
         customer_id = customer.stripe_customer_id
+        print(customer_id)
         subscription_id = customer.stripe_subscription_id
         email = request.user.email
 
@@ -75,9 +76,9 @@ def create_checkout_session(request, **kwargs):
 @login_required
 def success(request):
     messages.add_message(request, messages.SUCCESS, "Subscription confirmed")
-    # user = User.objects.get(username=request.user.username)
-    # customer = StripeCustomer.objects.get(user=user)
-    # customer.get_subscription_status()
+    user = User.objects.get(username=request.user.username)
+    customer = StripeCustomer.objects.get(user=user)
+    customer.get_subscription_status()
     return render(request, 'subscription/success.html')
 
 
@@ -105,56 +106,78 @@ def stripe_webhook(request):
     except stripe.error.SignatureVerificationError as e:
         # Invalid signature
         return HttpResponse(status=400, content=e)
+    if settings.DEBUG:
+        try:
+            with open(r'Desktop', 'w') as f:
+                f.write(event)
+        except:
+            pass
     # Handle the checkout.session.completed event
     if event['type'].strip() == 'checkout.session.completed':
+        print('checkout session')
         session = event['data']['object']
 
         # Fetch all the required data from session
         client_reference_id = session.get('client_reference_id')
         stripe_customer_id = session.get('customer')
+        print(stripe_customer_id)
         stripe_subscription_id = session.get('subscription')
 
-        # Get the user and create a new StripeCustomer
-        user = User.objects.get(id=client_reference_id)
         customer = StripeCustomer.objects.get(
-            user=user,
+            stripe_customer_id=stripe_customer_id,
         )
-        if not customer.stripe_customer_id:
-            customer.stripe_customer_id = stripe_customer_id
         customer.stripe_subscription_id = str(stripe_subscription_id)
         customer.status = StripeCustomer.Status.ACTIVE
         customer.save()
+        print(f'{customer.stripe_customer_id}::{customer.stripe_subscription_id}')
         subject = 'Thanks for subscribing'
+        user = customer.user
+        print(user.email)
         mail = Mail(
             user=user,
             subject=subject,
             header=subject,
             template_name='subscription_success',
-            )
+        )
         mail.message()
-        customer.get_subscription_status()
-    if event['type'].strip() == "customer.subscription.created" or event['type'].strip() == "customer.subscription.updated":
+    if event['type'].strip() == "customer.subscription.created" or event[
+        'type'].strip() == "customer.subscription.updated":
+        session = event['data']['object']
+        stripe_customer_id = session.get('customer').strip()
+        stripe_price_id = session.get('items')['data'][0]['price']['id']
+        stripe_subscription_id = session.get('subscription')
+        customer = StripeCustomer.objects.get(stripe_customer_id=stripe_customer_id)
         if event['type'].strip() == "customer.subscription.created":
             print("creating...")
+            customer.status = StripeCustomer.Status.ACTIVE
+            customer.stripe_subscription_id = stripe_subscription_id
+            customer.save()
+            print(f'{customer.stripe_customer_id}::{customer.stripe_subscription_id}')
         else:
             print('updating...')
         # Occurs whenever a customer is signed up for a new plan.
         # Occurs whenever a subscription changes
         # (e.g., switching from one plan to another,
         # or changing the status from trial to active).
-        session = event['data']['object']
-        stripe_customer_id = session.get('customer').strip()
-        print(session.get('items')['data'][0]['price']['id'])
+
+        print(stripe_price_id)
         try:
-            customer = StripeCustomer.objects.get(stripe_customer_id=stripe_customer_id)
-            customer.subscription_start = int(session.get('current_period_start'))
-            customer.subscription_end = int(session.get('current_period_end'))
-            customer.product = session.get('id')
-            customer.subscription = Subscription.objects.get(stripe_price_id=session.get('items')['data'][0]['price']['id'])
-            customer.status = StripeCustomer.Status.ACTIVE
+            if not customer.stripe_subscription_id:
+                customer.stripe_subscription_id = stripe_subscription_id
+                customer.save()
+                print(f'{customer.stripe_customer_id}::{customer.stripe_subscription_id}')
+            customer.get_subscription_status()
+            # customer.subscription_start = int(session.get('current_period_start'))
+            # customer.subscription_end = int(session.get('current_period_end'))
+            # customer.product = session.get('id')
+            # customer.subscription = Subscription.objects.get(stripe_price_id=str(stripe_price_id).strip())
+            # customer.status = StripeCustomer.Status.ACTIVE
             customer.save()
+            print(f'{customer.stripe_customer_id}::{customer.stripe_subscription_id}')
         except StripeCustomer.DoesNotExist as e:
             print(stripe_customer_id)
+            print(e)
+        except Exception as e:
             print(e)
     if event['type'].strip() == "customer.subscription.deleted":
         print('deleting...')
