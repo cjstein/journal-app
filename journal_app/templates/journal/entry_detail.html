@@ -17,7 +17,9 @@
       <div class="row">
         <div class="col-lg-12">
             <h5>
+              {% if entry.is_scheduled %}{% else %}
               <a href="{% url 'journal:entry_schedule' entry.uuid %}" class="entry-link"><i class="far fa-clock"></i> Schedule</a>
+              {% endif %}
               <a href="{% url 'journal:entry_update' entry.uuid %}" class="entry-link"><i class="far fa-edit"></i> Edit</a>
               <button type="submit" value="1" class="btn btn-danger" onclick="return EntryDeleteConfirmAction('Are you sure you want to remove this entry?', '{{ entry.pk }}')"><i class="far fa-trash-alt"> Delete</i></button>
             </h5>
