@@ -9,7 +9,7 @@ def test_user_owns(request, model: models.Model, pk):
 
 
 def test_user_has_subscription(request):
-    return request.user.subscription.status in ['trialing', 'active']
+    return request.user.customer.status in ['trialing', 'active']
 
 
 def get_entries_from_contact(pk):
