@@ -101,9 +101,6 @@ def stripe_webhook(request):
             payload, sig_header, endpoint_secret
         )
         session = event['data']['object']
-        stripe_customer_id = session.get('customer').strip()
-        stripe_price_id = session.get('items')['data'][0]['price']['id']
-        stripe_subscription_id = session.get('subscription')
     except ValueError as e:
         # Invalid payload
         return HttpResponse(status=400, content=e)
@@ -112,10 +109,13 @@ def stripe_webhook(request):
         return HttpResponse(status=400, content=e)
     if settings.DEBUG:
         try:
-            with open(r'Desktop', 'w') as f:
+            with open(r'Desktop/event_test.txt', 'w') as f:
                 f.write(event)
         except:
             pass
+    stripe_customer_id = session.get('customer').strip()
+    event_type = event['type'].strip()
+    print(f'type:{event_type}::{stripe_customer_id}')
     # Handle the checkout.session.completed event
     # if event['type'].strip() == 'checkout.session.completed':
     #     print('checkout session')
@@ -142,11 +142,13 @@ def stripe_webhook(request):
     #         template_name='subscription_success',
     #     )
     #     mail.message()
-    if event['type'].strip() == "customer.subscription.updated":
-        print('updating...')
-        print(stripe_price_id)
+    if event_type == "customer.subscription.updated":
         try:
+            stripe_subscription_id = session.get('items').get('data')[0].get('subscription')
             customer = StripeCustomer.objects.get(stripe_customer_id=stripe_customer_id)
+            if not customer.stripe_subscription_id:
+                customer.stripe_subscription_id = stripe_subscription_id
+                customer.save()
             customer.get_subscription_status()
             # customer.subscription_start = int(session.get('current_period_start'))
             # customer.subscription_end = int(session.get('current_period_end'))
@@ -160,10 +162,11 @@ def stripe_webhook(request):
             print(e)
         except Exception as e:
             print(e)
-    if event['type'].strip() == "customer.subscription.created":
+    if event_type == "customer.subscription.created":
         print("creating...")
-        print(stripe_price_id)
         try:
+            stripe_subscription_id = session.get('subscription').strip()
+            print(stripe_subscription_id)
             customer = StripeCustomer.objects.get(stripe_customer_id=stripe_customer_id)
             customer.status = StripeCustomer.Status.ACTIVE
             customer.stripe_subscription_id = stripe_subscription_id
@@ -181,7 +184,7 @@ def stripe_webhook(request):
             print(e)
         except Exception as e:
             print(e)
-    if event['type'].strip() == "customer.subscription.deleted":
+    if event_type == "customer.subscription.deleted":
         print('deleting...')
         # Occurs whenever a customer's subscription ends.
         print(stripe_customer_id)
