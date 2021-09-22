@@ -12,7 +12,7 @@ pytestmark = pytest.mark.django_db
 
 
 class TestReleaseEntries(TestCase):
-
+    # Tests the releasing of Entries
     def setUp(self):
         """
         Settings up two different users and testing release of one Users set of entries
@@ -33,7 +33,7 @@ class TestReleaseEntries(TestCase):
 
     def call_command(self, *args, **kwargs):
         """
-        This calls the release entry command.  This command
+        This calls the release entry command.
         """
         out = StringIO()
         call_command(
@@ -46,6 +46,7 @@ class TestReleaseEntries(TestCase):
         return out.getvalue()
 
     def test_release_entries(self):
+        # Test the release of entries of user1 and making sure the other users Entries aren't released
         # Assure the entries are originally not released
         assert self.user1.release_entries is False
         assert self.entry1.released is False
@@ -98,3 +99,7 @@ class TestReleaseEntries(TestCase):
         contact2_emails = Mail.objects.filter(to=self.contact2.email)
         self.assertEqual(contact1_emails[0].to, self.contact1.email)
         self.assertQuerysetEqual(contact2_emails, [])
+
+
+# TODO check release of entries for users who don't have verified email
+# TODO check release of entries for scheduled Entries
