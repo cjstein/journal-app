@@ -276,7 +276,6 @@ class ContactReleasedEntryList(ListView):
 class ContactReleasedEntryDetail(UserPassesTestMixin, DetailView):
     model = Entry
     template_name = 'journal/entry_detail.html'
-    login_url = 'home'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
