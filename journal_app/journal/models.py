@@ -73,10 +73,7 @@ class Entry(TimeStampedModel):
 
     @property
     def modified(self):
-        if self.updated:
-            return True
-        else:
-            return False
+        return bool(self.updated)
 
     def get_absolute_url(self):
         return reverse("journal:entry_detail", kwargs={"pk": self.uuid})
