@@ -145,7 +145,7 @@ class TestContactViews(TestCase):
         # Tests that a contact can visit an Entry detail page after being released
         response = self.client.get(
             reverse('journal:released_entry_detail',
-                    kwargs={'contact': self.contact.uuid, 'pk': self.entry_with_contact.pk}
+                    kwargs={'contact': self.contact.uuid, 'pk': self.entry_with_contact.uuid}
                     ),
         )
         self.assertEqual(response.status_code, 200, "Released Entries Detail Page")

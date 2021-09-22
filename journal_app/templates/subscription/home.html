@@ -4,16 +4,59 @@
 {% block title %}Subscriptions{% endblock %}
 
 {% block content %}
-  <div class="container mt-5">
-    {% if user.subscription.get.status == "active" %}
-      <h5>{{ user.subscription.get.product_name }}</h5>
-      <p>Subscription ends: {{ user.subscription.get.subscription_end|date:"SHORT_DATE_FORMAT" }}</p>
-    {% else %}
-      <form method="POST" action="/create-customer-portal-session">
-        <button type="btn btn-submit">Manage billing</button>
-      </form>
-    {% endif %}
-  </div>
+
+<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+      <h1 class="display-4">Subscriptions</h1>
+      <p class="lead">View all subscriptions here</p>
+    <div class="container">
+      <div class="card-deck mb-3 text-center">
+      {% for subscription in subscriptions %}
+        <div class="card mb-4 box-shadow">
+          <div class="card-header">
+            <h4 class="my-0 font-weight-normal mh-100">{{ subscription.name }}</h4>
+          </div>
+          <div class="card-body d-flex flex-column">
+            <h1 class="card-title pricing-card-title">${{ subscription.price }} <small class="text-muted">{{ subscription.get_price_unit_display }}</small></h1>
+            <ul class="list-unstyled mt-3 mb-4">
+              <li>{{ subscription.bullet_point_1 }}</li>
+              <li>{% if subscription.bullet_point_2 %}{{ subscription.bullet_point_2 }}{% else %}<br>{% endif %}</li>
+              <li>{% if subscription.bullet_point_3 %}{{ subscription.bullet_point_3 }}{% else %}<br>{% endif %}</li>
+              <li>{% if subscription.bullet_point_4 %}{{ subscription.bullet_point_4 }}{% else %}<br>{% endif %}</li>
+            </ul>
+            {% if customer.subscription.uuid == subscription.uuid %}
+              <a href="{% url "subscription:customer_portal" %}" class="">
+                <button id="{{ subscription.uuid }}" type="submit" class="mt-auto stripe-button btn btn-lg btn-block btn-theme-outline">Current Subscription</button>
+              </a>
+            {% elif customer.status == 'active' %}
+              <a href="{% url "subscription:customer_portal" %}" class="">
+                <button id="{{ subscription.uuid }}" type="submit" class="mt-auto stripe-button btn btn-lg btn-block btn-theme">Switch to this</button>
+              </a>
+            {% else %}
+              <button id="{{ subscription.uuid }}" type="button" class="stripe-button mt-auto btn btn-lg btn-block btn-theme" onclick="checkout(this.id)">Get started</button>
+            {% endif %}
+          </div>
+        </div>
+      {% endfor %}
+      {% if customer.status == "trialing" %}
+        <div class="card mb-4 box-shadow">
+          <div class="card-header">
+            <h4 class="my-0 font-weight-normal">Trial</h4>
+          </div>
+          <div class="card-body d-flex flex-column">
+            <h1 class="card-title pricing-card-title">$0 <small class="text-muted">/ mo</small></h1>
+            <ul class="list-unstyled mt-3 mb-4">
+              <li>Test the journal and reminder system</li>
+              <li>No entries will be sent to contacts</li>
+              <li>last 14 days</li>
+            </ul>
+            <button type="button" class="mt-auto btn btn-lg btn-block btn-theme-outline">Current</button>
+          </div>
+        </div>
+      {% endif %}
+      </div>
+    </div>
+</div>
+
 {% endblock %}
 
 {% block extra_js %}

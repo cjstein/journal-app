@@ -9,12 +9,7 @@ def test_user_owns(request, model: models.Model, pk):
 
 
 def test_user_has_subscription(request):
-    # This test whether the User has an active or trial Subscription
-    subscription_valid = (
-        request.user.subscription.status == 'trialing' or
-        request.user.subscription.status == 'active'
-    )
-    return subscription_valid
+    return request.user.customer.status in ['trialing', 'active']
 
 
 def get_entries_from_contact(pk):

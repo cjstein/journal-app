@@ -80,7 +80,6 @@ THIRD_PARTY_APPS = [
     "stripe",
     'bootstrap4',
     'bootstrap_datepicker_plus',
-
 ]
 
 LOCAL_APPS = [
