@@ -49,4 +49,4 @@ class User(AbstractUser):
         return f"{domain}{url}"
 
     def __str__(self):
-        return self.name if self.name else self.username
+        return self.name or self.username

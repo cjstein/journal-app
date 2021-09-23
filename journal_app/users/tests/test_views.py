@@ -9,8 +9,6 @@ from journal_app.users.tests.factories import UserFactory
 from journal_app.users.views import (
     UserRedirectView,
     UserUpdateView,
-    anon_user_checkin_view,
-    user_checkin_view,
     user_detail_view,
 )
 
@@ -94,7 +92,7 @@ class TestUserCheckinView(TestCase):
                              target_status_code=200,
                              fetch_redirect_response=True)
         self.user1.refresh_from_db()
-        assert self.user1.last_checkin != REFERENCE_DATE
+        self.assertNotEqual(self.user1.last_checkin, REFERENCE_DATE)
 
     def test_anon_checkin(self):
         assert self.user2.last_checkin == timezone.datetime(year=2019, month=10, day=30)
