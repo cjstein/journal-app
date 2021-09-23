@@ -172,12 +172,13 @@ def stripe_webhook(request):
             customer.stripe_subscription_id = stripe_subscription_id
             customer.save()
             customer.get_subscription_status()
-            # customer.subscription_start = int(session.get('current_period_start'))
-            # customer.subscription_end = int(session.get('current_period_end'))
-            # customer.product = session.get('id')
-            # customer.subscription = Subscription.objects.get(stripe_price_id=str(stripe_price_id).strip())
-            # customer.status = StripeCustomer.Status.ACTIVE
             customer.save()
+            mail = Mail.objects.create(
+                user=customer.user,
+                subject="Thanks for subscribing!",
+                template_name='subscription_success',
+            )
+            mail.message()
             print(f'{customer.stripe_customer_id}::{customer.stripe_subscription_id} created')
         except StripeCustomer.DoesNotExist as e:
             print(stripe_customer_id)

@@ -9,5 +9,7 @@
 {% endblock %}
 
 {% block content %}
-  Welcome {{ user.username }}.  Thank you for subscribing to the site!
+  {{ user }},<br>
+  Your subscription is a success! Your entries now will be released if you don't check in within {{ user.days_to_release_setting }} days.<br>
+  You can also schedule for an entry to be released.  If you have any questions please feel free to reach out to us at help@timecapsulejournal.com.
 {% endblock %}
