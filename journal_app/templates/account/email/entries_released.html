@@ -10,5 +10,6 @@ You Entries have been released!
 
 {% block content %}
   {{ user.username }},<br/>
-  Your Entries have now been released, if this is an accident, please login and retract the posts here.
+  Your Entries have now been released, if this is an accident, please login and retract the posts <a href="{% url 'users:detail' user.username %}">here</a>.<br>
+  The auto-renew for your subscription has been cancelled.  If you want to keep the auto-renew, please update that in the settings.
 {% endblock %}

@@ -1,5 +1,6 @@
+import stripe
 from django.core.management.base import BaseCommand
-
+from django.conf import settings
 from journal_app.journal.models import Entry
 from journal_app.journal_mail.models import Mail, TextMessage
 from journal_app.utils.bitly import shortener
@@ -42,6 +43,10 @@ class Command(BaseCommand):
                             )
                             message.send_text()
                             message.save()
+                stripe.api_key = settings.STRIPE_SECRET_KEY
+                subscription = stripe.Subscription.retrieve(user.customer.stripe_subscription_id)
+                subscription['cancel_at_period_end'] = True
+                subscription.save()
                 user_mail = Mail.objects.create(
                     user=user,
                     subject='Your entries have been released',

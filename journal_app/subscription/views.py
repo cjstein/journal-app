@@ -116,32 +116,6 @@ def stripe_webhook(request):
     stripe_customer_id = session.get('customer').strip()
     event_type = event['type'].strip()
     print(f'type:{event_type}::{stripe_customer_id}')
-    # Handle the checkout.session.completed event
-    # if event['type'].strip() == 'checkout.session.completed':
-    #     print('checkout session')
-    #     # Fetch all the required data from session
-    #     client_reference_id = session.get('client_reference_id')
-    #     stripe_customer_id = session.get('customer')
-    #     print(stripe_customer_id)
-    #     stripe_subscription_id = session.get('subscription')
-    #
-    #     customer = StripeCustomer.objects.get(
-    #         stripe_customer_id=stripe_customer_id,
-    #     )
-    #     customer.stripe_subscription_id = str(stripe_subscription_id)
-    #     customer.status = StripeCustomer.Status.ACTIVE
-    #     customer.save()
-    #     print(f'{customer.stripe_customer_id}::{customer.stripe_subscription_id}')
-    #     subject = 'Thanks for subscribing'
-    #     user = customer.user
-    #     print(user.email)
-    #     mail = Mail(
-    #         user=user,
-    #         subject=subject,
-    #         header=subject,
-    #         template_name='subscription_success',
-    #     )
-    #     mail.message()
     if event_type == "customer.subscription.updated":
         try:
             stripe_subscription_id = session.get('items').get('data')[0].get('subscription')
@@ -150,11 +124,6 @@ def stripe_webhook(request):
                 customer.stripe_subscription_id = stripe_subscription_id
                 customer.save()
             customer.get_subscription_status()
-            # customer.subscription_start = int(session.get('current_period_start'))
-            # customer.subscription_end = int(session.get('current_period_end'))
-            # customer.product = session.get('id')
-            # customer.subscription = Subscription.objects.get(stripe_price_id=str(stripe_price_id).strip())
-            # customer.status = StripeCustomer.Status.ACTIVE
             customer.save()
             print(f'{customer.stripe_customer_id}::{customer.stripe_subscription_id} updated')
         except StripeCustomer.DoesNotExist as e:
@@ -194,6 +163,8 @@ def stripe_webhook(request):
         customer.stripe_subscription_id = None
         customer.subscription_end = None
         customer.subscription_start = None
+        customer.product_name = None
+        customer.subscription_cache = session.get('items').get('data')[0]
         customer.save()
         # TODO add an email to confirm cancellation
     return HttpResponse(status=200)

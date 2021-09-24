@@ -99,7 +99,7 @@ class EntryUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
 
         if owner_valid and not subscription_valid:
             messages.add_message(self.request, messages.ERROR, 'Please activate your subscription')
-            return redirect('users:settings')
+            return redirect('subscription:home')
 
 
 class EntryScheduleView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
@@ -123,6 +123,20 @@ class EntryScheduleView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
         owner_valid = test_user_owns(self.request, Entry, self.kwargs['pk'])
         subscription_valid = test_user_has_subscription(self.request)
         return owner_valid and subscription_valid
+
+    def handle_no_permission(self):
+        owner_valid = test_user_owns(self.request, Entry, self.kwargs['pk'])
+        subscription_valid = test_user_has_subscription(self.request)
+        if subscription_valid and not owner_valid:
+            messages.add_message(self.request, messages.ERROR, 'Unable to access that object')
+            return redirect('journal:entry_list')
+
+        if owner_valid and not subscription_valid:
+            messages.add_message(self.request,
+                                 messages.ERROR,
+                                 'Please activate your subscription to schedule released entries',
+                                 )
+            return redirect('subscription:home')
 
 
 class EntryDeleteView(UserPassesTestMixin, LoginRequiredMixin, RedirectView):

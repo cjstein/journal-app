@@ -30,7 +30,7 @@ class EntryForm(ModelForm):
             'contact': autocomplete.ModelSelect2Multiple(url='journal:contact-autocomplete'),
         }
         labels = {
-            'public': 'Release everyone on your contact list?',
+            'public': ' Release to everyone?',
             'contact': 'Share with:',
         }
 
