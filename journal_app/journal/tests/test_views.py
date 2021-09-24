@@ -125,6 +125,8 @@ class TestContactViews(TestCase):
         self.contact = ContactFactory(user=self.user)
         self.entry_with_contact.contact.add(self.contact)
         self.entry_with_contact.save()
+        self.contact.save()
+        self.user.save()
         call_command('release_entries')
         self.user.refresh_from_db()
         self.entry_with_contact.refresh_from_db()
@@ -143,9 +145,10 @@ class TestContactViews(TestCase):
 
     def test_entries_released_detail(self):
         # Tests that a contact can visit an Entry detail page after being released
+        self.client = Client()
         response = self.client.get(
             reverse('journal:released_entry_detail',
-                    kwargs={'contact': self.contact.uuid, 'pk': self.entry_with_contact.uuid}
+                    kwargs={'contact': self.contact.uuid, 'pk': self.entry_with_contact.pk}
                     ),
         )
         self.assertEqual(response.status_code, 200, "Released Entries Detail Page")

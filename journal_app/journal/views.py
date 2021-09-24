@@ -99,7 +99,7 @@ class EntryUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
 
         if owner_valid and not subscription_valid:
             messages.add_message(self.request, messages.ERROR, 'Please activate your subscription')
-            return redirect('users:settings')
+            return redirect('subscription:home')
 
 
 class EntryScheduleView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
