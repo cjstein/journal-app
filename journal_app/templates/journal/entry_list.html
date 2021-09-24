@@ -30,7 +30,7 @@
           {% if entry.is_scheduled %}
             <i class="far fa-calendar-check"></i> Scheduled: {{ entry.scheduled_time|naturalday }}
           {% endif %}
-          {{ entry.body|safe|truncatewords:75 }}
+          <p>{{ entry.body|safe|truncatewords:75 }}</p>
         </div>
       </div>
     <hr/>
