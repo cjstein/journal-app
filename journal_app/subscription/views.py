@@ -116,32 +116,6 @@ def stripe_webhook(request):
     stripe_customer_id = session.get('customer').strip()
     event_type = event['type'].strip()
     print(f'type:{event_type}::{stripe_customer_id}')
-    # Handle the checkout.session.completed event
-    # if event['type'].strip() == 'checkout.session.completed':
-    #     print('checkout session')
-    #     # Fetch all the required data from session
-    #     client_reference_id = session.get('client_reference_id')
-    #     stripe_customer_id = session.get('customer')
-    #     print(stripe_customer_id)
-    #     stripe_subscription_id = session.get('subscription')
-    #
-    #     customer = StripeCustomer.objects.get(
-    #         stripe_customer_id=stripe_customer_id,
-    #     )
-    #     customer.stripe_subscription_id = str(stripe_subscription_id)
-    #     customer.status = StripeCustomer.Status.ACTIVE
-    #     customer.save()
-    #     print(f'{customer.stripe_customer_id}::{customer.stripe_subscription_id}')
-    #     subject = 'Thanks for subscribing'
-    #     user = customer.user
-    #     print(user.email)
-    #     mail = Mail(
-    #         user=user,
-    #         subject=subject,
-    #         header=subject,
-    #         template_name='subscription_success',
-    #     )
-    #     mail.message()
     if event_type == "customer.subscription.updated":
         try:
             stripe_subscription_id = session.get('items').get('data')[0].get('subscription')
