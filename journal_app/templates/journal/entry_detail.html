@@ -45,7 +45,7 @@
             {% if entry.contact.all|length == 1 %}
               <a href="{{ contact.get_absolute_url }}" class="entry-link">{{ contact.name }}</a>
             {% elif not forloop.last %}
-              <a href="{{ contact.get_absolute_url }}" class="entry-link">{{ contact.name }}</a>,
+              <a href="{{ contact.get_absolute_url }}" class="entry-link">{{ contact.name }}</a>, 
             {% else %}
               <a href="{{ contact.get_absolute_url }}" class="entry-link">{{ contact.name }}</a>
             {% endif %}
