@@ -150,11 +150,6 @@ def stripe_webhook(request):
                 customer.stripe_subscription_id = stripe_subscription_id
                 customer.save()
             customer.get_subscription_status()
-            # customer.subscription_start = int(session.get('current_period_start'))
-            # customer.subscription_end = int(session.get('current_period_end'))
-            # customer.product = session.get('id')
-            # customer.subscription = Subscription.objects.get(stripe_price_id=str(stripe_price_id).strip())
-            # customer.status = StripeCustomer.Status.ACTIVE
             customer.save()
             print(f'{customer.stripe_customer_id}::{customer.stripe_subscription_id} updated')
         except StripeCustomer.DoesNotExist as e:
@@ -194,6 +189,8 @@ def stripe_webhook(request):
         customer.stripe_subscription_id = None
         customer.subscription_end = None
         customer.subscription_start = None
+        customer.product_name = None
+        customer.subscription_cache = session.get('items').get('data')[0]
         customer.save()
         # TODO add an email to confirm cancellation
     return HttpResponse(status=200)
