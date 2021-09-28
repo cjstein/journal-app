@@ -32,8 +32,8 @@ class ActiveSubscriberFactory(DjangoModelFactory):
 
 class TrialSubscriberFactory(DjangoModelFactory):
     user = SubFactory(UserFactory)
-    stripe_customer_id = fuzzy.FuzzyText(length=18, chars=string.ascii_letters+string.digits, prefix='cus_')
-    stripe_subscription_id = fuzzy.FuzzyText(length=18, chars=string.ascii_letters+string.digits, prefix='sub_')
+    # stripe_customer_id = fuzzy.FuzzyText(length=18, chars=string.ascii_letters+string.digits, prefix='cus_')
+    # stripe_subscription_id = fuzzy.FuzzyText(length=18, chars=string.ascii_letters+string.digits, prefix='sub_')
     product = fuzzy.FuzzyText(length=18, chars=string.ascii_letters+string.digits, prefix='prod_')
     status = StripeCustomer.Status.TRIAL
     trial_end = datetime.date.today() + datetime.timedelta(days=14)
