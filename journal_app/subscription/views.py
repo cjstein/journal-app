@@ -15,10 +15,17 @@ from journal_app.users.models import User
 
 @login_required
 def home(request):
+    stripe.api_key = settings.STRIPE_SECRET_KEY
     try:
         customer = StripeCustomer.objects.get(user=request.user)
+        if not customer.stripe_customer_id:
+            stripe_customer = stripe.Customer.create(
+                email = request.user.email,
+                description = str(request.user)
+            )
+            customer.stripe_customer_id = stripe_customer.id
+            customer.save()
     except ObjectDoesNotExist:
-        stripe.api_key = settings.STRIPE_SECRET_KEY
         stripe_customer = stripe.Customer.create(
             email=request.user.email,
             description=str(request.user),

@@ -19,5 +19,6 @@ class TestSubscriptionViews(TestCase):
         self.assertIsNone(self.customer.stripe_customer_id)
         response = self.client.get(reverse('subscription:home'))
         self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'subscription/home.html')
+        self.customer.refresh_from_db()
         self.assertIsNotNone(self.customer.stripe_customer_id)
-        self.assertTemplateUsed(response, 'home.html')
