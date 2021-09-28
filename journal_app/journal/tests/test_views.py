@@ -1,11 +1,9 @@
 import pytest
-from django.core.exceptions import PermissionDenied
 from django.core.management import call_command
 from django.test import RequestFactory, TestCase, Client
 from django.urls import reverse
-
+from journal_app.subscription.tests.factories import ActiveSubscriberFactory
 from journal_app.journal.tests.factories import EntryFactory, ContactFactory
-from journal_app.users.tests.factories import UserFactory
 from journal_app.journal.views import (
     EntryCreateView,
     EntryDetailView,
@@ -22,9 +20,10 @@ class TestEntryViews(TestCase):
     def setUp(self):
         # Every test needs access to the request factory
         self.factory = RequestFactory()
-        self.entry1 = EntryFactory()
-        self.entry2 = EntryFactory()
-        self.user = self.entry1.user
+        self.subscribed_customer = ActiveSubscriberFactory()
+        self.user = self.subscribed_customer.user
+        self.entry1 = EntryFactory(user=self.user)
+        self.entry2 = EntryFactory(user=self.user)
         self.client = Client()
         self.client.force_login(user=self.user)
 
@@ -119,7 +118,9 @@ class TestContactViews(TestCase):
     # These tests are for contact views
     def setUp(self):
         # Every test needs access to the request factory
-        self.user = UserFactory(last_checkin=REFERENCE_DATE)
+        self.subscribed_customer = ActiveSubscriberFactory()
+        self.user = self.subscribed_customer.user
+        self.user.last_checkin = REFERENCE_DATE
         self.entry_with_contact = EntryFactory(user=self.user)
         self.entry_no_contact = EntryFactory(user=self.user)
         self.contact = ContactFactory(user=self.user)

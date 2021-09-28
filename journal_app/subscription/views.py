@@ -3,6 +3,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.sites.models import Site
+from django.core.exceptions import ObjectDoesNotExist
 from django.http.response import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
@@ -14,7 +15,15 @@ from journal_app.users.models import User
 
 @login_required
 def home(request):
-    customer = StripeCustomer.objects.get(user=request.user)
+    try:
+        customer = StripeCustomer.objects.get(user=request.user)
+    except ObjectDoesNotExist:
+        stripe.api_key = settings.STRIPE_SECRET_KEY
+        stripe_customer = stripe.Customer.create(
+            email=request.user.email,
+            description=str(request.user),
+        )
+        customer = StripeCustomer.objects.create(user=request.user, stripe_customer_id=stripe_customer.stripe_id)
     subscriptions = Subscription.objects.all()
     context = {
         'user': request.user,
