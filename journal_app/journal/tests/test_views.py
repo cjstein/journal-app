@@ -43,7 +43,7 @@ class TestEntryViews(TestCase):
             reverse('journal:entry_detail', kwargs={'pk': self.entry2.uuid}),
             follow=True,
         )
-        self.assertEqual(response.status_code, 403, "Redirects correctly")
+        self.assertEqual(response.status_code, 200, "Redirects correctly")
         self.assertTemplateNotUsed(r'journal/entry_detail.html')
         self.assertTemplateUsed(r'journal/entry_list.html')
 
@@ -101,7 +101,9 @@ class TestEntryViews(TestCase):
             reverse('journal:entry_delete', kwargs={'pk': self.entry1.uuid}),
             follow=True
         )
-        self.assertEqual(response.status_code, 403, "Wrong Entry Delete Success")
+        self.assertEqual(response.status_code, 200, "Wrong Entry Delete Success redirect")
+        self.assertTemplateNotUsed('journal:entry_delete')
+        self.assertTemplateUsed('journal:entry_list')
 
     def test_delete_view_success(self):
         # Tests that someone can delete successfully

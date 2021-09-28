@@ -24,8 +24,6 @@ class TestReleaseEntries(TestCase):
         self.user2 = self.subscribed_customer2.user
         self.entry1 = EntryFactory(user=self.user1)
         self.entry2 = EntryFactory(user=self.user2)
-        self.entry1.save()
-        self.entry2.save()
         self.contact1 = ContactFactory(user=self.user1)
         self.contact2 = ContactFactory(user=self.user1)
 
@@ -89,7 +87,6 @@ class TestReleaseEntries(TestCase):
         self.assertEqual(contact1_emails[0].to, self.contact1.email)
         self.assertQuerysetEqual(contact2_emails, [])
 
-    # TODO Rename this here and in `test_release_entries`
     def _test_release_entries(self):
         # Assure the other user and entry originally aren't released
         assert self.user2.release_entries is False
