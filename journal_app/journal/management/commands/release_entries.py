@@ -43,10 +43,13 @@ class Command(BaseCommand):
                             )
                             message.send_text()
                             message.save()
-                stripe.api_key = settings.STRIPE_SECRET_KEY
-                subscription = stripe.Subscription.retrieve(user.customer.stripe_subscription_id)
-                subscription['cancel_at_period_end'] = True
-                subscription.save()
+                try:
+                    stripe.api_key = settings.STRIPE_SECRET_KEY
+                    subscription = stripe.Subscription.retrieve(user.customer.stripe_subscription_id)
+                    subscription['cancel_at_period_end'] = True
+                    subscription.save()
+                except Exception as e:
+                    pass
                 user_mail = Mail.objects.create(
                     user=user,
                     subject='Your entries have been released',
