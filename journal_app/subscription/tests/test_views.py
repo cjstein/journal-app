@@ -1,4 +1,7 @@
 import pytest
+import string
+from factory import fuzzy
+from unittest.mock import patch
 from django.test import TestCase, Client
 from django.urls import reverse
 from journal_app.subscription.tests.factories import TrialSubscriberFactory
@@ -14,7 +17,9 @@ class TestSubscriptionViews(TestCase):
         self.client = Client()
         self.client.force_login(user=self.user)
 
-    def test_subscription_home_view(self):
+    @patch('stripe.Customer.create')
+    def test_subscription_home_view(self, mock_create):
+        mock_create.return_value.id = f'{fuzzy.FuzzyText(length=18, chars=string.ascii_letters+string.digits, prefix="cus_")}'
         # Tests the view for the subscription home including the creation of the stripe customer
         self.assertIsNone(self.customer.stripe_customer_id)
         response = self.client.get(reverse('subscription:home'))

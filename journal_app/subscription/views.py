@@ -20,8 +20,8 @@ def home(request):
         customer = StripeCustomer.objects.get(user=request.user)
         if not customer.stripe_customer_id:
             stripe_customer = stripe.Customer.create(
-                email = request.user.email,
-                description = str(request.user)
+                email=request.user.email,
+                description=str(request.user)
             )
             customer.stripe_customer_id = stripe_customer.id
             customer.save()
