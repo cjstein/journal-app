@@ -22,6 +22,10 @@ class TestReleaseEntries(TestCase):
         self.subscribed_customer2 = ActiveSubscriberFactory()
         self.user1 = self.subscribed_customer1.user
         self.user2 = self.subscribed_customer2.user
+        self.user1.email_verified = True
+        self.user2.email_verified = True
+        self.user1.save()
+        self.user2.save()
         self.entry1 = EntryFactory(user=self.user1)
         self.entry2 = EntryFactory(user=self.user2)
         self.contact1 = ContactFactory(user=self.user1)
