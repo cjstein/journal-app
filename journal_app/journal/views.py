@@ -287,7 +287,7 @@ class ContactReleasedEntryList(ListView):
         return context
 
 
-class ContactReleasedEntryDetail(UserPassesTestMixin, DetailView):
+class ContactReleasedEntryDetail(DetailView):
     model = Entry
     template_name = 'journal/entry_detail.html'
 
@@ -297,7 +297,3 @@ class ContactReleasedEntryDetail(UserPassesTestMixin, DetailView):
         context['entry'] = Entry.objects.get(pk=self.kwargs['pk'])
         context['released'] = True
         return context
-
-    def test_func(self):
-        contact = Contact.objects.get(pk=self.kwargs['contact'])
-        return contact.user.entries_released
