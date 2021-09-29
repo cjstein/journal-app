@@ -12,7 +12,6 @@ from journal_app.users.tests.factories import UserFactory
 
 class ActiveSubscriberFactory(DjangoModelFactory):
     user = SubFactory(UserFactory)
-    user.email_verified = True
     stripe_customer_id = fuzzy.FuzzyText(length=18, chars=string.ascii_letters+string.digits, prefix='cus_')
     stripe_subscription_id = fuzzy.FuzzyText(length=18, chars=string.ascii_letters+string.digits, prefix='sub_')
     product = fuzzy.FuzzyText(length=18, chars=string.ascii_letters+string.digits, prefix='prod_')
