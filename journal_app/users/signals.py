@@ -6,7 +6,8 @@ from django.dispatch import receiver
 from journal_app.users.models import User
 from journal_app.subscription.models import StripeCustomer
 
-# Trying to test mocking and not create users
+
+# Trying to test mocking and not create stripe customers at every User instance
 # @receiver(post_save, sender=User)
 # def create_stripe_customer(sender, instance, created, **kwargs):
 #     stripe.api_key = settings.STRIPE_SECRET_KEY
