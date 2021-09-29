@@ -61,11 +61,9 @@ def create_checkout_session(request, **kwargs):
         customer_id = customer.stripe_customer_id
         print(customer_id)
         subscription_id = customer.stripe_subscription_id
-        email = request.user.email
 
     except StripeCustomer.DoesNotExist:
         customer_id = None
-        email = request.user.email
         subscription_id = None
 
     try:
