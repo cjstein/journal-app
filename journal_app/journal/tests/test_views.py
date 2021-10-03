@@ -1,11 +1,9 @@
 import pytest
-from django.core.exceptions import PermissionDenied
 from django.core.management import call_command
 from django.test import RequestFactory, TestCase, Client
 from django.urls import reverse
-
+from journal_app.subscription.tests.factories import ActiveSubscriberFactory
 from journal_app.journal.tests.factories import EntryFactory, ContactFactory
-from journal_app.users.tests.factories import UserFactory
 from journal_app.journal.views import (
     EntryCreateView,
     EntryDetailView,
@@ -22,9 +20,12 @@ class TestEntryViews(TestCase):
     def setUp(self):
         # Every test needs access to the request factory
         self.factory = RequestFactory()
-        self.entry1 = EntryFactory()
-        self.entry2 = EntryFactory()
-        self.user = self.entry1.user
+        self.subscribed_customer = ActiveSubscriberFactory()
+        self.user = self.subscribed_customer.user
+        self.user.email_verified = True
+        self.user.save()
+        self.entry1 = EntryFactory(user=self.user)
+        self.entry2 = EntryFactory(user=self.user)
         self.client = Client()
         self.client.force_login(user=self.user)
 
@@ -44,7 +45,7 @@ class TestEntryViews(TestCase):
             reverse('journal:entry_detail', kwargs={'pk': self.entry2.uuid}),
             follow=True,
         )
-        self.assertEqual(response.status_code, 403, "Redirects correctly")
+        self.assertEqual(response.status_code, 200, "Redirects correctly")
         self.assertTemplateNotUsed(r'journal/entry_detail.html')
         self.assertTemplateUsed(r'journal/entry_list.html')
 
@@ -102,7 +103,9 @@ class TestEntryViews(TestCase):
             reverse('journal:entry_delete', kwargs={'pk': self.entry1.uuid}),
             follow=True
         )
-        self.assertEqual(response.status_code, 403, "Wrong Entry Delete Success")
+        self.assertEqual(response.status_code, 200, "Wrong Entry Delete Success redirect")
+        self.assertTemplateNotUsed('journal:entry_delete')
+        self.assertTemplateUsed('journal:entry_list')
 
     def test_delete_view_success(self):
         # Tests that someone can delete successfully
@@ -119,7 +122,9 @@ class TestContactViews(TestCase):
     # These tests are for contact views
     def setUp(self):
         # Every test needs access to the request factory
-        self.user = UserFactory(last_checkin=REFERENCE_DATE)
+        self.subscribed_customer = ActiveSubscriberFactory()
+        self.user = self.subscribed_customer.user
+        self.user.last_checkin = REFERENCE_DATE
         self.entry_with_contact = EntryFactory(user=self.user)
         self.entry_no_contact = EntryFactory(user=self.user)
         self.contact = ContactFactory(user=self.user)

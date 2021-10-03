@@ -3,8 +3,8 @@ import pytest
 from django.core.management import call_command
 from django.test import TestCase
 from journal_app.subscription.models import StripeCustomer
-from journal_app.users.tests.factories import UserFactory
-from journal_app.journal.tests.test_views import REFERENCE_DATE
+from journal_app.subscription.tests.factories import ActiveSubscriberFactory, ExpiredSubscriberFactory, TrialSubscriberFactory
+from journal_app.users.tests.test_views import REFERENCE_DATE
 
 
 pytestmark = pytest.mark.django_db
@@ -14,23 +14,22 @@ class TestTrialEndCommand(TestCase):
     """ Create two different user one where a trial ends and one where it should and make sure they all work correctly.
     """
     def setUp(self):
-        self.active_user = UserFactory()
-        self.second_active_user = UserFactory()
-        self.expired_user = UserFactory()
-        self.expired_user.customer.trial_end = REFERENCE_DATE
-        self.expired_user.customer.status = StripeCustomer.Status.CANCELLED
-        self.expired_user.customer.save()
+        self.trial_customer = TrialSubscriberFactory()
+        self.active_customer = ActiveSubscriberFactory()
+        self.expired_customer = ExpiredSubscriberFactory()
+        self.trial_customer.trial_end = REFERENCE_DATE
+        self.trial_customer.save()
 
     def refresh_users_from_db(self):
-        self.active_user.refresh_from_db()
-        self.second_active_user.refresh_from_db()
-        self.expired_user.refresh_from_db()
+        self.active_customer.refresh_from_db()
+        self.trial_customer.refresh_from_db()
+        self.expired_customer.refresh_from_db()
 
     def test_setup(self):
         self.refresh_users_from_db()
-        self.assertEqual(self.active_user.customer.status, 'trialing')
-        self.assertEqual(self.second_active_user.customer.status, 'trialing')
-        self.assertEqual(self.expired_user.customer.status, 'cancelled')
+        self.assertEqual(self.active_customer.status, 'active')
+        self.assertEqual(self.trial_customer.status, 'trialing')
+        self.assertEqual(self.expired_customer.status, 'cancelled')
 
     def call_command(self, *args, **kwargs):
         """
@@ -47,15 +46,11 @@ class TestTrialEndCommand(TestCase):
         return out.getvalue()
 
     def test_trial_end_command(self):
-        self.active_user.customer.trial_end = REFERENCE_DATE
-        self.active_user.customer.save()
         self.call_command()
-        self.active_user_subscription = StripeCustomer.objects.get(user=self.active_user)
-        self.second_active_user_subscription = StripeCustomer.objects.get(user=self.second_active_user)
-        self.expired_user_subscription = StripeCustomer.objects.get(user=self.expired_user)
-        self.assertEqual(self.active_user_subscription.status, 'cancelled')
-        self.assertEqual(self.second_active_user_subscription.status, 'trialing')
-        self.assertEqual(self.expired_user_subscription.status, 'cancelled')
+        self.refresh_users_from_db()
+        self.assertEqual(self.active_customer.status, 'active')
+        self.assertEqual(self.trial_customer.status, 'cancelled')
+        self.assertEqual(self.expired_customer.status, 'cancelled')
 
 
 

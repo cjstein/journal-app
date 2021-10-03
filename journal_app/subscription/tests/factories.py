@@ -17,8 +17,8 @@ class ActiveSubscriberFactory(DjangoModelFactory):
     product = fuzzy.FuzzyText(length=18, chars=string.ascii_letters+string.digits, prefix='prod_')
     status = StripeCustomer.Status.ACTIVE
     subscription_start = fuzzy.FuzzyDate(
-        start_date=datetime.date(2020, 1, 1),
-        end_date=datetime.date(2020, 12, 31),
+        start_date=datetime.date(datetime.date.today().year, 1, 1),
+        end_date=datetime.date(datetime.date.today().year, 12, 31),
     )
     subscription_end = fuzzy.FuzzyDate(
         start_date=datetime.date.today(),
@@ -31,8 +31,8 @@ class ActiveSubscriberFactory(DjangoModelFactory):
 
 class TrialSubscriberFactory(DjangoModelFactory):
     user = SubFactory(UserFactory)
-    stripe_customer_id = fuzzy.FuzzyText(length=18, chars=string.ascii_letters+string.digits, prefix='cus_')
-    stripe_subscription_id = fuzzy.FuzzyText(length=18, chars=string.ascii_letters+string.digits, prefix='sub_')
+    # stripe_customer_id = fuzzy.FuzzyText(length=18, chars=string.ascii_letters+string.digits, prefix='cus_')
+    # stripe_subscription_id = fuzzy.FuzzyText(length=18, chars=string.ascii_letters+string.digits, prefix='sub_')
     product = fuzzy.FuzzyText(length=18, chars=string.ascii_letters+string.digits, prefix='prod_')
     status = StripeCustomer.Status.TRIAL
     trial_end = datetime.date.today() + datetime.timedelta(days=14)
@@ -48,7 +48,7 @@ class ExpiredSubscriberFactory(DjangoModelFactory):
     product = fuzzy.FuzzyText(length=18, chars=string.ascii_letters+string.digits, prefix='prod_')
     status = StripeCustomer.Status.CANCELLED
     subscription_end = fuzzy.FuzzyDate(
-        start_date=datetime.date(2021, 1, 1),
+        start_date=datetime.date(datetime.date.today().year, 1, 1),
         end_date=datetime.date.today(),
     )
     subscription_start = fuzzy.FuzzyDate(

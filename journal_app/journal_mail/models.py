@@ -74,6 +74,7 @@ class Mail(models.Model):
 
 class TextMessage(models.Model):
     contact = models.ForeignKey(Contact, on_delete=models.SET_NULL, null=True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     body = models.TextField(blank=False)
     number = models.CharField(validators=[phone_regex], max_length=17, blank=True, null=True)
     sent_on = models.DateTimeField(blank=True, null=True)

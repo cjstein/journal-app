@@ -38,15 +38,19 @@ class Command(BaseCommand):
                             url = shortener(contact.released_entries_url)
                             body = f'{user} has shared entries with you on Time Capsule Journal.  Click {url} to view.'
                             message = TextMessage.objects.create(
+                                user=user,
                                 contact=contact,
                                 body=body
                             )
                             message.send_text()
                             message.save()
-                stripe.api_key = settings.STRIPE_SECRET_KEY
-                subscription = stripe.Subscription.retrieve(user.customer.stripe_subscription_id)
-                subscription['cancel_at_period_end'] = True
-                subscription.save()
+                try:
+                    stripe.api_key = settings.STRIPE_SECRET_KEY
+                    subscription = stripe.Subscription.retrieve(user.customer.stripe_subscription_id)
+                    subscription['cancel_at_period_end'] = True
+                    subscription.save()
+                except Exception as e:
+                    pass
                 user_mail = Mail.objects.create(
                     user=user,
                     subject='Your entries have been released',

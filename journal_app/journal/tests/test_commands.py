@@ -4,6 +4,7 @@ import pytest
 from django.core.management import call_command
 from django.test import TestCase
 
+from journal_app.subscription.tests.factories import ActiveSubscriberFactory
 from journal_app.journal.tests.factories import ContactFactory, EntryFactory
 from journal_app.journal_mail.models import Mail
 from journal_app.users.tests.test_views import REFERENCE_DATE
@@ -17,17 +18,16 @@ class TestReleaseEntries(TestCase):
         """
         Settings up two different users and testing release of one Users set of entries
         """
-        self.entry1 = EntryFactory()
-        self.entry2 = EntryFactory()
-
-        self.user1 = self.entry1.user
+        self.subscribed_customer1 = ActiveSubscriberFactory()
+        self.subscribed_customer2 = ActiveSubscriberFactory()
+        self.user1 = self.subscribed_customer1.user
+        self.user2 = self.subscribed_customer2.user
         self.user1.email_verified = True
-        self.user1.save()
-
-        self.user2 = self.entry2.user
         self.user2.email_verified = True
+        self.user1.save()
         self.user2.save()
-
+        self.entry1 = EntryFactory(user=self.user1)
+        self.entry2 = EntryFactory(user=self.user2)
         self.contact1 = ContactFactory(user=self.user1)
         self.contact2 = ContactFactory(user=self.user1)
 
@@ -58,12 +58,7 @@ class TestReleaseEntries(TestCase):
         self.user1.refresh_from_db()
         # Assure the contact was correctly added to the entry
         self.assertQuerysetEqual(self.entry1.contact.all(), [str(self.contact1)], transform=str)
-        # Assure the other user and entry originally aren't released
-        assert self.user2.release_entries is False
-        assert self.entry2.released is False
-        # We are calling the command with the current date and time as the last_checkin
-        # to make sure the entries aren't released by accident
-        out = self.call_command()
+        self._test_release_entries()
         assert self.user1.release_entries is False
         assert self.entry1.released is False
         assert self.user2.release_entries is False
@@ -85,11 +80,7 @@ class TestReleaseEntries(TestCase):
         contact2_emails = Mail.objects.filter(to=self.contact2.email)
         self.assertEqual(contact1_emails[0].to, self.contact1.email)
         self.assertQuerysetEqual(contact2_emails, [])
-        # Make sure the command didn't incorrectly trigger the other users release when it shouldn't
-        assert self.user2.release_entries is False
-        assert self.entry2.released is False
-        # Run the command again to make sure there weren't duplicate emails
-        out = self.call_command() # noqa F841
+        self._test_release_entries()
         self.user1.refresh_from_db()
         self.entry1.refresh_from_db()
         self.entry2.refresh_from_db()
@@ -99,6 +90,14 @@ class TestReleaseEntries(TestCase):
         contact2_emails = Mail.objects.filter(to=self.contact2.email)
         self.assertEqual(contact1_emails[0].to, self.contact1.email)
         self.assertQuerysetEqual(contact2_emails, [])
+
+    def _test_release_entries(self):
+        # Assure the other user and entry originally aren't released
+        assert self.user2.release_entries is False
+        assert self.entry2.released is False
+        # We are calling the command with the current date and time as the last_checkin
+        # to make sure the entries aren't released by accident
+        out = self.call_command()
 
 
 # TODO check release of entries for users who don't have verified email
