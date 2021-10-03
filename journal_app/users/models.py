@@ -23,7 +23,8 @@ class User(AbstractUser):
     email_verified = BooleanField(default=False)
 
     def get_absolute_url(self):
-        return reverse("users:detail", kwargs={"username": self.username})
+        domain = Site.objects.get_current().domain
+        return domain + reverse("users:detail", kwargs={"username": self.username})
 
     @property
     def checkin_deadline(self):
