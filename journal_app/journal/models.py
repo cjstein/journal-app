@@ -41,7 +41,8 @@ class Contact(TimeStampedModel):
     # Possibly add signal bot
 
     def get_absolute_url(self):
-        return reverse("journal:contact_entry_list", kwargs={"pk": self.uuid})
+        domain = Site.objects.get_current().domain
+        return domain + reverse("journal:contact_entry_list", kwargs={"pk": self.uuid})
 
     def released_entries_url(self):
         domain = Site.objects.get_current().domain
@@ -76,7 +77,8 @@ class Entry(TimeStampedModel):
         return bool(self.updated)
 
     def get_absolute_url(self):
-        return reverse("journal:entry_detail", kwargs={"pk": self.uuid})
+        domain = Site.objects.get_current().domain
+        return domain + reverse("journal:entry_detail", kwargs={"pk": self.uuid})
 
     def __str__(self):
         return self.title
