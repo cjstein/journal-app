@@ -32,6 +32,7 @@ class Command(BaseCommand):
                         url = shortener(contact.released_entries_url)
                         body = f'{entry.user} has shared entries with you on Time Capsule Journal.  Click {url} to view.'
                         message = TextMessage.objects.create(
+                            user=entry.user,
                             contact=contact,
                             body=body
                         )

@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from journal_app.journal_mail.models import Mail
+from journal_app.journal_mail.models import Mail, TextMessage
 
 
 @admin.register(Mail)
@@ -26,4 +26,13 @@ class MailItem(admin.ModelAdmin):
     list_filter = (
         'user',
         'template_name',
+    )
+
+
+@admin.register(TextMessage)
+class TextMessageAdmin(admin.ModelAdmin):
+    list_display = (
+        'user',
+        'sent_on',
+        'status',
     )
