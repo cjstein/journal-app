@@ -41,3 +41,5 @@ class Command(BaseCommand):
                 template_name='entries_released',
             )
             user_mail.message()
+            entry.released = True
+            entry.save()
