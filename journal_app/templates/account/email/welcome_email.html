@@ -9,5 +9,5 @@ Thanks for joining!
 {% endblock %}
 
 {% block content %}
-  Welcome {{ user }}.  Thank you for joining the site!  Please visit our tutorial page to see how it works.
+  Welcome {{ user }}.  Thank you for joining the site!  Please visit our <a href="{% url 'tutorial' %}">tutorial page</a> to see how it works.
 {% endblock %}
