@@ -2,7 +2,7 @@ import pytest
 
 from django.test import TestCase
 from django.utils import timezone
-
+from django.contrib.sites.models import Site
 from journal_app.users.models import User
 from journal_app.users.tests.factories import UserFactory
 
@@ -10,7 +10,8 @@ pytestmark = pytest.mark.django_db
 
 
 def test_user_get_absolute_url(user: User):
-    assert user.get_absolute_url() == f"/users/{user.username}/"
+    domain = Site.objects.get_current().domain
+    assert user.get_absolute_url() == f"{domain}/users/{user.username}/"
 
 
 def test_user_checkin_deadline(user: User):

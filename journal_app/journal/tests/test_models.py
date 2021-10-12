@@ -1,6 +1,7 @@
 import pytest
 
 from journal_app.journal.tests.factories import ContactFactory, EntryFactory
+from django.contrib.sites.models import Site
 
 pytestmark = pytest.mark.django_db
 
@@ -18,7 +19,8 @@ def test_entry_repr():
 def test_entry_get_absolute_url():
     entry = EntryFactory()
     url = entry.get_absolute_url()
-    assert url == f'/journal/entry/{entry.uuid}/'
+    domain = Site.objects.get_current().domain
+    assert url == f'{domain}/journal/entry/{entry.uuid}/'
 
 
 # Contact Tests
@@ -37,4 +39,5 @@ def test_contact_repr():
 def test_contact_get_absolute_url():
     contact = ContactFactory()
     url = contact.get_absolute_url()
-    assert url == f'/journal/contact/{contact.uuid}/entries/'
+    domain = Site.objects.get_current().domain
+    assert url == f'{domain}/journal/contact/{contact.uuid}/entries/'
