@@ -78,6 +78,7 @@ class TestEntryViews(TestCase):
 
     def test_create_success_view(self):
         # Tests that the create view is successful and redirects correctly and has a success message
+        self.assertEqual(self.user.customer.status, 'active')
         response = self.client.post(
             reverse('journal:entry_create'),
             data={'title': 'Test title', 'body': 'random body data'},

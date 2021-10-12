@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+  <h1>Tutorial</h1>
+  <div class="row">
+    <div class="col-4">
+      <div class="list-group" id="list-tab" role="tablist">
+        <a class="list-group-item list-group-item-action active" id="list-home-list" data-toggle="list" href="#list-home" role="tab" aria-controls="home">Description</a>
+        <a class="list-group-item list-group-item-action" id="list-release-list" data-toggle="list" href="#list-release" role="tab" aria-controls="release">Release</a>
+        <a class="list-group-item list-group-item-action" id="list-schedule-list" data-toggle="list" href="#list-schedule" role="tab" aria-controls="schedule">Schedule</a>
+        <a class="list-group-item list-group-item-action" id="list-retraction-list" data-toggle="list" href="#list-retraction" role="tab" aria-controls="retraction">Retraction</a>
+      </div>
+    </div>
+    <div class="col-8">
+      <div class="tab-content" id="nav-tabContent">
+        <div class="tab-pane fade show active" id="list-home" role="tabpanel" aria-labelledby="list-home-list">
+          <p>
+            A personal journal to to write about life lessons, stores, memories, secrets or anything you wish to be remembered and passed on. You can add contacts and tag each Entry with who you want to share them with and when your Entries are released, they will get a notification to read all the Entries you've shared with them.
+          </p>
+        </div>
+        <div class="tab-pane fade" id="list-release" role="tabpanel" aria-labelledby="list-release-list">
+          <p>
+            When your Entries get released, the contacts that you have tagged to that Entry wil get notified that they have memories that were shared with them.
+          </p>
+          <p>
+            Your Entries can be released if you don't checkin within the specified number of days or if you schedule an Entry to be released. By default, the number of days before release by checkin in 7 days, but you can change that in your {% if request.user.is_authenticated %}<a class="p-link" href="{% url 'users:detail' request.user.username %}">settings</a>{% else %}settings{% endif %}.
+          </p>
+        </div>
+        <div class="tab-pane fade" id="list-schedule" role="tabpanel" aria-labelledby="list-schedule-list">
+          <p>
+            You can schedule your Entries to release on a specific date.  After that, your Entry will always be shared.  The Entries that are scheduled will only release on the scheduled dates, even you don't checkin within the specified times.
+          </p>
+        </div>
+        <div class="tab-pane fade" id="list-retraction" role="tabpanel" aria-labelledby="list-retraction-list">If you accidentally miss your checkin, you can retract your Entries.  You contacts will have already been alerted, but they won't be able to read anything if you retract them.</div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+

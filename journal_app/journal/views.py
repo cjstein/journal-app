@@ -1,7 +1,7 @@
 from dal import autocomplete
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.urls import reverse_lazy
+from django.urls import reverse
 from django.utils import timezone
 from django.shortcuts import redirect
 from django.views.generic import (
@@ -149,7 +149,7 @@ class EntryDeleteView(UserPassesTestMixin, LoginRequiredMixin, RedirectView):
         title = entry.title
         entry.delete()
         messages.add_message(self.request, messages.SUCCESS, f"{title} successfully deleted!")
-        return reverse_lazy('journal:entry_list')
+        return reverse('journal:entry_list')
 
 
 # Contact Pages
@@ -174,8 +174,8 @@ class ContactCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        # messages.add_message(self.request, messages.SUCCESS, "")
-        return reverse_lazy('journal:contact_list')
+        messages.add_message(self.request, messages.SUCCESS, "Contact added successfully")
+        return reverse('journal:contact_list')
 
 
 class ContactUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
@@ -190,7 +190,7 @@ class ContactUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse_lazy('journal:contact_list')
+        return redirect('journal:contact_list')
 
     def test_func(self):
         owner_valid = test_user_owns(self.request, Contact, self.kwargs['pk'])
@@ -216,7 +216,7 @@ class ContactDeleteView(UserPassesTestMixin, LoginRequiredMixin, RedirectView):
         name = contact.name
         contact.delete()
         messages.add_message(self.request, messages.SUCCESS, f"{name} successfully deleted!")
-        return reverse_lazy('journal:contact_list')
+        return redirect('journal:contact_list')
 
     def test_func(self):
         return test_user_owns(self.request, Contact, self.kwargs['pk'])

@@ -190,3 +190,18 @@ hr {
   padding-bottom: 50%;
   overflow: visible;
 }
+
+
+.list-group-item.active {
+  background-color: #3D3D3D;
+  color: #61ca61;
+  border-color: #214721;
+}
+
+.p-link {
+  color: #3D3D3D;
+}
+
+.p-link:hover {
+  color: #61ca61;
+}
