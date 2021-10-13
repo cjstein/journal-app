@@ -189,5 +189,3 @@ STRIPE_PUBLIC_KEY = env("STRIPE_PUBLIC_KEY", default='')
 STRIPE_SECRET_KEY = env("STRIPE_SECRET_KEY", default='')
 STRIPE_LIVE_MODE = env.bool("STRIPE_LIVE_MODE", False)
 
-
-TESTING = False
