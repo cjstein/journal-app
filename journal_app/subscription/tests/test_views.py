@@ -22,7 +22,8 @@ class TestSubscriptionViews(TestCase):
 
     @patch('stripe.Customer.create')
     def test_subscription_home_view(self, mock_create):
-        mock_create.return_value.id = f'{fuzzy.FuzzyText(length=18, chars=string.ascii_letters+string.digits, prefix="cus_")}'
+        return_value = fuzzy.FuzzyText(length=18, chars=string.ascii_letters + string.digits, prefix="cus_")
+        mock_create.return_value.id = f'{return_value}'
         # Tests the view for the subscription home including the creation of the stripe customer
         self.assertIsNone(self.customer.stripe_customer_id)
         response = self.client.get(reverse('subscription:home'))

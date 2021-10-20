@@ -51,7 +51,7 @@ class Command(BaseCommand):
                     subscription = stripe.Subscription.retrieve(user.customer.stripe_subscription_id)
                     subscription['cancel_at_period_end'] = True
                     subscription.save()
-                except Exception as e:
+                except: # noqaE722
                     pass
                 user_mail = Mail.objects.create(
                     user=user,
