@@ -5,7 +5,6 @@ from unittest.mock import Mock, patch
 import stripe
 from nose.tools import assert_is_none
 
-
 SUBSCRIPTION = {
     "id": "sub_IMW8JDBaFcu3tH",
     "object": "subscription",

@@ -1,15 +1,13 @@
-import pytest
 from django.core.management import call_command
-from django.test import RequestFactory, TestCase, Client
+from django.test import Client, RequestFactory, TestCase
 from django.urls import reverse
+
+import pytest
+
+from journal_app.journal.tests.factories import ContactFactory, EntryFactory
+from journal_app.journal.views import (EntryCreateView, EntryDetailView,
+                                       EntryListView, EntryUpdateView)
 from journal_app.subscription.tests.factories import ActiveSubscriberFactory
-from journal_app.journal.tests.factories import EntryFactory, ContactFactory
-from journal_app.journal.views import (
-    EntryCreateView,
-    EntryDetailView,
-    EntryListView,
-    EntryUpdateView,
-)
 from journal_app.users.tests.test_views import REFERENCE_DATE
 
 pytestmark = pytest.mark.django_db

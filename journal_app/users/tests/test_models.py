@@ -1,8 +1,9 @@
-import pytest
-
+from django.contrib.sites.models import Site
 from django.test import TestCase
 from django.utils import timezone
-from django.contrib.sites.models import Site
+
+import pytest
+
 from journal_app.users.models import User
 from journal_app.users.tests.factories import UserFactory
 

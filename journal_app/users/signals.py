@@ -1,11 +1,12 @@
+from django.conf import settings
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
 import stripe
 from allauth.account.signals import email_confirmed
-from django.db.models.signals import post_save
-from django.conf import settings
-from django.dispatch import receiver
-from journal_app.users.models import User
-from journal_app.subscription.models import StripeCustomer
 
+from journal_app.subscription.models import StripeCustomer
+from journal_app.users.models import User
 
 # Trying to test mocking and not create stripe customers at every User instance
 # @receiver(post_save, sender=User)

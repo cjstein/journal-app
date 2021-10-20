@@ -1,10 +1,12 @@
-import stripe
-from django.core.management.base import BaseCommand
 from django.conf import settings
+from django.core.management.base import BaseCommand
+
+import stripe
+
 from journal_app.journal.models import Entry
 from journal_app.journal_mail.models import Mail, TextMessage
-from journal_app.utils.bitly import shortener
 from journal_app.users.models import User
+from journal_app.utils.bitly import shortener
 
 
 class Command(BaseCommand):

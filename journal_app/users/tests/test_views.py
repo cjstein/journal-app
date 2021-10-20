@@ -1,16 +1,14 @@
-import pytest
 from django.contrib.auth.models import AnonymousUser
 from django.test import Client, RequestFactory, TestCase
 from django.urls import reverse
 from django.utils import timezone
 
+import pytest
+
 from journal_app.users.models import User
 from journal_app.users.tests.factories import UserFactory
-from journal_app.users.views import (
-    UserRedirectView,
-    UserUpdateView,
-    user_detail_view,
-)
+from journal_app.users.views import (UserRedirectView, UserUpdateView,
+                                     user_detail_view)
 
 pytestmark = pytest.mark.django_db
 REFERENCE_DATE = timezone.datetime(year=2019, month=10, day=30)

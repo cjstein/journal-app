@@ -1,12 +1,14 @@
-# Django imports
-from django.db import models
-from django.core.validators import RegexValidator
-from django.urls import reverse
-from django.contrib.sites.models import Site
-# Custom imports
-from journal_app.users.models import User
 # Python base imports
 import uuid
+
+from django.contrib.sites.models import Site
+from django.core.validators import RegexValidator
+# Django imports
+from django.db import models
+from django.urls import reverse
+
+# Local imports
+from journal_app.users.models import User
 
 phone_regex = RegexValidator(
     regex=r'^\d{10}$',

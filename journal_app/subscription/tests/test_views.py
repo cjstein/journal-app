@@ -1,9 +1,12 @@
-import pytest
 import string
-from factory import fuzzy
 from unittest.mock import patch
-from django.test import TestCase, Client
+
+from django.test import Client, TestCase
 from django.urls import reverse
+
+import pytest
+from factory import fuzzy
+
 from journal_app.subscription.tests.factories import TrialSubscriberFactory
 
 pytestmark = pytest.mark.django_db
