@@ -1,5 +1,6 @@
-import pytest
 from django.test import TestCase
+
+import pytest
 
 from journal_app.journal.forms import ContactForm, EntryForm
 from journal_app.journal.tests.factories import ContactFactory

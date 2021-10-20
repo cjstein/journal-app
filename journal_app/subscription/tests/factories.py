@@ -1,5 +1,6 @@
-import string
 import datetime
+import string
+
 from factory import SubFactory, fuzzy
 from factory.django import DjangoModelFactory
 

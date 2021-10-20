@@ -4,12 +4,13 @@ from django.db import models
 from django.template.loader import render_to_string
 from django.utils import timezone
 from django.utils.html import strip_tags
+
 from twilio.rest import Client
 
-from config.settings.base import DEFAULT_FROM_EMAIL, TWILIO_NUMBER, TWILIO_AUTH_TOKEN, TWILIO_ACCOUNT_SID
-from journal_app.users.models import User
+from config.settings.base import (DEFAULT_FROM_EMAIL, TWILIO_ACCOUNT_SID,
+                                  TWILIO_AUTH_TOKEN, TWILIO_NUMBER)
 from journal_app.journal.models import Contact
-
+from journal_app.users.models import User
 
 phone_regex = RegexValidator(
     regex=r'^\d{10}$',

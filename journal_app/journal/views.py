@@ -1,19 +1,17 @@
-from dal import autocomplete
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils import timezone
-from django.shortcuts import redirect
-from django.views.generic import (
-    CreateView,
-    DetailView,
-    ListView,
-    UpdateView,
-    RedirectView,
-)
+from django.views.generic import (CreateView, DetailView, ListView,
+                                  RedirectView, UpdateView)
+
+from dal import autocomplete
+
 from journal_app.journal.forms import ContactForm, EntryForm, EntryScheduleForm
 from journal_app.journal.models import Contact, Entry
-from journal_app.journal.utils import test_user_owns, test_user_has_subscription
+from journal_app.journal.utils import (test_user_has_subscription,
+                                       test_user_owns)
 
 # Entry Views
 # -------------------------------------------------------------------------------------------------------

@@ -1,6 +1,7 @@
-from allauth.account.signals import email_confirmed
 from django.contrib.sites.models import Site
 from django.dispatch import receiver
+
+from allauth.account.signals import email_confirmed
 
 from journal_app.journal_mail.models import Mail
 from journal_app.users.models import User

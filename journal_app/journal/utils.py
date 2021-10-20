@@ -1,4 +1,5 @@
 from django.db import models
+
 from journal_app.journal.models import Contact
 
 

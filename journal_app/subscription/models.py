@@ -1,8 +1,10 @@
-import stripe
 import uuid
+
 from django.conf import settings
 from django.db import models
 from django.utils import timezone
+
+import stripe
 
 from journal_app.users.models import User
 

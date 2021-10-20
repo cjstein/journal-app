@@ -1,7 +1,8 @@
+from django.contrib.sites.models import Site
+
 import pytest
 
 from journal_app.journal.tests.factories import ContactFactory, EntryFactory
-from django.contrib.sites.models import Site
 
 pytestmark = pytest.mark.django_db
 

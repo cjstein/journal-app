@@ -1,6 +1,7 @@
-import pytest
-from django.urls import reverse
 from django.conf import settings
+from django.urls import reverse
+
+import pytest
 
 
 def test_subscription_home_url():

@@ -1,5 +1,6 @@
-import pytest
 from django.urls import resolve, reverse
+
+import pytest
 
 from .factories import contact, entry  # noqa F401
 
