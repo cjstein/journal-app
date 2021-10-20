@@ -6,7 +6,7 @@ import pytest
 
 from journal_app.journal.tests.factories import ContactFactory, EntryFactory
 from journal_app.journal.views import (EntryCreateView, EntryDetailView,
-                                       EntryListView, EntryUpdateView)
+                                       EntryListView)
 from journal_app.subscription.tests.factories import ActiveSubscriberFactory
 from journal_app.users.tests.test_views import REFERENCE_DATE
 

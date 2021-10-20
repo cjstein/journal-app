@@ -1,8 +1,6 @@
 from django.conf import settings
 from django.urls import reverse
 
-import pytest
-
 
 def test_subscription_home_url():
     assert reverse('subscription:home') == '/subscription/'

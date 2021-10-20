@@ -126,7 +126,7 @@ def stripe_webhook(request):
         try:
             with open(r'Desktop/event_test.txt', 'w') as f:
                 f.write(event)
-        except:
+        except:  # noqa E722
             pass
     stripe_customer_id = session.get('customer').strip()
     event_type = event['type'].strip()

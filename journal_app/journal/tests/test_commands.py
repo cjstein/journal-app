@@ -98,7 +98,7 @@ class TestReleaseEntries(TestCase):
         assert self.entry2.released is False
         # We are calling the command with the current date and time as the last_checkin
         # to make sure the entries aren't released by accident
-        out = self.call_command()
+        out = self.call_command() # noqa F841
 
 
 # TODO check release of entries for users who don't have verified email
