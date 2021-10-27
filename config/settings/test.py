@@ -55,3 +55,5 @@ DATABASES = {
 DATABASES["default"]["ATOMIC_REQUESTS"] = True
 
 USE_TZ = False
+
+ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1", "testserver"]

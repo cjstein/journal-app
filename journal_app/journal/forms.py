@@ -1,9 +1,11 @@
-from dal import autocomplete
 from django import forms
 from django.forms import ModelForm, ValidationError
 from django.utils import timezone
-from tinymce.widgets import TinyMCE
+
 from bootstrap_datepicker_plus import DatePickerInput
+from dal import autocomplete
+from tinymce.widgets import TinyMCE
+
 from journal_app.journal.models import Contact, Entry
 
 
@@ -12,7 +14,6 @@ class DateInput(forms.DateInput):
 
 
 class EntryForm(ModelForm):
-
     def __init__(self, user, *args, **kwargs):
         super(EntryForm, self).__init__(*args, **kwargs)
         self.fields['contact'].queryset = Contact.objects.filter(user=user)
@@ -36,7 +37,6 @@ class EntryForm(ModelForm):
 
 
 class ContactForm(ModelForm):
-
     def clean(self):
         clean_data = super().clean()
         email = clean_data.get('email')
@@ -62,7 +62,6 @@ class ContactForm(ModelForm):
 
 
 class EntryContactAddForm(ModelForm):
-
     def __init__(self, user, *args, **kwargs):
         super(EntryContactAddForm, self).__init__(*args, **kwargs)
         self.fields['contact'].queryset = Contact.objects.filter(user=user)
@@ -84,8 +83,7 @@ class EntryScheduleForm(forms.ModelForm):
         widgets = {
             'scheduled_time': DatePickerInput(
                 options={
-                    'minDate': str(timezone.now()+timezone.timedelta(days=1))
+                    'minDate': str(timezone.now() + timezone.timedelta(days=1))
                 }
             )
         }
-        # TODO create a way to validate the form so only dates after today can be input

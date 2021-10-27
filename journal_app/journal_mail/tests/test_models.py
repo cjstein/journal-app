@@ -1,10 +1,10 @@
-import pytest
 from django.test import TestCase
 
-from journal_app.users.tests.factories import UserFactory
-from journal_app.journal.tests.factories import EntryFactory, ContactFactory
-from journal_app.journal_mail.models import Mail
+import pytest
 
+from journal_app.journal.tests.factories import ContactFactory, EntryFactory
+from journal_app.journal_mail.models import Mail
+from journal_app.users.tests.factories import UserFactory
 
 pytestmark = pytest.mark.django_db
 

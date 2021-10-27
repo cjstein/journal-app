@@ -1,10 +1,4 @@
-# Standard library imports
-from unittest.mock import Mock, patch
-
-# 3rd party imports
-import stripe
-from nose.tools import assert_is_none
-
+from unittest.mock import patch
 
 SUBSCRIPTION = {
     "id": "sub_IMW8JDBaFcu3tH",
@@ -115,7 +109,7 @@ CUSTOMER = {
 
 @patch('stripe.Subscription.retrieve')
 def test_retrieve_subscription(mock_retrieve):
-       mock_retrieve.return_value.json.return_value = SUBSCRIPTION
+    mock_retrieve.return_value.json.return_value = SUBSCRIPTION
 
 
 @patch('stripe.Subscription.create')

@@ -1,11 +1,15 @@
+
 from io import StringIO
-import pytest
+
 from django.core.management import call_command
 from django.test import TestCase
-from journal_app.subscription.models import StripeCustomer
-from journal_app.subscription.tests.factories import ActiveSubscriberFactory, ExpiredSubscriberFactory, TrialSubscriberFactory
-from journal_app.users.tests.test_views import REFERENCE_DATE
 
+import pytest
+
+from journal_app.subscription.tests.factories import (ActiveSubscriberFactory,
+                                                      ExpiredSubscriberFactory,
+                                                      TrialSubscriberFactory)
+from journal_app.users.tests.test_views import REFERENCE_DATE
 
 pytestmark = pytest.mark.django_db
 
@@ -51,7 +55,3 @@ class TestTrialEndCommand(TestCase):
         self.assertEqual(self.active_customer.status, 'active')
         self.assertEqual(self.trial_customer.status, 'cancelled')
         self.assertEqual(self.expired_customer.status, 'cancelled')
-
-
-
-

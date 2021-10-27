@@ -1,5 +1,6 @@
-import pytest
 from django.urls import resolve, reverse
+
+import pytest
 
 from journal_app.users.models import User
 
