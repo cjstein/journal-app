@@ -59,3 +59,5 @@ USE_TZ = False
 DEBUG = True
 TESTING = True
 print('test_settings')
+
+ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1", "testserver"]

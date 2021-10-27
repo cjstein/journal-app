@@ -37,8 +37,6 @@ class TestEntryViews(TestCase):
 
     def test_wrong_detail_view(self):
         # Tests if someone tries to see a view they don't own
-        self.client = Client()
-        self.client.force_login(user=self.entry1.user)
         response = self.client.get(
             reverse('journal:entry_detail', kwargs={'pk': self.entry2.uuid}),
             follow=True,
@@ -49,8 +47,6 @@ class TestEntryViews(TestCase):
 
     def test_wrong_update_view(self):
         # Tests someone accessing an update view they don't own
-        self.client = Client()
-        self.client.force_login(user=self.entry1.user)
         response = self.client.get(
             reverse('journal:entry_update', kwargs={'pk': self.entry2.uuid}),
             follow=True,
@@ -61,17 +57,12 @@ class TestEntryViews(TestCase):
 
     def test_list_view(self):
         # Tests that the list view is routed correctly
-        request = self.factory.get(reverse('journal:entry_list'))
-        request.user = self.entry1.user
-        callable_obj = EntryListView.as_view()
-        response = callable_obj(request)
+        response = self.client.get(reverse('journal:entry_list'))
         self.assertEqual(response.status_code, 200, "Entry List")
 
     def test_create_view(self):
         # Tests that the Create view is routed correctly
-        request = self.factory.get(reverse('journal:entry_create'))
-        request.user = self.entry1.user
-        response = EntryCreateView.as_view()(request)
+        response = self.client.get(reverse('journal:entry_create'))
         self.assertEqual(response.status_code, 200, "Entry Create")
 
     def test_create_success_view(self):
@@ -79,20 +70,28 @@ class TestEntryViews(TestCase):
         self.assertEqual(self.user.customer.status, 'active')
         response = self.client.post(
             reverse('journal:entry_create'),
-            data={'title': 'Test title', 'body': 'random body data'},
+            data={
+                'title': 'Test title',
+                'body': 'random body data',
+                'public': False,
+            },
             follow=True,
         )
-        self.assertEqual(response.status_code, 200, "Entry Create Success")
+        self.assertEqual(response.status_code, 302, "Entry Create Success")
         assert len(response.context['messages']) > 0
 
     def test_update_success_view(self):
         # Tests that an update is routed correctly and has a success message
         response = self.client.post(
             reverse('journal:entry_update', kwargs={'pk': self.entry1.pk}),
-            data={'title': 'Test title 2', 'body': 'random updated body data'},
+            data={
+                'title': 'Test title 2',
+                'body': 'random updated body data',
+                'public': False,
+            },
             follow=True,
         )
-        self.assertEqual(response.status_code, 200, "Entry Create Success")
+        self.assertEqual(response.status_code, 302, "Entry Create Success")
         assert len(response.context['messages']) > 0
 
     def test_wrong_delete_view(self):
