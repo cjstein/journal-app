@@ -1,12 +1,13 @@
 from io import StringIO
 
-import pytest
 from django.core.management import call_command
 from django.test import TestCase
 
-from journal_app.subscription.tests.factories import ActiveSubscriberFactory
+import pytest
+
 from journal_app.journal.tests.factories import ContactFactory, EntryFactory
 from journal_app.journal_mail.models import Mail
+from journal_app.subscription.tests.factories import ActiveSubscriberFactory
 from journal_app.users.tests.test_views import REFERENCE_DATE
 
 pytestmark = pytest.mark.django_db
@@ -97,7 +98,7 @@ class TestReleaseEntries(TestCase):
         assert self.entry2.released is False
         # We are calling the command with the current date and time as the last_checkin
         # to make sure the entries aren't released by accident
-        out = self.call_command()
+        out = self.call_command() # noqa F841
 
 
 # TODO check release of entries for users who don't have verified email

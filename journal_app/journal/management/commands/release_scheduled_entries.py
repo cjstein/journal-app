@@ -1,5 +1,6 @@
 from django.core.management.base import BaseCommand
 from django.utils import timezone
+
 from journal_app.journal.models import Entry
 from journal_app.journal_mail.models import Mail, TextMessage
 from journal_app.utils.bitly import shortener

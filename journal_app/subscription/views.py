@@ -1,15 +1,16 @@
-import stripe
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.sites.models import Site
 from django.core.exceptions import ObjectDoesNotExist
 from django.http.response import HttpResponse, JsonResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect, render
 from django.views.decorators.csrf import csrf_exempt
 
-from journal_app.subscription.models import StripeCustomer, Subscription
+import stripe
+
 from journal_app.journal_mail.models import Mail
+from journal_app.subscription.models import StripeCustomer, Subscription
 from journal_app.users.models import User
 
 
@@ -125,7 +126,7 @@ def stripe_webhook(request):
         try:
             with open(r'Desktop/event_test.txt', 'w') as f:
                 f.write(event)
-        except:
+        except:  # noqa E722
             pass
     stripe_customer_id = session.get('customer').strip()
     event_type = event['type'].strip()

@@ -1,21 +1,14 @@
 from django.urls import path
 
-from journal_app.journal.views import (
-    ContactAutoComplete,
-    ContactCreateView,
-    ContactDeleteView,
-    ContactEntryList,
-    ContactListView,
-    ContactReleasedEntryDetail,
-    ContactReleasedEntryList,
-    ContactUpdateView,
-    EntryCreateView,
-    EntryDeleteView,
-    EntryDetailView,
-    EntryListView,
-    EntryUpdateView,
-    EntryScheduleView,
-)
+from journal_app.journal.views import (ContactAutoComplete, ContactCreateView,
+                                       ContactDeleteView, ContactEntryList,
+                                       ContactListView,
+                                       ContactReleasedEntryDetail,
+                                       ContactReleasedEntryList,
+                                       ContactUpdateView, EntryCreateView,
+                                       EntryDeleteView, EntryDetailView,
+                                       EntryListView, EntryScheduleView,
+                                       EntryUpdateView)
 
 app_name = "journal"
 

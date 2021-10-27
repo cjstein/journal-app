@@ -1,8 +1,8 @@
 from django.core.management.base import BaseCommand
 from django.utils import timezone
 
-from journal_app.subscription.models import StripeCustomer
 from journal_app.journal_mail.models import Mail
+from journal_app.subscription.models import StripeCustomer
 
 
 class Command(BaseCommand):

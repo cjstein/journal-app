@@ -1,6 +1,8 @@
-import requests
 import json
+
 from django.conf import settings
+
+import requests
 
 
 def shortener(link):

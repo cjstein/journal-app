@@ -1,8 +1,10 @@
-import stripe
 import uuid
+
 from django.conf import settings
 from django.db import models
 from django.utils import timezone
+
+import stripe
 
 from journal_app.users.models import User
 
@@ -65,7 +67,9 @@ class StripeCustomer(models.Model):
             self.subscription_start = timezone.datetime.fromtimestamp(int(subscription.current_period_start))
             self.status = subscription.status
             self.subscription_cache = subscription
-            self.subscription = Subscription.objects.get(stripe_price_id=subscription['items']['data'][0]['price']['id'])
+            self.subscription = Subscription.objects.get(
+                stripe_price_id=subscription['items']['data'][0]['price']['id'],
+            )
             self.save()
 
     def check_trial_status(self):

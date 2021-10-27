@@ -1,10 +1,13 @@
-import stripe
-from django.core.management.base import BaseCommand
 from django.conf import settings
+from django.core.management.base import BaseCommand
+
+import stripe
+
 from journal_app.journal.models import Entry
 from journal_app.journal_mail.models import Mail, TextMessage
-from journal_app.utils.bitly import shortener
 from journal_app.users.models import User
+from journal_app.subscription.models import StripeCustomer
+from journal_app.utils.bitly import shortener
 
 
 class Command(BaseCommand):
@@ -13,7 +16,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         users = User.objects.filter(entries_released=False, email_verified=True)
         for user in users:
-            if user.release_entries:
+            if user.release_entries and user.customer.status == StripeCustomer.Status.ACTIVE:
                 entries = Entry.objects.filter(user=user, is_scheduled=False)
                 for entry in entries:
                     entry.released = True
@@ -49,7 +52,7 @@ class Command(BaseCommand):
                     subscription = stripe.Subscription.retrieve(user.customer.stripe_subscription_id)
                     subscription['cancel_at_period_end'] = True
                     subscription.save()
-                except Exception as e:
+                except: # noqaE722
                     pass
                 user_mail = Mail.objects.create(
                     user=user,
