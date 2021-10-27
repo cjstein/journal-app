@@ -16,7 +16,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         users = User.objects.filter(entries_released=False, email_verified=True)
         for user in users:
-            if user.release_entries and user.subscription.status == StripeCustomer.Status.ACTIVE:
+            if user.release_entries and user.customer.status == StripeCustomer.Status.ACTIVE:
                 entries = Entry.objects.filter(user=user, is_scheduled=False)
                 for entry in entries:
                     entry.released = True
