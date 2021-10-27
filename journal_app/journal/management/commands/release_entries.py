@@ -6,6 +6,7 @@ import stripe
 from journal_app.journal.models import Entry
 from journal_app.journal_mail.models import Mail, TextMessage
 from journal_app.users.models import User
+from journal_app.subscription.models import StripeCustomer
 from journal_app.utils.bitly import shortener
 
 
@@ -15,7 +16,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         users = User.objects.filter(entries_released=False, email_verified=True)
         for user in users:
-            if user.release_entries:
+            if user.release_entries and user.subscription.status == StripeCustomer.Status.ACTIVE:
                 entries = Entry.objects.filter(user=user, is_scheduled=False)
                 for entry in entries:
                     entry.released = True
