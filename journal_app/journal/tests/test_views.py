@@ -22,6 +22,7 @@ class TestEntryViews(TestCase):
         self.user = self.subscribed_customer.user
         self.user.email_verified = True
         self.user.save()
+        self.user.refresh_from_db()
         self.entry1 = EntryFactory(user=self.user)
         self.entry2 = EntryFactory(user=self.user)
         self.client = Client()
