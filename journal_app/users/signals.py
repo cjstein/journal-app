@@ -28,6 +28,7 @@ def create_stripe_customer(sender, instance, created, **kwargs):
         customer = StripeCustomer.objects.create(user=instance)
         customer.stripe_customer_id = fuzzy.FuzzyText(length=18, chars=string.ascii_letters+string.digits, prefix='cus_')
         customer.save()
+        return
     stripe.api_key = settings.STRIPE_SECRET_KEY
     if created:
         customer = StripeCustomer.objects.create(user=instance)
