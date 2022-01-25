@@ -1,5 +1,7 @@
 import stripe
+import string
 from allauth.account.signals import email_confirmed
+from factory import fuzzy
 from django.db.models.signals import post_save
 from django.conf import settings
 from django.dispatch import receiver
@@ -20,9 +22,18 @@ from journal_app.subscription.models import StripeCustomer
 #         customer.stripe_customer_id = stripe_customer.stripe_id
 #         customer.save()
 
-
-@receiver(email_confirmed)
-def user_email_confirmed(request, email_address, **kwargs):
-    user = email_address.user
-    user.email_verified = True
-    user.save()
+@receiver(post_save, sender=User)
+def create_stripe_customer(sender, instance, created, **kwargs):
+    if settings.TESTING:
+        customer = StripeCustomer.objects.create(user=instance)
+        customer.stripe_customer_id = fuzzy.FuzzyText(length=18, chars=string.ascii_letters+string.digits, prefix='cus_')
+        customer.save()
+    stripe.api_key = settings.STRIPE_SECRET_KEY
+    if created:
+        customer = StripeCustomer.objects.create(user=instance)
+        stripe_customer = stripe.Customer.create(
+            email=instance.email,
+            description=str(instance),
+        )
+        customer.stripe_customer_id = stripe_customer.stripe_id
+        customer.save()

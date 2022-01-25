@@ -4,6 +4,7 @@ With these settings, tests run faster.
 
 from .base import *  # noqa
 from .base import env
+import sys
 
 # GENERAL
 # ------------------------------------------------------------------------------
@@ -55,3 +56,6 @@ DATABASES = {
 DATABASES["default"]["ATOMIC_REQUESTS"] = True
 
 USE_TZ = False
+DEBUG = True
+TESTING = True
+print('test_settings')
