@@ -24,17 +24,5 @@ from journal_app.subscription.models import StripeCustomer
 
 @receiver(post_save, sender=User)
 def create_stripe_customer(sender, instance, created, **kwargs):
-    if settings.TESTING:
         customer = StripeCustomer.objects.create(user=instance)
-        customer.stripe_customer_id = fuzzy.FuzzyText(length=18, chars=string.ascii_letters+string.digits, prefix='cus_')
-        customer.save()
-        return
-    stripe.api_key = settings.STRIPE_SECRET_KEY
-    if created:
-        customer = StripeCustomer.objects.create(user=instance)
-        stripe_customer = stripe.Customer.create(
-            email=instance.email,
-            description=str(instance),
-        )
-        customer.stripe_customer_id = stripe_customer.stripe_id
         customer.save()
