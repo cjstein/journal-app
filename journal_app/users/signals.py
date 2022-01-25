@@ -24,5 +24,6 @@ from journal_app.subscription.models import StripeCustomer
 
 @receiver(post_save, sender=User)
 def create_stripe_customer(sender, instance, created, **kwargs):
+    if created:
         customer = StripeCustomer.objects.create(user=instance)
         customer.save()
