@@ -21,6 +21,8 @@ from journal_app.users.models import User
 #         customer.stripe_customer_id = stripe_customer.stripe_id
 #         customer.save()
 
+from allauth.account.signals import email_confirmed
+
 
 @receiver(email_confirmed)
 def user_email_confirmed(request, email_address, **kwargs):
