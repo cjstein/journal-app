@@ -30,6 +30,31 @@ class ActiveSubscriberFactory(DjangoModelFactory):
         model = StripeCustomer
 
 
+def create_active_subscriber(user, **kwargs):
+    stripe_customer_id = fuzzy.FuzzyText(length=18, chars=string.ascii_letters + string.digits, prefix='cus_')
+    stripe_subscription_id = fuzzy.FuzzyText(length=18, chars=string.ascii_letters + string.digits, prefix='sub_')
+    product = fuzzy.FuzzyText(length=18, chars=string.ascii_letters + string.digits, prefix='prod_')
+    status = StripeCustomer.Status.ACTIVE
+    subscription_start = fuzzy.FuzzyDate(
+        start_date=datetime.date(datetime.date.today().year, 1, 1),
+        end_date=datetime.date(datetime.date.today().year, 12, 31),
+    )
+    subscription_end = fuzzy.FuzzyDate(
+        start_date=datetime.date.today(),
+        end_date=datetime.date(datetime.date.today().year + 1, datetime.date.today().month, datetime.date.today().day)
+    )
+    return StripeCustomer.objects.create(
+        user=user,
+        stripe_customer_id=stripe_customer_id,
+        stripe_subscription_id=stripe_subscription_id,
+        product=product,
+        status=status,
+        subscription_start=subscription_start,
+        subscription_end=subscription_end,
+        **kwargs
+    )
+
+
 class TrialSubscriberFactory(DjangoModelFactory):
     user = SubFactory(UserFactory)
     stripe_customer_id = fuzzy.FuzzyText(length=18, chars=string.ascii_letters+string.digits, prefix='cus_')
