@@ -126,7 +126,7 @@ class EntryScheduleView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
         owner_valid = test_user_owns(self.request, Entry, self.kwargs['pk'])
         subscription_valid = test_user_has_subscription(self.request)
         if subscription_valid and not owner_valid:
-            messages.add_message(self.request, messages.ERROR, 'Unable to access that object')
+            messages.add_message(self.request, messages.ERROR, 'Schedule is only allowed for paid subscribers')
             return redirect('journal:entry_list')
 
         if owner_valid and not subscription_valid:
