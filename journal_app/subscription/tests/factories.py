@@ -67,6 +67,23 @@ class TrialSubscriberFactory(DjangoModelFactory):
         model = StripeCustomer
 
 
+def create_trial_subscriber(user, **kwargs):
+    stripe_customer_id = fuzzy.FuzzyText(length=18, chars=string.ascii_letters + string.digits, prefix='cus_')
+    stripe_subscription_id = fuzzy.FuzzyText(length=18, chars=string.ascii_letters + string.digits, prefix='sub_')
+    product = fuzzy.FuzzyText(length=18, chars=string.ascii_letters + string.digits, prefix='prod_')
+    status = StripeCustomer.Status.TRIAL
+    trial_end = datetime.date.today() + datetime.timedelta(days=14)
+    return StripeCustomer.objects.create(
+        user=user,
+        stripe_customer_id=stripe_customer_id,
+        stripe_subscription_id=stripe_subscription_id,
+        product=product,
+        status=status,
+        trial_end=trial_end,
+        **kwargs
+    )
+
+
 class ExpiredSubscriberFactory(DjangoModelFactory):
     user = SubFactory(UserFactory)
     stripe_customer_id = fuzzy.FuzzyText(length=18, chars=string.ascii_letters + string.digits, prefix='cus_')
