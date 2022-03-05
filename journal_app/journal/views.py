@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import redirect
-from django.urls import reverse
+from django.urls import reverse_lazy
 from django.utils import timezone
 from django.views.generic import (CreateView, DetailView, ListView,
                                   RedirectView, UpdateView)
@@ -35,12 +35,14 @@ class EntryListView(LoginRequiredMixin, ListView):
     context_object_name = "entries"
 
     def get_queryset(self):
-        return Entry.objects.filter(user=self.request.user)
+        return Entry.objects.filter(user=self.request.user).order_by('-created')
 
 
 class EntryCreateView(LoginRequiredMixin, CreateView):
     model = Entry
     form_class = EntryForm
+
+    action = 'create'
 
     def get_form_kwargs(self, **kwargs):
         kwargs = super(EntryCreateView, self).get_form_kwargs()
@@ -48,7 +50,6 @@ class EntryCreateView(LoginRequiredMixin, CreateView):
         return kwargs
 
     def form_valid(self, form):
-        messages.add_message(self.request, messages.SUCCESS, 'Entry successfully added')
         form.instance.user = self.request.user
         return super().form_valid(form)
 
@@ -56,6 +57,10 @@ class EntryCreateView(LoginRequiredMixin, CreateView):
         context = super(EntryCreateView, self).get_context_data()
         context['contacts'] = Contact.objects.filter(user=self.request.user)
         return context
+
+    def get_success_url(self):
+        messages.add_message(self.request, messages.SUCCESS, 'Entry successfully added')
+        return reverse_lazy('journal:entry_detail', kwargs={'pk': self.object.pk})
 
 
 class EntryUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
@@ -119,14 +124,14 @@ class EntryScheduleView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
 
     def test_func(self):
         owner_valid = test_user_owns(self.request, Entry, self.kwargs['pk'])
-        subscription_valid = test_user_has_subscription(self.request)
+        subscription_valid = self.request.user.customer.Status == 'active'
         return owner_valid and subscription_valid
 
     def handle_no_permission(self):
         owner_valid = test_user_owns(self.request, Entry, self.kwargs['pk'])
-        subscription_valid = test_user_has_subscription(self.request)
+        subscription_valid = self.request.user.customer.Status == 'active'
         if subscription_valid and not owner_valid:
-            messages.add_message(self.request, messages.ERROR, 'Unable to access that object')
+            messages.add_message(self.request, messages.ERROR, 'Schedule is only allowed for paid subscribers')
             return redirect('journal:entry_list')
 
         if owner_valid and not subscription_valid:
@@ -147,7 +152,7 @@ class EntryDeleteView(UserPassesTestMixin, LoginRequiredMixin, RedirectView):
         title = entry.title
         entry.delete()
         messages.add_message(self.request, messages.SUCCESS, f"{title} successfully deleted!")
-        return reverse('journal:entry_list')
+        return reverse_lazy('journal:entry_list')
 
 
 # Contact Pages
@@ -173,7 +178,7 @@ class ContactCreateView(LoginRequiredMixin, CreateView):
 
     def get_success_url(self):
         messages.add_message(self.request, messages.SUCCESS, "Contact added successfully")
-        return reverse('journal:contact_list')
+        return reverse_lazy('journal:contact_list')
 
 
 class ContactUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):

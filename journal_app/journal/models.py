@@ -5,7 +5,7 @@ from django.contrib.sites.models import Site
 from django.core.validators import RegexValidator
 # Django imports
 from django.db import models
-from django.urls import reverse
+from django.urls import reverse_lazy
 
 # Local imports
 from journal_app.users.models import User
@@ -40,12 +40,10 @@ class Contact(TimeStampedModel):
     # Possibly add signal bot
 
     def get_absolute_url(self):
-        domain = Site.objects.get_current().domain
-        return domain + reverse("journal:contact_entry_list", kwargs={"pk": self.uuid})
+        return reverse_lazy("journal:contact_entry_list", kwargs={"pk": self.uuid})
 
     def released_entries_url(self):
-        domain = Site.objects.get_current().domain
-        return domain + reverse('journal:released_entries', kwargs={'contact': self.uuid})
+        return reverse_lazy('journal:released_entries', kwargs={'contact': self.uuid})
 
     def __str__(self):
         return self.name
@@ -76,8 +74,7 @@ class Entry(TimeStampedModel):
         return bool(self.updated)
 
     def get_absolute_url(self):
-        domain = Site.objects.get_current().domain
-        return domain + reverse("journal:entry_detail", kwargs={"pk": self.uuid})
+        return reverse_lazy("journal:entry_detail", kwargs={"pk": self.uuid})
 
     def __str__(self):
         return self.title

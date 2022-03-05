@@ -14,9 +14,6 @@ def test_user_has_subscription(request):
 
 
 def get_entries_from_contact(pk):
-    context = {}
     contact = Contact.objects.get(pk=pk)
     entry_list = contact.entry_set.all()
-    context['contact'] = contact
-    context['entries'] = entry_list
-    return context
+    return {'contact': contact, 'entries': entry_list}

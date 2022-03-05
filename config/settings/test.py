@@ -4,6 +4,7 @@ With these settings, tests run faster.
 
 from .base import *  # noqa
 from .base import env
+import sys
 
 # GENERAL
 # ------------------------------------------------------------------------------
@@ -57,3 +58,5 @@ DATABASES["default"]["ATOMIC_REQUESTS"] = True
 USE_TZ = False
 
 ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1", "testserver"]
+
+TESTING = True
