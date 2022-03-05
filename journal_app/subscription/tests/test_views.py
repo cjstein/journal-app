@@ -7,7 +7,8 @@ from django.urls import reverse
 import pytest
 from factory import fuzzy
 
-from journal_app.subscription.tests.factories import TrialSubscriberFactory
+from journal_app.subscription.tests.factories import create_trial_subscriber, create_active_subscriber
+from journal_app.users.tests.factories import UserFactory
 
 pytestmark = pytest.mark.django_db
 
@@ -15,8 +16,9 @@ pytestmark = pytest.mark.django_db
 class TestSubscriptionViews(TestCase):
     # Test the views that are meant for the subscriptions
     def setUp(self) -> None:
-        self.customer = TrialSubscriberFactory()
-        self.user = self.customer.user
+        self.user = UserFactory
+        self.customer = create_trial_subscriber(self.user)
+
         self.client = Client()
         self.client.force_login(user=self.user)
 

@@ -31,28 +31,21 @@ class ActiveSubscriberFactory(DjangoModelFactory):
 
 
 def create_active_subscriber(user, **kwargs):
-    stripe_customer_id = fuzzy.FuzzyText(length=18, chars=string.ascii_letters + string.digits, prefix='cus_')
-    stripe_subscription_id = fuzzy.FuzzyText(length=18, chars=string.ascii_letters + string.digits, prefix='sub_')
-    product = fuzzy.FuzzyText(length=18, chars=string.ascii_letters + string.digits, prefix='prod_')
-    status = StripeCustomer.Status.ACTIVE
-    subscription_start = fuzzy.FuzzyDate(
+    customer = StripeCustomer.objects.get(user=user)
+    customer.stripe_customer_id = fuzzy.FuzzyText(length=18, chars=string.ascii_letters + string.digits, prefix='cus_')
+    customer.stripe_subscription_id = fuzzy.FuzzyText(length=18, chars=string.ascii_letters + string.digits, prefix='sub_')
+    customer.product = fuzzy.FuzzyText(length=18, chars=string.ascii_letters + string.digits, prefix='prod_')
+    customer.status = StripeCustomer.Status.ACTIVE
+    customer.subscription_start = fuzzy.FuzzyDate(
         start_date=datetime.date(datetime.date.today().year, 1, 1),
         end_date=datetime.date(datetime.date.today().year, 12, 31),
     )
-    subscription_end = fuzzy.FuzzyDate(
+    customer.subscription_end = fuzzy.FuzzyDate(
         start_date=datetime.date.today(),
         end_date=datetime.date(datetime.date.today().year + 1, datetime.date.today().month, datetime.date.today().day)
     )
-    return StripeCustomer.objects.create(
-        user=user,
-        stripe_customer_id=stripe_customer_id,
-        stripe_subscription_id=stripe_subscription_id,
-        product=product,
-        status=status,
-        subscription_start=subscription_start,
-        subscription_end=subscription_end,
-        **kwargs
-    )
+    customer.save()
+    return customer
 
 
 class TrialSubscriberFactory(DjangoModelFactory):
@@ -68,20 +61,14 @@ class TrialSubscriberFactory(DjangoModelFactory):
 
 
 def create_trial_subscriber(user, **kwargs):
-    stripe_customer_id = fuzzy.FuzzyText(length=18, chars=string.ascii_letters + string.digits, prefix='cus_')
-    stripe_subscription_id = fuzzy.FuzzyText(length=18, chars=string.ascii_letters + string.digits, prefix='sub_')
-    product = fuzzy.FuzzyText(length=18, chars=string.ascii_letters + string.digits, prefix='prod_')
-    status = StripeCustomer.Status.TRIAL
-    trial_end = datetime.date.today() + datetime.timedelta(days=14)
-    return StripeCustomer.objects.create(
-        user=user,
-        stripe_customer_id=stripe_customer_id,
-        stripe_subscription_id=stripe_subscription_id,
-        product=product,
-        status=status,
-        trial_end=trial_end,
-        **kwargs
-    )
+    customer = StripeCustomer.objects.get(user=user)
+    customer.stripe_customer_id = fuzzy.FuzzyText(length=18, chars=string.ascii_letters + string.digits, prefix='cus_')
+    customer.stripe_subscription_id = fuzzy.FuzzyText(length=18, chars=string.ascii_letters + string.digits, prefix='sub_')
+    customer.product = fuzzy.FuzzyText(length=18, chars=string.ascii_letters + string.digits, prefix='prod_')
+    customer.status = StripeCustomer.Status.TRIAL
+    customer.trial_end = datetime.date.today() + datetime.timedelta(days=14)
+    customer.save()
+    return customer
 
 
 class ExpiredSubscriberFactory(DjangoModelFactory):
