@@ -2,7 +2,7 @@ import string
 from unittest.mock import patch
 
 from django.test import Client, TestCase
-from django.urls import reverse
+from django.urls import reverse_lazy
 
 import pytest
 from factory import fuzzy
@@ -16,7 +16,7 @@ pytestmark = pytest.mark.django_db
 class TestSubscriptionViews(TestCase):
     # Test the views that are meant for the subscriptions
     def setUp(self) -> None:
-        self.user = UserFactory
+        self.user = UserFactory()
         self.customer = create_trial_subscriber(self.user)
 
         self.client = Client()
@@ -28,7 +28,7 @@ class TestSubscriptionViews(TestCase):
         mock_create.return_value.id = f'{return_value}'
         # Tests the view for the subscription home including the creation of the stripe customer
         self.assertIsNone(self.customer.stripe_customer_id)
-        response = self.client.get(reverse('subscription:home'))
+        response = self.client.get(reverse_lazy('subscription:home'))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'subscription/home.html')
         self.customer.refresh_from_db()

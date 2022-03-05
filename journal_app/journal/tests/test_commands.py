@@ -7,7 +7,8 @@ import pytest
 
 from journal_app.journal.tests.factories import ContactFactory, EntryFactory
 from journal_app.journal_mail.models import Mail
-from journal_app.subscription.tests.factories import ActiveSubscriberFactory
+from journal_app.subscription.tests.factories import create_active_subscriber
+from journal_app.users.tests.factories import UserFactory
 from journal_app.users.tests.test_views import REFERENCE_DATE
 
 pytestmark = pytest.mark.django_db
@@ -19,10 +20,10 @@ class TestReleaseEntries(TestCase):
         """
         Settings up two different users and testing release of one Users set of entries
         """
-        self.subscribed_customer1 = ActiveSubscriberFactory()
-        self.subscribed_customer2 = ActiveSubscriberFactory()
-        self.user1 = self.subscribed_customer1.user
-        self.user2 = self.subscribed_customer2.user
+        self.user1 = UserFactory()
+        self.user2 = UserFactory()
+        self.subscribed_customer1 = create_active_subscriber(self.user1)
+        self.subscribed_customer2 = create_active_subscriber(self.user2)
         self.user1.email_verified = True
         self.user2.email_verified = True
         self.user1.save()
