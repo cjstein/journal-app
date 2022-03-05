@@ -124,12 +124,12 @@ class EntryScheduleView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
 
     def test_func(self):
         owner_valid = test_user_owns(self.request, Entry, self.kwargs['pk'])
-        subscription_valid = test_user_has_subscription(self.request)
+        subscription_valid = self.request.user.customer.Status == 'active'
         return owner_valid and subscription_valid
 
     def handle_no_permission(self):
         owner_valid = test_user_owns(self.request, Entry, self.kwargs['pk'])
-        subscription_valid = test_user_has_subscription(self.request)
+        subscription_valid = self.request.user.customer.Status == 'active'
         if subscription_valid and not owner_valid:
             messages.add_message(self.request, messages.ERROR, 'Schedule is only allowed for paid subscribers')
             return redirect('journal:entry_list')
