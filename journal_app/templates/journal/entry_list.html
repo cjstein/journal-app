@@ -14,7 +14,7 @@
           <a href="{% if released %}{% url 'journal:released_entry_detail' contact.pk entry.pk %}{% else %}{{ entry.get_absolute_url }}{% endif %}">
             <h4 class="entry-link">{{ entry.title }}</h4>
           </a>
-          {% if entry.released %}
+          {% if entry.user == request.user %}
             <p>
               <b>Created: </b>
               {{ entry.created }}

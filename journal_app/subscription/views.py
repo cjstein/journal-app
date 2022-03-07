@@ -71,9 +71,12 @@ def create_checkout_session(request, **kwargs):
         checkout_session = stripe.checkout.Session.create(
             customer=customer_id,
             subscription=subscription_id,
-            client_reference_id=request.user.id if request.user.is_authenticated else None,
-            success_url=domain_url + '/subscription/success?session_id={CHECKOUT_SESSION_ID}',
-            cancel_url=domain_url + '/subscription/cancel/',
+            client_reference_id=request.user.id
+            if request.user.is_authenticated
+            else None,
+            success_url=domain_url
+            + '/subscription/success?session_id={CHECKOUT_SESSION_ID}',
+            cancel_url=f'{domain_url}/subscription/cancel/',
             payment_method_types=['card'],
             mode='subscription',
             line_items=[
@@ -81,8 +84,9 @@ def create_checkout_session(request, **kwargs):
                     'price': product.stripe_price_id,
                     'quantity': 1,
                 }
-            ]
+            ],
         )
+
         return JsonResponse({'sessionId': checkout_session['id']})
     except Exception as e:
         return JsonResponse({'error': str(e)})
