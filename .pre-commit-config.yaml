@@ -20,10 +20,10 @@ repos:
     hooks:
       - id: isort
 
-  - repo: https://gitlab.com/pycqa/flake8
-    rev: 3.8.3
+  - repo: local
     hooks:
-      - id: flake8
-        args: ['--config=setup.cfg']
-        additional_dependencies: [flake8-isort]
-
+      - id: run-tests
+        language: script
+        name: Run tests
+        entry: ./run-tests.cmd
+        stages: [push]
